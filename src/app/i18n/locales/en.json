@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Outdoor Experience"
+  },
+  "common": {
+    "language": "Language",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "auth": {
+    "tagline": "A complete platform to create, manage, and share unforgettable experiences.",
+    "login": {
+      "welcomeBack": "Welcome back!",
+      "signInToContinue": "Sign in to continue.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign In",
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Enter a valid email",
+      "passwordRequired": "Please enter your password"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "subtitle": "Reset your password",
+      "instructions": "Enter your email and instructions will be sent to you!",
+      "successMessage": "If an account exists for that email, reset instructions have been sent.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter email",
+      "emailRequired": "Please enter your email",
+      "submit": "Send Reset Link",
+      "rememberPassword": "Wait, I remember my password...",
+      "backToLogin": "Click here"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Outdoor Experience"
+  }
+}

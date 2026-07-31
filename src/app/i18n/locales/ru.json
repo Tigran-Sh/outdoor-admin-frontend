@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Outdoor Experience"
+  },
+  "common": {
+    "language": "Язык",
+    "showPassword": "Показать пароль",
+    "hidePassword": "Скрыть пароль"
+  },
+  "auth": {
+    "tagline": "Полноценная платформа для создания, управления и обмена незабываемыми впечатлениями.",
+    "login": {
+      "welcomeBack": "С возвращением!",
+      "signInToContinue": "Войдите, чтобы продолжить.",
+      "emailLabel": "Эл. почта",
+      "emailPlaceholder": "Введите эл. почту",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Введите пароль",
+      "rememberMe": "Запомнить меня",
+      "forgotPassword": "Забыли пароль?",
+      "signIn": "Войти",
+      "emailRequired": "Пожалуйста, введите email",
+      "emailInvalid": "Введите корректный email",
+      "passwordRequired": "Пожалуйста, введите пароль"
+    },
+    "forgotPassword": {
+      "title": "Забыли пароль?",
+      "subtitle": "Сбросьте пароль",
+      "instructions": "Введите свой email, и мы отправим вам инструкции!",
+      "successMessage": "Если аккаунт с таким email существует, инструкции по сбросу пароля отправлены.",
+      "emailLabel": "Эл. почта",
+      "emailPlaceholder": "Введите эл. почту",
+      "emailRequired": "Пожалуйста, введите email",
+      "submit": "Отправить ссылку",
+      "rememberPassword": "Постойте, я вспомнил пароль...",
+      "backToLogin": "Нажмите здесь"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Outdoor Experience"
+  }
+}

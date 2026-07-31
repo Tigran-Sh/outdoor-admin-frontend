@@ -1,8 +1,20 @@
 import { Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher/LanguageSwitcher";
 
 function AuthLayout() {
+  const { t } = useTranslation();
+
   return (
     <div className="auth-page-wrapper pt-5">
+      <div
+        className="position-fixed top-0 m-3"
+        style={{ zIndex: 1000, right: "130px" }}
+      >
+        <LanguageSwitcher />
+      </div>
+
       <div className="auth-one-bg-position auth-one-bg" id="auth-particles">
         <div className="bg-overlay" />
 
@@ -25,7 +37,7 @@ function AuthLayout() {
             <div className="col-lg-12">
               <div className="text-center">
                 <p className="mb-0 text-muted">
-                  &copy; {new Date().getFullYear()} Outdoor Experience
+                  {t("footer.copyright", { year: new Date().getFullYear() })}
                 </p>
               </div>
             </div>

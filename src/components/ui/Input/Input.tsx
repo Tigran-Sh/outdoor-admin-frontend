@@ -1,4 +1,5 @@
 import { forwardRef, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { InputProps } from "./Input.types";
 
@@ -6,6 +7,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     id,
     label,
+    labelAddon,
     error,
     helperText,
     size = "md",
@@ -16,6 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   },
   ref,
 ) {
+  const { t } = useTranslation();
   const generatedId = useId();
   const inputId = id ?? generatedId;
 
@@ -41,9 +44,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className={containerClassName ?? "mb-3"}>
       {label && (
-        <label htmlFor={inputId} className="form-label">
-          {label}
-        </label>
+        <>
+          {labelAddon && <div className="float-end">{labelAddon}</div>}
+          <label htmlFor={inputId} className="form-label">
+            {label}
+          </label>
+        </>
       )}
 
       {isPassword ? (
@@ -53,7 +59,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             type="button"
             className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
             onClick={() => setShowPassword((prev) => !prev)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
           >
             <i className="ri-eye-fill align-middle" />
           </button>

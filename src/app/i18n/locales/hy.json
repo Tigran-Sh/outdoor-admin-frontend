@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Outdoor Experience"
+  },
+  "common": {
+    "language": "Լեզու",
+    "showPassword": "Ցուցադրել գաղտնաբառը",
+    "hidePassword": "Թաքցնել գաղտնաբառը"
+  },
+  "auth": {
+    "tagline": "Ամբողջական հարթակ՝ անմոռանալի փորձառություններ ստեղծելու, կազմակերպելու և կիսվելու համար։",
+    "login": {
+      "welcomeBack": "Բարի վերադարձ!",
+      "signInToContinue": "Մուտք գործեք՝ շարունակելու համար։",
+      "emailLabel": "Էլ. փոստ",
+      "emailPlaceholder": "Մուտքագրեք էլ. փոստը",
+      "passwordLabel": "Գաղտնաբառ",
+      "passwordPlaceholder": "Մուտքագրեք գաղտնաբառը",
+      "rememberMe": "Հիշել ինձ",
+      "forgotPassword": "Մոռացե՞լ եք գաղտնաբառը",
+      "signIn": "Մուտք գործել",
+      "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
+      "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
+      "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառը"
+    },
+    "forgotPassword": {
+      "title": "Մոռացե՞լ եք գաղտնաբառը",
+      "subtitle": "Վերականգնեք ձեր գաղտնաբառը",
+      "instructions": "Մուտքագրեք ձեր էլ. փոստը, և մենք կուղարկենք հրահանգներ։",
+      "successMessage": "Եթե այդ էլ. փոստով հաշիվ գոյություն ունի, վերականգնման հրահանգներն ուղարկվել են։",
+      "emailLabel": "Էլ. փոստ",
+      "emailPlaceholder": "Մուտքագրեք էլ. փոստը",
+      "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
+      "submit": "Ուղարկել հղումը",
+      "rememberPassword": "Սպասեք, ես հիշեցի գաղտնաբառս...",
+      "backToLogin": "Սեղմեք այստեղ"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Outdoor Experience"
+  }
+}
