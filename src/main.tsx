@@ -5,6 +5,8 @@ import App from "./App";
 
 import { QueryProvider } from "./app/providers";
 
+import "./styles/main.scss";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryProvider>

@@ -1,0 +1,25 @@
+//
+// _icons.scss
+//
+// Minimal, self-hosted subset of Remix Icon (https://remixicon.com).
+// Only the glyphs actually used by the app are declared below;
+// add more `.ri-*` rules here as new icons are needed.
+// Source: node_modules/remixicon/fonts/remixicon.css
+
+@font-face {
+    font-family: "remixicon";
+    src: url("../../assets/fonts/remixicon.woff2") format("woff2");
+    font-display: swap;
+}
+
+[class^="ri-"],
+[class*=" ri-"] {
+    font-family: "remixicon" !important;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ri-eye-fill:before {
+    content: "\ecb4";
+}

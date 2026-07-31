@@ -1,0 +1,38 @@
+// Global styles entry point.
+// Source design ported from the Velzon (Minimal) admin template.
+
+// Bootstrap core files
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+// Our variable overrides (must come before the full Bootstrap import)
+@import "./bootstrap/variables";
+@import "./bootstrap/variables-custom";
+@import "./bootstrap/variables-dark";
+
+@import "bootstrap/scss/mixins";
+
+// Extra utilities merged into Bootstrap's utilities API
+@import "./bootstrap/utilities";
+
+// Full Bootstrap
+@import "bootstrap/scss/bootstrap";
+
+// Base / global styles
+@import "./base/root";
+@import "./base/reboot";
+@import "./base/helper";
+
+// Components
+@import "./components/buttons";
+@import "./components/type";
+@import "./components/form-control";
+@import "./components/form-check";
+@import "./components/forms";
+@import "./components/icons";
+
+// Structure
+@import "./structure/footer";
+
+// Pages
+@import "./pages/authentication";
