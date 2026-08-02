@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -8,10 +7,7 @@ import Button from "@/components/ui/Button/Button";
 import Input from "@/components/ui/Input/Input";
 
 import AuthCard from "./components/AuthCard";
-
-interface ForgotPasswordFormValues {
-  email: string;
-}
+import { getForgotPasswordSchema, type ForgotPasswordFormValues } from "./ForgotPasswordPage.schema";
 
 function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -21,9 +17,7 @@ function ForgotPasswordPage() {
     initialValues: {
       email: "",
     },
-    validationSchema: Yup.object({
-      email: Yup.string().required(t("auth.forgotPassword.emailRequired")),
-    }),
+    validationSchema: getForgotPasswordSchema(t),
     onSubmit: (values, { setSubmitting }) => {
       // TODO: wire up to the auth service.
       console.log(values);

@@ -5,7 +5,42 @@
   "common": {
     "language": "Язык",
     "showPassword": "Показать пароль",
-    "hidePassword": "Скрыть пароль"
+    "hidePassword": "Скрыть пароль",
+    "toggleMenu": "Показать/скрыть меню",
+    "search": "Поиск",
+    "searchPlaceholder": "Поиск...",
+    "notifications": "Уведомления",
+    "noNotifications": "У вас нет новых уведомлений",
+    "myAccount": "Мой аккаунт",
+    "myProfile": "Мой профиль",
+    "settings": "Настройки",
+    "logout": "Выйти"
+  },
+  "sidebar": {
+    "groups": {
+      "main": "Меню"
+    },
+    "dashboard": "Панель управления",
+    "clubVerification": "Верификация клубов",
+    "clubs": "Клубы",
+    "users": "Пользователи",
+    "eventsModeration": "Модерация мероприятий",
+    "financePayouts": "Финансы и выплаты",
+    "reviewsDisputes": "Отзывы и споры",
+    "categoriesTags": "Категории и теги",
+    "announcements": "Объявления",
+    "rolesSettings": "Роли и настройки",
+    "events": "Мероприятия",
+    "participants": "Участники",
+    "checkIn": "Регистрация",
+    "team": "Команда",
+    "refundRequests": "Заявки на возврат",
+    "reviews": "Отзывы",
+    "clubProfile": "Профиль клуба",
+    "settings": "Настройки",
+    "myEvents": "Мои мероприятия",
+    "confirmCompletion": "Подтвердить завершение",
+    "myProfile": "Мой профиль"
   },
   "auth": {
     "tagline": "Полноценная платформа для создания, управления и обмена незабываемыми впечатлениями.",

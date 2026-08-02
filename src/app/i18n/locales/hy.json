@@ -5,7 +5,42 @@
   "common": {
     "language": "Լեզու",
     "showPassword": "Ցուցադրել գաղտնաբառը",
-    "hidePassword": "Թաքցնել գաղտնաբառը"
+    "hidePassword": "Թաքցնել գաղտնաբառը",
+    "toggleMenu": "Ցուցադրել/թաքցնել ընտրացանկը",
+    "search": "Որոնում",
+    "searchPlaceholder": "Որոնել...",
+    "notifications": "Ծանուցումներ",
+    "noNotifications": "Դուք նոր ծանուցումներ չունեք",
+    "myAccount": "Իմ հաշիվը",
+    "myProfile": "Իմ պրոֆիլը",
+    "settings": "Կարգավորումներ",
+    "logout": "Ելք"
+  },
+  "sidebar": {
+    "groups": {
+      "main": "Ընտրացանկ"
+    },
+    "dashboard": "Վահանակ",
+    "clubVerification": "Ակումբների վավերացում",
+    "clubs": "Ակումբներ",
+    "users": "Օգտատերեր",
+    "eventsModeration": "Միջոցառումների մոդերացիա",
+    "financePayouts": "Ֆինանսներ և վճարումներ",
+    "reviewsDisputes": "Կարծիքներ և վեճեր",
+    "categoriesTags": "Կատեգորիաներ և պիտակներ",
+    "announcements": "Հայտարարություններ",
+    "rolesSettings": "Դերեր և կարգավորումներ",
+    "events": "Միջոցառումներ",
+    "participants": "Մասնակիցներ",
+    "checkIn": "Գրանցում",
+    "team": "Թիմ",
+    "refundRequests": "Վերադարձի հայտեր",
+    "reviews": "Կարծիքներ",
+    "clubProfile": "Ակումբի պրոֆիլ",
+    "settings": "Կարգավորումներ",
+    "myEvents": "Իմ միջոցառումները",
+    "confirmCompletion": "Հաստատել ավարտը",
+    "myProfile": "Իմ պրոֆիլը"
   },
   "auth": {
     "tagline": "Ամբողջական հարթակ՝ անմոռանալի փորձառություններ ստեղծելու, կազմակերպելու և կիսվելու համար։",

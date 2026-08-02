@@ -5,7 +5,42 @@
   "common": {
     "language": "Language",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "toggleMenu": "Toggle menu",
+    "search": "Search",
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications",
+    "noNotifications": "You have no new notifications",
+    "myAccount": "My account",
+    "myProfile": "My profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "sidebar": {
+    "groups": {
+      "main": "Menu"
+    },
+    "dashboard": "Dashboard",
+    "clubVerification": "Club Verification",
+    "clubs": "Clubs",
+    "users": "Users",
+    "eventsModeration": "Events Moderation",
+    "financePayouts": "Finance & Payouts",
+    "reviewsDisputes": "Reviews & Disputes",
+    "categoriesTags": "Categories & Tags",
+    "announcements": "Announcements",
+    "rolesSettings": "Roles & Settings",
+    "events": "Events",
+    "participants": "Participants",
+    "checkIn": "Check-in",
+    "team": "Team",
+    "refundRequests": "Refund Requests",
+    "reviews": "Reviews",
+    "clubProfile": "Club Profile",
+    "settings": "Settings",
+    "myEvents": "My Events",
+    "confirmCompletion": "Confirm Completion",
+    "myProfile": "My Profile"
   },
   "auth": {
     "tagline": "A complete platform to create, manage, and share unforgettable experiences.",
