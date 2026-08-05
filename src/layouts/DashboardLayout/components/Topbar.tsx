@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher/LanguageSwitcher";
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher/ThemeSwitcher";
 
 import { useLayout } from "@/app/providers/useLayout";
 
-import NotificationMenu from "./NotificationMenu";
 import UserMenu from "./UserMenu";
 
 interface TopbarProps {
@@ -32,23 +32,11 @@ function Topbar({ userName }: TopbarProps) {
                 <span />
               </span>
             </button>
-
-            <form className="app-search d-none d-md-block" role="search">
-              <div className="position-relative">
-                <input
-                  type="search"
-                  className="form-control"
-                  placeholder={t("common.searchPlaceholder")}
-                  aria-label={t("common.search")}
-                />
-                <span className="ri-search-line search-widget-icon" aria-hidden="true" />
-              </div>
-            </form>
           </div>
 
           <div className="d-flex align-items-center">
+            <ThemeSwitcher className="header-item" />
             <LanguageSwitcher className="header-item" />
-            <NotificationMenu />
             <UserMenu name={userName} />
           </div>
         </div>

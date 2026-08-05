@@ -8,6 +8,8 @@ import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 
 import AdminDashboardPage from "@/pages/admin/DashboardPage";
 import ClubDashboardPage from "@/pages/club/DashboardPage";
+import EventsPage from "@/pages/events/EventsPage";
+import CreateEventPage from "@/pages/events/CreateEventPage";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,16 @@ const router = createBrowserRouter([
       {
         path: "/club/dashboard",
         element: <ClubDashboardPage />,
+      },
+
+      {
+        path: "/club/events",
+        element: <EventsPage />,
+      },
+
+      {
+        path: "/club/events/create",
+        element: <CreateEventPage />,
       },
     ],
   },

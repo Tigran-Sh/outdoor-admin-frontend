@@ -23,7 +23,7 @@ function LoginPage() {
       // TODO: wire up to the auth service.
       console.log(values);
       setSubmitting(false);
-      navigate("/admin/dashboard");
+      navigate("/club/dashboard");
     },
   });
 

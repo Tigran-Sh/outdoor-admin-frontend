@@ -7,14 +7,22 @@
     "showPassword": "Ցուցադրել գաղտնաբառը",
     "hidePassword": "Թաքցնել գաղտնաբառը",
     "toggleMenu": "Ցուցադրել/թաքցնել ընտրացանկը",
-    "search": "Որոնում",
-    "searchPlaceholder": "Որոնել...",
-    "notifications": "Ծանուցումներ",
-    "noNotifications": "Դուք նոր ծանուցումներ չունեք",
+    "switchToLightMode": "Անցնել լուսավոր ռեժիմի",
+    "switchToDarkMode": "Անցնել մուգ ռեժիմի",
+    "close": "Փակել",
+    "edit": "Խմբագրել",
+    "delete": "Ձելել",
+    "cancel": "Չեղարկել",
     "myAccount": "Իմ հաշիվը",
     "myProfile": "Իմ պրոֆիլը",
     "settings": "Կարգավորումներ",
-    "logout": "Ելք"
+    "logout": "Ելք",
+    "table": {
+      "searchPlaceholder": "Որոնել...",
+      "showing": "Ցուցադրվում է {{from}}-ից {{to}}-ը {{total}}-ից",
+      "previous": "Նախորդ",
+      "next": "Հաջորդ"
+    }
   },
   "sidebar": {
     "groups": {
@@ -69,6 +77,86 @@
       "submit": "Ուղարկել հղումը",
       "rememberPassword": "Սպասեք, ես հիշեցի գաղտնաբառս...",
       "backToLogin": "Սեղմեք այստեղ"
+    }
+  },
+  "events": {
+    "createEvent": "Ստեղծել միջոցառում",
+    "empty": "Դեռ միջոցառումներ չկան։",
+    "table": {
+      "name": "Միջոցառման անվանում",
+      "location": "Վայր",
+      "date": "Ամսաթիվ",
+      "guide": "Նշանակված ուղեկցորդ",
+      "categories": "Կատեգորիաներ",
+      "actions": "Գործողություններ"
+    },
+    "status": {
+      "cancelled": "Չեղարկված"
+    },
+    "cancelEvent": "Չեղարկել միջոցառումը",
+    "confirmDelete": {
+      "title": "Ջնջել այս միջոցառումը՞",
+      "message": "Այս գործողությունը հետ չի գարնարկվի։",
+      "confirm": "Այո, ջնջել"
+    },
+    "confirmCancel": {
+      "title": "Չեղարկել այս միջոցառումը՞",
+      "message": "Մասնակիցները կիառացվեն միջոցառման չեղարկման մասին։",
+      "confirm": "Այո, չեղարկել միջոցառումը"
+    },
+    "categories": {
+      "hiking": "Արշավ",
+      "cycling": "Հեծանվավազք",
+      "water": "Ջրային սպորտ",
+      "adventure": "Արկածախնդրություն",
+      "sunrise": "Արևածագ"
+    },
+    "form": {
+      "title": "Ստեղծել միջոցառում",
+      "editTitle": "Խմբագրել միջոցառումը",
+      "cancel": "Չեղարկել",
+      "submit": "Ստեղծել միջոցառում",
+      "saveChanges": "Պահպանել փոփոխությունները",
+      "steps": {
+        "general": "Ընդհանուր",
+        "schedule": "Ժամանակացույց",
+        "details": "Մանրամասներ"
+      },
+      "fields": {
+        "name": {
+          "label": "Միջոցառման անվանում",
+          "placeholder": "Մուտքագրեք միջոցառման անվանումը"
+        },
+        "location": {
+          "label": "Վայր",
+          "placeholder": "Մուտքագրեք միջոցառման վայրը"
+        },
+        "date": {
+          "label": "Ամսաթիվ"
+        },
+        "time": {
+          "label": "Ժամ"
+        },
+        "guide": {
+          "label": "Նշանակված ուղեկցորդ",
+          "placeholder": "Ընտրեք ուղեկցորդ"
+        },
+        "categories": {
+          "label": "Կատեգորիաներ"
+        },
+        "description": {
+          "label": "Նկարագրություն",
+          "placeholder": "Նկարագրեք միջոցառումը..."
+        }
+      },
+      "validation": {
+        "nameRequired": "Խնդրում ենք մուտքագրել միջոցառման անվանումը",
+        "locationRequired": "Խնդրում ենք մուտքագրել վայրը",
+        "dateRequired": "Խնդրում ենք ընտրել ամսաթիվը",
+        "timeRequired": "Խնդրում ենք ընտրել ժամը",
+        "guideRequired": "Խնդրում ենք ընտրել ուղեկցորդ",
+        "categoriesRequired": "Խնդրում ենք ընտրել առնվազն մեկ կատեգորիա"
+      }
     }
   },
   "footer": {

@@ -7,14 +7,22 @@
     "showPassword": "Показать пароль",
     "hidePassword": "Скрыть пароль",
     "toggleMenu": "Показать/скрыть меню",
-    "search": "Поиск",
-    "searchPlaceholder": "Поиск...",
-    "notifications": "Уведомления",
-    "noNotifications": "У вас нет новых уведомлений",
+    "switchToLightMode": "Переключить на светлую тему",
+    "switchToDarkMode": "Переключить на тёмную тему",
+    "close": "Закрыть",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "cancel": "Отмена",
     "myAccount": "Мой аккаунт",
     "myProfile": "Мой профиль",
     "settings": "Настройки",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "table": {
+      "searchPlaceholder": "Поиск...",
+      "showing": "Показано {{from}}–{{to}} из {{total}} результатов",
+      "previous": "Назад",
+      "next": "Далее"
+    }
   },
   "sidebar": {
     "groups": {
@@ -69,6 +77,86 @@
       "submit": "Отправить ссылку",
       "rememberPassword": "Постойте, я вспомнил пароль...",
       "backToLogin": "Нажмите здесь"
+    }
+  },
+  "events": {
+    "createEvent": "Создать мероприятие",
+    "empty": "Мероприятий пока нет.",
+    "table": {
+      "name": "Название мероприятия",
+      "location": "Место",
+      "date": "Дата",
+      "guide": "Назначенный гид",
+      "categories": "Категории",
+      "actions": "Действия"
+    },
+    "status": {
+      "cancelled": "Отменено"
+    },
+    "cancelEvent": "Отменить мероприятие",
+    "confirmDelete": {
+      "title": "Удалить это мероприятие?",
+      "message": "Это действие нельзя отменить.",
+      "confirm": "Да, удалить"
+    },
+    "confirmCancel": {
+      "title": "Отменить это мероприятие?",
+      "message": "Участники будут уведомлены об отмене мероприятия.",
+      "confirm": "Да, отменить мероприятие"
+    },
+    "categories": {
+      "hiking": "Пешие походы",
+      "cycling": "Велоспорт",
+      "water": "Водный спорт",
+      "adventure": "Приключения",
+      "sunrise": "Восход солнца"
+    },
+    "form": {
+      "title": "Создать мероприятие",
+      "editTitle": "Редактировать мероприятие",
+      "cancel": "Отмена",
+      "submit": "Создать мероприятие",
+      "saveChanges": "Сохранить изменения",
+      "steps": {
+        "general": "Общее",
+        "schedule": "Расписание",
+        "details": "Детали"
+      },
+      "fields": {
+        "name": {
+          "label": "Название мероприятия",
+          "placeholder": "Введите название мероприятия"
+        },
+        "location": {
+          "label": "Место",
+          "placeholder": "Введите место проведения"
+        },
+        "date": {
+          "label": "Дата"
+        },
+        "time": {
+          "label": "Время"
+        },
+        "guide": {
+          "label": "Назначенный гид",
+          "placeholder": "Выберите гида"
+        },
+        "categories": {
+          "label": "Категории"
+        },
+        "description": {
+          "label": "Описание",
+          "placeholder": "Опишите мероприятие..."
+        }
+      },
+      "validation": {
+        "nameRequired": "Пожалуйста, введите название мероприятия",
+        "locationRequired": "Пожалуйста, введите место",
+        "dateRequired": "Пожалуйста, выберите дату",
+        "timeRequired": "Пожалуйста, выберите время",
+        "guideRequired": "Пожалуйста, выберите гида",
+        "categoriesRequired": "Пожалуйста, выберите хотя бы одну категорию"
+      }
     }
   },
   "footer": {

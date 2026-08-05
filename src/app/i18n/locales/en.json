@@ -7,14 +7,22 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "toggleMenu": "Toggle menu",
-    "search": "Search",
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "noNotifications": "You have no new notifications",
+    "switchToLightMode": "Switch to light mode",
+    "switchToDarkMode": "Switch to dark mode",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
     "myAccount": "My account",
     "myProfile": "My profile",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "table": {
+      "searchPlaceholder": "Search...",
+      "showing": "Showing {{from}} to {{to}} of {{total}} results",
+      "previous": "Previous",
+      "next": "Next"
+    }
   },
   "sidebar": {
     "groups": {
@@ -69,6 +77,86 @@
       "submit": "Send Reset Link",
       "rememberPassword": "Wait, I remember my password...",
       "backToLogin": "Click here"
+    }
+  },
+  "events": {
+    "createEvent": "Create Event",
+    "empty": "No events yet.",
+    "table": {
+      "name": "Event Name",
+      "location": "Location",
+      "date": "Date",
+      "guide": "Assigned Guide",
+      "categories": "Categories",
+      "actions": "Actions"
+    },
+    "status": {
+      "cancelled": "Cancelled"
+    },
+    "cancelEvent": "Cancel event",
+    "confirmDelete": {
+      "title": "Delete this event?",
+      "message": "This action cannot be undone.",
+      "confirm": "Yes, delete it"
+    },
+    "confirmCancel": {
+      "title": "Cancel this event?",
+      "message": "Participants will be notified that the event was cancelled.",
+      "confirm": "Yes, cancel event"
+    },
+    "categories": {
+      "hiking": "Hiking",
+      "cycling": "Cycling",
+      "water": "Water Sports",
+      "adventure": "Adventure",
+      "sunrise": "Sunrise"
+    },
+    "form": {
+      "title": "Create Event",
+      "editTitle": "Edit Event",
+      "cancel": "Cancel",
+      "submit": "Create Event",
+      "saveChanges": "Save Changes",
+      "steps": {
+        "general": "General",
+        "schedule": "Schedule",
+        "details": "Details"
+      },
+      "fields": {
+        "name": {
+          "label": "Event Name",
+          "placeholder": "Enter event name"
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Enter event location"
+        },
+        "date": {
+          "label": "Date"
+        },
+        "time": {
+          "label": "Time"
+        },
+        "guide": {
+          "label": "Assigned Guide",
+          "placeholder": "Select a guide"
+        },
+        "categories": {
+          "label": "Categories"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Describe the event..."
+        }
+      },
+      "validation": {
+        "nameRequired": "Please enter an event name",
+        "locationRequired": "Please enter a location",
+        "dateRequired": "Please select a date",
+        "timeRequired": "Please select a time",
+        "guideRequired": "Please select a guide",
+        "categoriesRequired": "Please select at least one category"
+      }
     }
   },
   "footer": {
