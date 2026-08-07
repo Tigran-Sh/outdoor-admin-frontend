@@ -70,7 +70,9 @@ function toEventFormValues(event: EventListItem): EventFormValues {
   };
 }
 
-function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "status"> {
+function toEventListItem(
+  values: EventFormValues,
+): Omit<EventListItem, "id" | "status"> {
   return {
     name: values.name,
     category: values.category,
@@ -79,7 +81,9 @@ function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "s
       : EVENT_REGIONS[0],
     date: values.date,
     time: values.time,
-    durationType: (EVENT_DURATION_TYPES as readonly string[]).includes(values.durationType)
+    durationType: (EVENT_DURATION_TYPES as readonly string[]).includes(
+      values.durationType,
+    )
       ? (values.durationType as EventDurationType)
       : EVENT_DURATION_TYPES[0],
     endDate: values.endDate,
@@ -92,7 +96,9 @@ function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "s
     meetingPointDescription: values.meetingPointDescription,
     meetingPointCoordinates: values.meetingPointCoordinates,
     maxParticipants: values.maxParticipants,
-    priceType: (EVENT_PRICE_TYPES as readonly string[]).includes(values.priceType)
+    priceType: (EVENT_PRICE_TYPES as readonly string[]).includes(
+      values.priceType,
+    )
       ? (values.priceType as EventPriceType)
       : EVENT_PRICE_TYPES[0],
     price: values.price,
@@ -116,6 +122,8 @@ function EventsPage() {
     const createdEvent = state?.createdEvent;
     if (!createdEvent) return mockEvents;
 
+    console.log(events, "events");
+
     return [
       ...mockEvents,
       {
@@ -126,7 +134,9 @@ function EventsPage() {
     ];
   });
   const [editingEvent, setEditingEvent] = useState<EventListItem | null>(null);
-  const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(null);
+  const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!location.state) return;
@@ -149,11 +159,15 @@ function EventsPage() {
     if (!confirmAction) return;
 
     if (confirmAction.type === "delete") {
-      setEvents((prev) => prev.filter((event) => event.id !== confirmAction.event.id));
+      setEvents((prev) =>
+        prev.filter((event) => event.id !== confirmAction.event.id),
+      );
     } else {
       setEvents((prev) =>
         prev.map((event) =>
-          event.id === confirmAction.event.id ? { ...event, status: "cancelled" } : event,
+          event.id === confirmAction.event.id
+            ? { ...event, status: "cancelled" }
+            : event,
         ),
       );
     }
@@ -183,7 +197,9 @@ function EventsPage() {
       sortable: true,
       accessor: (row) => t(`activityTypes.${row.category}`),
       render: (row) => {
-        const category = EVENT_CATEGORIES.find((item) => item.id === row.category);
+        const category = EVENT_CATEGORIES.find(
+          (item) => item.id === row.category,
+        );
         if (!category) return "—";
 
         return (
@@ -211,8 +227,10 @@ function EventsPage() {
       key: "guide",
       header: t("events.table.guide"),
       sortable: true,
-      accessor: (row) => EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "",
-      render: (row) => EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "—",
+      accessor: (row) =>
+        EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "",
+      render: (row) =>
+        EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "—",
     },
     {
       key: "actions",
@@ -304,7 +322,11 @@ function EventsPage() {
         isOpen={confirmAction !== null}
         onClose={() => setConfirmAction(null)}
         onConfirm={handleConfirmAction}
-        icon={confirmAction?.type === "delete" ? "ri-delete-bin-line" : "ri-error-warning-line"}
+        icon={
+          confirmAction?.type === "delete"
+            ? "ri-delete-bin-line"
+            : "ri-error-warning-line"
+        }
         confirmVariant={confirmAction?.type === "delete" ? "danger" : "warning"}
         title={
           confirmAction?.type === "delete"

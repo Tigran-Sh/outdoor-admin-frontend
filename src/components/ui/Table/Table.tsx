@@ -172,7 +172,7 @@ function Table<T>({
       {searchable && (
         <div
           className="search-box"
-          style={{ maxWidth: 300, marginBottom: "3222px" }}
+          style={{ maxWidth: 300, marginBottom: "32px" }}
         >
           <input
             type="search"
