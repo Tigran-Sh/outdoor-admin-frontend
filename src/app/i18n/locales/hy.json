@@ -22,6 +22,10 @@
       "showing": "Ցուցադրվում է {{from}}-ից {{to}}-ը {{total}}-ից",
       "previous": "Նախորդ",
       "next": "Հաջորդ"
+    },
+    "imageUpload": {
+      "dropInstructions": "Կցեք ֆայլերը այստեղ կամ սեղմեք՝ վերբեռնելու համար։",
+      "removeImage": "Հեռացնել նկարը"
     }
   },
   "sidebar": {
@@ -79,15 +83,48 @@
       "backToLogin": "Սեղմեք այստեղ"
     }
   },
+  "activityTypes": {
+    "hiking": "Արշավական",
+    "trailRunning": "Վազք",
+    "cycling": "Հեծանվաը",
+    "climbing": "Մագլցում",
+    "zipline": "Զիպ լայն",
+    "skydiving": "Ազատ անկում",
+    "parachuting": "Պարաշուտ",
+    "paragliding": "Պարապլան",
+    "hangGliding": "Դելտապլան",
+    "supBoarding": "Սապ բորդ",
+    "yachting": "Յախտա",
+    "surfing": "Սերֆինգ",
+    "kayaking": "Կայակինգ",
+    "rafting": "Ռաֆտինգ",
+    "canyoneering": "Կանյոնի հաղթահարում",
+    "wakeboarding": "Վեյքբորդինգ",
+    "skiing": "Դահուկ",
+    "snowboarding": "Սնուուբորդ"
+  },
+  "regions": {
+    "yerevan": "Երևան",
+    "aragatsotn": "Արագածոտն",
+    "ararat": "Արարատ",
+    "armavir": "Արմավիր",
+    "gegharkunik": "Գեղարքունիք",
+    "kotayk": "Կոտայք",
+    "lori": "Լոռի",
+    "shirak": "Շիրակ",
+    "syunik": "Սյունիք",
+    "tavush": "Տավուշ",
+    "vayotsDzor": "Վայոց ձոր"
+  },
   "events": {
     "createEvent": "Ստեղծել միջոցառում",
     "empty": "Դեռ միջոցառումներ չկան։",
     "table": {
       "name": "Միջոցառման անվանում",
-      "location": "Վայր",
+      "category": "Կատեգորիա",
+      "region": "Մարզ",
       "date": "Ամսաթիվ",
       "guide": "Նշանակված ուղեկցորդ",
-      "categories": "Կատեգորիաներ",
       "actions": "Գործողություններ"
     },
     "status": {
@@ -104,12 +141,24 @@
       "message": "Մասնակիցները կիառացվեն միջոցառման չեղարկման մասին։",
       "confirm": "Այո, չեղարկել միջոցառումը"
     },
-    "categories": {
-      "hiking": "Արշավ",
-      "cycling": "Հեծանվավազք",
-      "water": "Ջրային սպորտ",
-      "adventure": "Արկածախնդրություն",
-      "sunrise": "Արևածագ"
+    "languages": {
+      "en": "Անգլերեն",
+      "hy": "Հայերեն",
+      "ru": "Ռուսերեն"
+    },
+    "difficulties": {
+      "easy": "Հեշտ",
+      "medium": "Միջին",
+      "hard": "Բարդ",
+      "extreme": "Էքստրեմալ"
+    },
+    "priceTypes": {
+      "free": "Անվճար",
+      "paid": "Վճարովի"
+    },
+    "durationTypes": {
+      "single": "Մեկօրյա",
+      "multi": "Բազմօրյա"
     },
     "form": {
       "title": "Ստեղծել միջոցառում",
@@ -120,6 +169,9 @@
       "steps": {
         "general": "Ընդհանուր",
         "schedule": "Ժամանակացույց",
+        "route": "Երթուղի",
+        "salesTerms": "Վաճառք և պայմաններ",
+        "media": "Մեդիա",
         "details": "Մանրամասներ"
       },
       "fields": {
@@ -127,22 +179,94 @@
           "label": "Միջոցառման անվանում",
           "placeholder": "Մուտքագրեք միջոցառման անվանումը"
         },
-        "location": {
-          "label": "Վայր",
-          "placeholder": "Մուտքագրեք միջոցառման վայրը"
+        "category": {
+          "label": "Կատեգորիա",
+          "placeholder": "Ընտրեք կատեգորիան"
         },
         "date": {
           "label": "Ամսաթիվ"
         },
         "time": {
-          "label": "Ժամ"
+          "label": "Մեկնարկի ժամ"
+        },
+        "durationType": {
+          "label": "Տևողություն"
+        },
+        "endDate": {
+          "label": "Ավարտի ամսաթիվ"
         },
         "guide": {
           "label": "Նշանակված ուղեկցորդ",
           "placeholder": "Ընտրեք ուղեկցորդ"
         },
-        "categories": {
-          "label": "Կատեգորիաներ"
+        "sweepGuide": {
+          "label": "Հետնապահ",
+          "placeholder": "Ընտրեք հետնապահ",
+          "helperText": "Ոչ պարտադիր։ Ուղեկցորդը, ով մնում է խմբի հետևում։"
+        },
+        "region": {
+          "label": "Լոկացիա (մարզ / տարածաշրջան)",
+          "placeholder": "Ընտրեք մարզը"
+        },
+        "difficulties": {
+          "label": "Բարդությունը"
+        },
+        "distanceKm": {
+          "label": "Հեռավորությունը (կմ)"
+        },
+        "elevationGainM": {
+          "label": "Հարաբերական բարձրություն (մ)"
+        },
+        "meetingPointDescription": {
+          "label": "Հանդիպման վայր",
+          "placeholder": "օրինակ՝ Գլխավոր մուտք, այցելուների կենտրոն"
+        },
+        "meetingPointCoordinates": {
+          "label": "Հանդիպման վայրի կոորդինատներ",
+          "placeholder": "օրինակ՝ 40.7397, 44.8639",
+          "helperText": "Օգտագործվում է մասնակիցների համար ավտոմատ նավարկման հղում ստեղծելու համար։"
+        },
+        "maxParticipants": {
+          "label": "Մասնակիցների առավելագույն քանակ",
+          "placeholder": "օր.՝ 18",
+          "helperText": "Երբ հասնի առավելագույն քանակին, միջոցառումն ավտոմատ կնշվի որպես Sold Out։"
+        },
+        "priceType": {
+          "label": "Գնի տեսակ",
+          "placeholder": "Ընտրեք գնի տեսակը"
+        },
+        "price": {
+          "label": "Գին (դրամ)",
+          "helperText": "Թողեք դատարկ, եթե միջոցառումն անվճար է։"
+        },
+        "includedItems": {
+          "label": "Ինչ է ներառված գնի մեջ",
+          "placeholder": "Նշեք, թե ինչ է ներառված գնի մեջ..."
+        },
+        "excludedItems": {
+          "label": "Ինչ չի ներառված",
+          "placeholder": "Նշեք, թե ինչ չի ներառված..."
+        },
+        "cancellationPolicy": {
+          "label": "Չեղարկման պայմաններ",
+          "placeholder": "Նկարագրեք չեղարկման պայմանները..."
+        },
+        "additionalInfo": {
+          "label": "Լրացուցիչ տեղեկություն",
+          "placeholder": "Այլ տեղեկություն, որը մասնակիցները պետք է իմանան..."
+        },
+        "coverImage": {
+          "label": "Կազմի նկար"
+        },
+        "galleryImages": {
+          "label": "Լրացուցիչ նկարներ"
+        },
+        "whatIsNecessary": {
+          "label": "Ինչ է անհրաժեշտ",
+          "placeholder": "Նշեք, թե ինչ պետք է վերցնեն կամ պատրաստեն մասնակիցները..."
+        },
+        "languages": {
+          "label": "Ուղեկցորդի աշխատանքային լեզուներ"
         },
         "description": {
           "label": "Նկարագրություն",
@@ -151,11 +275,155 @@
       },
       "validation": {
         "nameRequired": "Խնդրում ենք մուտքագրել միջոցառման անվանումը",
-        "locationRequired": "Խնդրում ենք մուտքագրել վայրը",
+        "categoryRequired": "Խնդրում ենք ընտրել կատեգորիան",
         "dateRequired": "Խնդրում ենք ընտրել ամսաթիվը",
         "timeRequired": "Խնդրում ենք ընտրել ժամը",
+        "endDateRequired": "Խնդրում ենք ընտրել ավարտի ամսաթիվը",
         "guideRequired": "Խնդրում ենք ընտրել ուղեկցորդ",
-        "categoriesRequired": "Խնդրում ենք ընտրել առնվազն մեկ կատեգորիա"
+        "languagesRequired": "Խնդրում ենք ընտրել առնվազն մեկ լեզու",
+        "regionRequired": "Խնդրում ենք ընտրել մարզը",
+        "difficultiesRequired": "Խնդրում ենք ընտրել առնվազն մեկ բարդություն",
+        "meetingPointDescriptionRequired": "Խնդրում ենք նկարագրել հանդիպման վայրը",
+        "distanceRequired": "Խնդրում ենք մուտքագրել հեռավորությունը",
+        "distanceInvalid": "Մուտքագրեք վավեր հեռավորություն",
+        "elevationRequired": "Խնդրում ենք մուտքագրել հարաբերական բարձրությունը",
+        "elevationInvalid": "Մուտքագրեք վավեր բարձրություն",
+        "coordinatesRequired": "Խնդրում ենք մուտքագրել հանդիպման վայրի կոորդինատները",
+        "maxParticipantsRequired": "Խնդրում ենք մուտքագրել մասնակիցների առավելագույն քանակը",
+        "maxParticipantsInvalid": "Մուտքագրեք վավեր քանակ",
+        "priceTypeRequired": "Խնդրում ենք ընտրել գնի տեսակը",
+        "priceRequired": "Խնդրում ենք մուտքագրել գինը",
+        "priceInvalid": "Մուտքագրեք վավեր գին"
+      }
+    }
+  },
+  "clubs": {
+    "createClub": "Ստեղծել ակումբ",
+    "empty": "Դեռ ակումբներ չկան։",
+    "table": {
+      "name": "Ակումբի անվանում",
+      "activityTypes": "Ակտիվության տեսակներ",
+      "baseRegion": "Հիմնական մարզ",
+      "email": "Էլ. փոստ",
+      "status": "Կարգավիճակ",
+      "actions": "Գործողություններ"
+    },
+    "status": {
+      "pending": "Սպասման մեջ",
+      "identityVerified": "Ինքնությունը հաստատված",
+      "fullyVerified": "Ամբողջությամբ հաստատված"
+    },
+    "verifyIdentity": "Հաստատել ինքնությունը",
+    "view": {
+      "tabs": {
+        "overview": "Ընդհանուր",
+        "legal": "Իրավական"
+      },
+      "editProfile": "Խմբագրել պրոֆիլը",
+      "contact": "Կոնտակտներ",
+      "notProvided": "Նշված չէ",
+      "notUploaded": "Վերբեռնված չէ"
+    },
+    "confirmDelete": {
+      "title": "Ջնջել այս ակումբը՞",
+      "message": "Այս գործողությունը հետ չի գործարկվի։",
+      "confirm": "Այո, ջնջել"
+    },
+    "confirmVerify": {
+      "title": "Հաստատել ակումբի ինքնությունը՞",
+      "message": "Ակումբը կկարողանա ստեղծել և հրապարակել միջոցառումներ։",
+      "confirm": "Այո, հաստատել"
+    },
+    "entityTypes": {
+      "individual": "Անհատ ուղեկցորդ",
+      "soleTrader": "Անհատ ձեռնարկատեր (ԱՁ)",
+      "llc": "ՍՊԸ",
+      "informal": "Ոչ պաշտոնական ակումբ"
+    },
+    "form": {
+      "title": "Ստեղծել ակումբ",
+      "editTitle": "Խմբագրել ակումբը",
+      "cancel": "Չեղարկել",
+      "submit": "Ստեղծել ակումբ",
+      "saveChanges": "Պահպանել փոփոխությունները",
+      "steps": {
+        "identity": "Ինքնություն",
+        "legal": "Իրավական"
+      },
+      "fields": {
+        "name": {
+          "label": "Ակումբի անվանում",
+          "placeholder": "Մուտքագրեք ակումբի անվանումը"
+        },
+        "logo": {
+          "label": "Լոգո"
+        },
+        "coverImage": {
+          "label": "Կազմի նկար"
+        },
+        "about": {
+          "label": "Մասին / Նկարագրություն",
+          "placeholder": "Պատմեք մասնակիցներին, թե ինչով է զբաղվում ձեր ակումբը...",
+          "helperText": "Կարճ պրոֆիլը վստահություն չի ներշնչի․ գրեք մի քանի նախադասություն։"
+        },
+        "activityTypes": {
+          "label": "Ակտիվության տեսակներ"
+        },
+        "baseRegion": {
+          "label": "Հիմնական մարզ",
+          "placeholder": "Ընտրեք մարզը"
+        },
+        "yearFounded": {
+          "label": "Հիմնադրման տարեթիվ"
+        },
+        "email": {
+          "label": "Էլ. փոստ",
+          "placeholder": "Մուտքագրեք էլ. փոստը"
+        },
+        "phone": {
+          "label": "Հեռախոս",
+          "placeholder": "Մուտքագրեք հեռախոսը"
+        },
+        "social": {
+          "label": "Սոց ցանցեր",
+          "instagramPlaceholder": "Instagram",
+          "facebookPlaceholder": "Facebook",
+          "telegramPlaceholder": "Telegram",
+          "helperText": "Առնվազն մեկը՝ Instagram, Facebook կամ Telegram, պարտադիր է։"
+        },
+        "website": {
+          "label": "Կայք",
+          "placeholder": "https://..."
+        },
+        "entityType": {
+          "label": "Իրավաբանական տեսակ",
+          "placeholder": "Ընտրեք իրավաբանական տեսակը",
+          "helperText": "Սա որոշում է, թե ստորև ինչ փաստաթղթեր են անհրաժեշտ։"
+        },
+        "taxId": {
+          "label": "ՀՎՀՀ",
+          "placeholder": "Մուտքագրեք ՀՎՀՀ-ն"
+        },
+        "ownerIdDocument": {
+          "label": "Սեփականատիրոջ անձնագիր"
+        }
+      },
+      "validation": {
+        "nameRequired": "Խնդրում ենք մուտքագրել ակումբի անվանումը",
+        "logoRequired": "Խնդրում ենք վերբեռնել լոգո",
+        "aboutRequired": "Խնդրում ենք մուտքագրել նկարագրություն",
+        "aboutTooShort": "Խնդրում ենք մուտքագրել առնվազն {{min}} նիշ",
+        "activityTypesRequired": "Խնդրում ենք ընտրել առնվազն մեկ ակտիվության տեսակ",
+        "baseRegionRequired": "Խնդրում ենք ընտրել հիմնական մարզը",
+        "yearFoundedInvalid": "Մուտքագրեք վավեր տարեթիվ",
+        "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
+        "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
+        "phoneRequired": "Խնդրում ենք մուտքագրել հեռախոսը",
+        "socialRequired": "Խնդրում ենք նշել առնվազն մեկը՝ Instagram, Facebook կամ Telegram",
+        "websiteInvalid": "Մուտքագրեք վավեր հղում",
+        "entityTypeRequired": "Խնդրում ենք ընտրել իրավաբանական տեսակը",
+        "taxIdRequired": "Խնդրում ենք մուտքագրել ՀՎՀՀ-ն",
+        "ownerIdDocumentRequired": "Խնդրում ենք վերբեռնել սեփականատիրոջ անձնագիրը"
       }
     }
   },

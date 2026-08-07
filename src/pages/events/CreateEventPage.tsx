@@ -6,8 +6,14 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardFooter } from "@/components/ui/Card/Card";
 
+import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
+
 import EventFormFields from "./components/EventFormFields";
-import { getEventFormSchema, initialEventFormValues, type EventFormValues } from "./EventForm.schema";
+import {
+  getEventFormSchema,
+  initialEventFormValues,
+  type EventFormValues,
+} from "./EventForm.schema";
 
 function CreateEventPage() {
   const { t } = useTranslation();
@@ -22,6 +28,8 @@ function CreateEventPage() {
     },
   });
 
+  useRevalidateOnLanguageChange(formik.validateForm);
+
   function handleCancel() {
     navigate("/club/events");
   }
@@ -30,7 +38,10 @@ function CreateEventPage() {
 
   return (
     <>
-      <Breadcrumbs title={pageTitle} />
+      <Breadcrumbs
+        title={pageTitle}
+        items={[{ label: t("sidebar.events"), to: "/club/events" }]}
+      />
 
       <Card>
         <CardBody>
@@ -40,7 +51,11 @@ function CreateEventPage() {
         </CardBody>
 
         <CardFooter className="d-flex justify-content-end gap-2">
-          <Button appearance="outline" variant="secondary" onClick={handleCancel}>
+          <Button
+            appearance="outline"
+            variant="secondary"
+            onClick={handleCancel}
+          >
             {t("events.form.cancel")}
           </Button>
 

@@ -1676,7 +1676,7 @@ $breadcrumb-margin-bottom: 1rem;
 $breadcrumb-bg: null;
 $breadcrumb-divider-color: var(--#{$prefix}secondary-color);
 $breadcrumb-active-color: var(--#{$prefix}secondary-color);
-$breadcrumb-divider: quote("\F0142");
+$breadcrumb-divider: quote("/");
 $breadcrumb-divider-flipped: $breadcrumb-divider;
 $breadcrumb-border-radius: null;
 // scss-docs-end breadcrumb-variables

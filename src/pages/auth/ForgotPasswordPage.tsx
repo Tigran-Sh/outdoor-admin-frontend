@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import Button from "@/components/ui/Button/Button";
 import Input from "@/components/ui/Input/Input";
 
+import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
+
 import AuthCard from "./components/AuthCard";
 import { getForgotPasswordSchema, type ForgotPasswordFormValues } from "./ForgotPasswordPage.schema";
 
@@ -25,6 +27,8 @@ function ForgotPasswordPage() {
       setSubmitted(true);
     },
   });
+
+  useRevalidateOnLanguageChange(formik.validateForm);
 
   return (
     <AuthCard

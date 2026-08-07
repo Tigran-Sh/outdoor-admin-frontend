@@ -10,6 +10,10 @@ import AdminDashboardPage from "@/pages/admin/DashboardPage";
 import ClubDashboardPage from "@/pages/club/DashboardPage";
 import EventsPage from "@/pages/events/EventsPage";
 import CreateEventPage from "@/pages/events/CreateEventPage";
+import ClubsPage from "@/pages/clubs/ClubsPage";
+import CreateClubPage from "@/pages/clubs/CreateClubPage";
+import ClubProfilePage from "@/pages/clubs/ClubProfilePage";
+import ClubViewPage from "@/pages/clubs/ClubViewPage";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +51,26 @@ const router = createBrowserRouter([
       {
         path: "/club/events/create",
         element: <CreateEventPage />,
+      },
+
+      {
+        path: "/club/profile",
+        element: <ClubViewPage />,
+      },
+
+      {
+        path: "/club/profile/edit",
+        element: <ClubProfilePage />,
+      },
+
+      {
+        path: "/admin/clubs",
+        element: <ClubsPage />,
+      },
+
+      {
+        path: "/admin/clubs/create",
+        element: <CreateClubPage />,
       },
     ],
   },

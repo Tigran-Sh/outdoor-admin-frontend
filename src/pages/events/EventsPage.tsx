@@ -14,10 +14,18 @@ import EventFormModal from "./components/EventFormModal";
 import type { EventFormValues } from "./EventForm.schema";
 import {
   EVENT_CATEGORIES,
+  EVENT_DURATION_TYPES,
   EVENT_GUIDES,
+  EVENT_PRICE_TYPES,
+  EVENT_REGIONS,
   formatEventDate,
   mockEvents,
+  type EventDifficulty,
+  type EventDurationType,
+  type EventLanguage,
   type EventListItem,
+  type EventPriceType,
+  type EventRegion,
 } from "./EventsPage.data";
 
 type ConfirmActionType = "cancel" | "delete";
@@ -34,12 +42,68 @@ interface EventsPageLocationState {
 function toEventFormValues(event: EventListItem): EventFormValues {
   return {
     name: event.name,
-    location: event.location,
+    category: event.category,
+    region: event.region,
     description: event.description,
     date: event.date,
     time: event.time,
+    durationType: event.durationType,
+    endDate: event.endDate,
     guideId: event.guideId,
-    categoryIds: event.categoryIds,
+    sweepGuideId: event.sweepGuideId,
+    languageIds: event.languageIds,
+    difficultyIds: event.difficultyIds,
+    distanceKm: event.distanceKm,
+    elevationGainM: event.elevationGainM,
+    meetingPointDescription: event.meetingPointDescription,
+    meetingPointCoordinates: event.meetingPointCoordinates,
+    maxParticipants: event.maxParticipants,
+    priceType: event.priceType,
+    price: event.price,
+    whatIsNecessary: event.whatIsNecessary,
+    includedItems: event.includedItems,
+    excludedItems: event.excludedItems,
+    cancellationPolicy: event.cancellationPolicy,
+    additionalInfo: event.additionalInfo,
+    coverImage: event.coverImage,
+    galleryImages: event.galleryImages,
+  };
+}
+
+function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "status"> {
+  return {
+    name: values.name,
+    category: values.category,
+    region: (EVENT_REGIONS as readonly string[]).includes(values.region)
+      ? (values.region as EventRegion)
+      : EVENT_REGIONS[0],
+    date: values.date,
+    time: values.time,
+    durationType: (EVENT_DURATION_TYPES as readonly string[]).includes(values.durationType)
+      ? (values.durationType as EventDurationType)
+      : EVENT_DURATION_TYPES[0],
+    endDate: values.endDate,
+    guideId: values.guideId,
+    sweepGuideId: values.sweepGuideId,
+    languageIds: values.languageIds as EventLanguage[],
+    difficultyIds: values.difficultyIds as EventDifficulty[],
+    distanceKm: values.distanceKm,
+    elevationGainM: values.elevationGainM,
+    meetingPointDescription: values.meetingPointDescription,
+    meetingPointCoordinates: values.meetingPointCoordinates,
+    maxParticipants: values.maxParticipants,
+    priceType: (EVENT_PRICE_TYPES as readonly string[]).includes(values.priceType)
+      ? (values.priceType as EventPriceType)
+      : EVENT_PRICE_TYPES[0],
+    price: values.price,
+    whatIsNecessary: values.whatIsNecessary,
+    includedItems: values.includedItems,
+    excludedItems: values.excludedItems,
+    cancellationPolicy: values.cancellationPolicy,
+    additionalInfo: values.additionalInfo,
+    description: values.description,
+    coverImage: values.coverImage,
+    galleryImages: values.galleryImages,
   };
 }
 
@@ -56,13 +120,7 @@ function EventsPage() {
       ...mockEvents,
       {
         id: crypto.randomUUID(),
-        name: createdEvent.name,
-        location: createdEvent.location,
-        date: createdEvent.date,
-        time: createdEvent.time,
-        guideId: createdEvent.guideId,
-        categoryIds: createdEvent.categoryIds,
-        description: createdEvent.description,
+        ...toEventListItem(createdEvent),
         status: "scheduled",
       },
     ];
@@ -79,7 +137,9 @@ function EventsPage() {
   function handleUpdateEvent(values: EventFormValues) {
     setEvents((prev) =>
       prev.map((event) =>
-        editingEvent && event.id === editingEvent.id ? { ...event, ...values } : event,
+        editingEvent && event.id === editingEvent.id
+          ? { ...event, ...toEventListItem(values) }
+          : event,
       ),
     );
     setEditingEvent(null);
@@ -117,7 +177,29 @@ function EventsPage() {
         </div>
       ),
     },
-    { key: "location", header: t("events.table.location"), sortable: true },
+    {
+      key: "category",
+      header: t("events.table.category"),
+      sortable: true,
+      accessor: (row) => t(`activityTypes.${row.category}`),
+      render: (row) => {
+        const category = EVENT_CATEGORIES.find((item) => item.id === row.category);
+        if (!category) return "—";
+
+        return (
+          <Badge variant={category.variant} appearance="subtle">
+            {t(`activityTypes.${row.category}`)}
+          </Badge>
+        );
+      },
+    },
+    {
+      key: "region",
+      header: t("events.table.region"),
+      sortable: true,
+      accessor: (row) => t(`regions.${row.region}`),
+      render: (row) => t(`regions.${row.region}`),
+    },
     {
       key: "date",
       header: t("events.table.date"),
@@ -131,24 +213,6 @@ function EventsPage() {
       sortable: true,
       accessor: (row) => EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "",
       render: (row) => EVENT_GUIDES.find((guide) => guide.id === row.guideId)?.name ?? "—",
-    },
-    {
-      key: "categories",
-      header: t("events.table.categories"),
-      render: (row) => (
-        <div className="d-flex flex-wrap gap-1">
-          {row.categoryIds.map((categoryId) => {
-            const category = EVENT_CATEGORIES.find((item) => item.id === categoryId);
-            if (!category) return null;
-
-            return (
-              <Badge key={categoryId} variant={category.variant} appearance="subtle">
-                {t(`events.categories.${categoryId}`)}
-              </Badge>
-            );
-          })}
-        </div>
-      ),
     },
     {
       key: "actions",

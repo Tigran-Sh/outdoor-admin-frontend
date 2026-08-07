@@ -6,22 +6,22 @@ import Modal from "@/components/ui/Modal/Modal";
 
 import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
 
-import EventFormFields from "./EventFormFields";
-import { getEventFormSchema, type EventFormValues } from "../EventForm.schema";
+import ClubFormFields from "./ClubFormFields";
+import { getClubFormSchema, type ClubFormValues } from "../ClubProfile.schema";
 
-interface EventFormModalProps {
+interface ClubFormModalProps {
   isOpen: boolean;
-  initialValues: EventFormValues;
+  initialValues: ClubFormValues;
   onClose: () => void;
-  onSubmit: (values: EventFormValues) => void;
+  onSubmit: (values: ClubFormValues) => void;
 }
 
-function EventFormModal({ isOpen, initialValues, onClose, onSubmit }: EventFormModalProps) {
+function ClubFormModal({ isOpen, initialValues, onClose, onSubmit }: ClubFormModalProps) {
   const { t } = useTranslation();
 
-  const formik = useFormik<EventFormValues>({
+  const formik = useFormik<ClubFormValues>({
     initialValues,
-    validationSchema: getEventFormSchema(t),
+    validationSchema: getClubFormSchema(t),
     onSubmit: (values, { resetForm, setSubmitting }) => {
       onSubmit(values);
       setSubmitting(false);
@@ -41,13 +41,13 @@ function EventFormModal({ isOpen, initialValues, onClose, onSubmit }: EventFormM
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={t("events.form.editTitle")}
+      title={t("clubs.form.editTitle")}
       size="lg"
       scrollable
       footer={
         <>
           <Button appearance="outline" variant="secondary" onClick={handleClose}>
-            {t("events.form.cancel")}
+            {t("clubs.form.cancel")}
           </Button>
 
           <Button
@@ -56,16 +56,16 @@ function EventFormModal({ isOpen, initialValues, onClose, onSubmit }: EventFormM
             loading={formik.isSubmitting}
             onClick={() => formik.handleSubmit()}
           >
-            {t("events.form.saveChanges")}
+            {t("clubs.form.saveChanges")}
           </Button>
         </>
       }
     >
       <form noValidate onSubmit={formik.handleSubmit}>
-        <EventFormFields formik={formik} />
+        <ClubFormFields formik={formik} />
       </form>
     </Modal>
   );
 }
 
-export default EventFormModal;
+export default ClubFormModal;

@@ -22,6 +22,10 @@
       "showing": "Showing {{from}} to {{to}} of {{total}} results",
       "previous": "Previous",
       "next": "Next"
+    },
+    "imageUpload": {
+      "dropInstructions": "Drop files here or click to upload.",
+      "removeImage": "Remove image"
     }
   },
   "sidebar": {
@@ -79,15 +83,48 @@
       "backToLogin": "Click here"
     }
   },
+  "activityTypes": {
+    "hiking": "Hiking",
+    "trailRunning": "Trail Running",
+    "cycling": "Cycling",
+    "climbing": "Climbing",
+    "zipline": "Zipline",
+    "skydiving": "Skydiving",
+    "parachuting": "Parachuting",
+    "paragliding": "Paragliding",
+    "hangGliding": "Hang Gliding",
+    "supBoarding": "SUP Boarding",
+    "yachting": "Yachting",
+    "surfing": "Surfing",
+    "kayaking": "Kayaking",
+    "rafting": "Rafting",
+    "canyoneering": "Canyoneering",
+    "wakeboarding": "Wakeboarding",
+    "skiing": "Skiing",
+    "snowboarding": "Snowboarding"
+  },
+  "regions": {
+    "yerevan": "Yerevan",
+    "aragatsotn": "Aragatsotn",
+    "ararat": "Ararat",
+    "armavir": "Armavir",
+    "gegharkunik": "Gegharkunik",
+    "kotayk": "Kotayk",
+    "lori": "Lori",
+    "shirak": "Shirak",
+    "syunik": "Syunik",
+    "tavush": "Tavush",
+    "vayotsDzor": "Vayots Dzor"
+  },
   "events": {
     "createEvent": "Create Event",
     "empty": "No events yet.",
     "table": {
       "name": "Event Name",
-      "location": "Location",
+      "category": "Category",
+      "region": "Region",
       "date": "Date",
       "guide": "Assigned Guide",
-      "categories": "Categories",
       "actions": "Actions"
     },
     "status": {
@@ -104,12 +141,24 @@
       "message": "Participants will be notified that the event was cancelled.",
       "confirm": "Yes, cancel event"
     },
-    "categories": {
-      "hiking": "Hiking",
-      "cycling": "Cycling",
-      "water": "Water Sports",
-      "adventure": "Adventure",
-      "sunrise": "Sunrise"
+    "languages": {
+      "en": "English",
+      "hy": "Armenian",
+      "ru": "Russian"
+    },
+    "difficulties": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "extreme": "Extreme"
+    },
+    "priceTypes": {
+      "free": "Free",
+      "paid": "Paid"
+    },
+    "durationTypes": {
+      "single": "Single-day",
+      "multi": "Multi-day"
     },
     "form": {
       "title": "Create Event",
@@ -120,6 +169,9 @@
       "steps": {
         "general": "General",
         "schedule": "Schedule",
+        "route": "Route",
+        "salesTerms": "Sales & Terms",
+        "media": "Media",
         "details": "Details"
       },
       "fields": {
@@ -127,22 +179,94 @@
           "label": "Event Name",
           "placeholder": "Enter event name"
         },
-        "location": {
-          "label": "Location",
-          "placeholder": "Enter event location"
+        "category": {
+          "label": "Category",
+          "placeholder": "Select a category"
         },
         "date": {
           "label": "Date"
         },
         "time": {
-          "label": "Time"
+          "label": "Start Time"
+        },
+        "durationType": {
+          "label": "Duration"
+        },
+        "endDate": {
+          "label": "End Date"
         },
         "guide": {
           "label": "Assigned Guide",
           "placeholder": "Select a guide"
         },
-        "categories": {
-          "label": "Categories"
+        "sweepGuide": {
+          "label": "Sweep Guide",
+          "placeholder": "Select a sweep guide",
+          "helperText": "Optional. The guide who stays at the back of the group."
+        },
+        "region": {
+          "label": "Region",
+          "placeholder": "Select a region"
+        },
+        "difficulties": {
+          "label": "Difficulty"
+        },
+        "distanceKm": {
+          "label": "Distance (km)"
+        },
+        "elevationGainM": {
+          "label": "Elevation gain (m)"
+        },
+        "meetingPointDescription": {
+          "label": "Meeting Point",
+          "placeholder": "e.g. Main entrance, visitor center"
+        },
+        "meetingPointCoordinates": {
+          "label": "Meeting Point Coordinates",
+          "placeholder": "e.g. 40.7397, 44.8639",
+          "helperText": "Used to automatically generate a navigation link for participants."
+        },
+        "maxParticipants": {
+          "label": "Maximum Participants",
+          "placeholder": "e.g. 18",
+          "helperText": "When capacity is reached, the event will automatically be marked as Sold Out."
+        },
+        "priceType": {
+          "label": "Pricing",
+          "placeholder": "Select pricing"
+        },
+        "price": {
+          "label": "Price (AMD)",
+          "helperText": "Leave blank if the event is free."
+        },
+        "includedItems": {
+          "label": "What's Included",
+          "placeholder": "List what's included in the price..."
+        },
+        "excludedItems": {
+          "label": "What's Not Included",
+          "placeholder": "List what's not included..."
+        },
+        "cancellationPolicy": {
+          "label": "Cancellation Policy",
+          "placeholder": "Describe the cancellation terms..."
+        },
+        "additionalInfo": {
+          "label": "Additional Info",
+          "placeholder": "Any other information participants should know..."
+        },
+        "coverImage": {
+          "label": "Cover image"
+        },
+        "galleryImages": {
+          "label": "Gallery images"
+        },
+        "whatIsNecessary": {
+          "label": "What's Necessary",
+          "placeholder": "List what participants should bring or prepare..."
+        },
+        "languages": {
+          "label": "Guide Working Languages"
         },
         "description": {
           "label": "Description",
@@ -151,11 +275,155 @@
       },
       "validation": {
         "nameRequired": "Please enter an event name",
-        "locationRequired": "Please enter a location",
+        "categoryRequired": "Please select a category",
         "dateRequired": "Please select a date",
         "timeRequired": "Please select a time",
+        "endDateRequired": "Please select an end date",
         "guideRequired": "Please select a guide",
-        "categoriesRequired": "Please select at least one category"
+        "languagesRequired": "Please select at least one language",
+        "regionRequired": "Please select a region",
+        "difficultiesRequired": "Please select at least one difficulty",
+        "meetingPointDescriptionRequired": "Please describe the meeting point",
+        "distanceRequired": "Please enter a distance",
+        "distanceInvalid": "Enter a valid distance",
+        "elevationRequired": "Please enter an elevation gain",
+        "elevationInvalid": "Enter a valid elevation gain",
+        "coordinatesRequired": "Please enter the meeting point coordinates",
+        "maxParticipantsRequired": "Please enter the maximum number of participants",
+        "maxParticipantsInvalid": "Enter a valid number of participants",
+        "priceTypeRequired": "Please select a pricing option",
+        "priceRequired": "Please enter a price",
+        "priceInvalid": "Enter a valid price"
+      }
+    }
+  },
+  "clubs": {
+    "createClub": "Create Club",
+    "empty": "No clubs yet.",
+    "table": {
+      "name": "Club Name",
+      "activityTypes": "Activity Types",
+      "baseRegion": "Base Region",
+      "email": "Email",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "Pending",
+      "identityVerified": "Identity Verified",
+      "fullyVerified": "Fully Verified"
+    },
+    "verifyIdentity": "Verify identity",
+    "view": {
+      "tabs": {
+        "overview": "Overview",
+        "legal": "Legal"
+      },
+      "editProfile": "Edit Profile",
+      "contact": "Contact",
+      "notProvided": "Not provided",
+      "notUploaded": "Not uploaded"
+    },
+    "confirmDelete": {
+      "title": "Delete this club?",
+      "message": "This action cannot be undone.",
+      "confirm": "Yes, delete it"
+    },
+    "confirmVerify": {
+      "title": "Verify this club's identity?",
+      "message": "The club will be able to create and publish events.",
+      "confirm": "Yes, verify"
+    },
+    "entityTypes": {
+      "individual": "Individual Guide",
+      "soleTrader": "Sole Trader (ԱՁ)",
+      "llc": "LLC",
+      "informal": "Informal Club"
+    },
+    "form": {
+      "title": "Create Club",
+      "editTitle": "Edit Club",
+      "cancel": "Cancel",
+      "submit": "Create Club",
+      "saveChanges": "Save Changes",
+      "steps": {
+        "identity": "Identity",
+        "legal": "Legal"
+      },
+      "fields": {
+        "name": {
+          "label": "Club Name",
+          "placeholder": "Enter club name"
+        },
+        "logo": {
+          "label": "Logo"
+        },
+        "coverImage": {
+          "label": "Cover Image"
+        },
+        "about": {
+          "label": "About / Description",
+          "placeholder": "Tell participants what your club does...",
+          "helperText": "A short profile won't build much trust — aim for a few sentences."
+        },
+        "activityTypes": {
+          "label": "Activity Types"
+        },
+        "baseRegion": {
+          "label": "Base Region",
+          "placeholder": "Select a region"
+        },
+        "yearFounded": {
+          "label": "Year Founded"
+        },
+        "email": {
+          "label": "Public Email",
+          "placeholder": "Enter public email"
+        },
+        "phone": {
+          "label": "Public Phone",
+          "placeholder": "Enter public phone"
+        },
+        "social": {
+          "label": "Social Media",
+          "instagramPlaceholder": "Instagram",
+          "facebookPlaceholder": "Facebook",
+          "telegramPlaceholder": "Telegram",
+          "helperText": "At least one of Instagram, Facebook, or Telegram is required."
+        },
+        "website": {
+          "label": "Website",
+          "placeholder": "https://..."
+        },
+        "entityType": {
+          "label": "Entity Type",
+          "placeholder": "Select an entity type",
+          "helperText": "This determines which legal documents are required below."
+        },
+        "taxId": {
+          "label": "Tax ID (ՀՎՀՀ)",
+          "placeholder": "Enter tax ID"
+        },
+        "ownerIdDocument": {
+          "label": "Owner ID Document"
+        }
+      },
+      "validation": {
+        "nameRequired": "Please enter a club name",
+        "logoRequired": "Please upload a logo",
+        "aboutRequired": "Please enter a description",
+        "aboutTooShort": "Please enter at least {{min}} characters",
+        "activityTypesRequired": "Please select at least one activity type",
+        "baseRegionRequired": "Please select a base region",
+        "yearFoundedInvalid": "Enter a valid year",
+        "emailRequired": "Please enter a public email",
+        "emailInvalid": "Enter a valid email",
+        "phoneRequired": "Please enter a public phone number",
+        "socialRequired": "Please provide at least one of Instagram, Facebook, or Telegram",
+        "websiteInvalid": "Enter a valid URL",
+        "entityTypeRequired": "Please select an entity type",
+        "taxIdRequired": "Please enter a tax ID",
+        "ownerIdDocumentRequired": "Please upload an owner ID document"
       }
     }
   },

@@ -21,7 +21,10 @@
     animation-duration: .3s;
     animation-fill-mode: both;
     position: absolute;
+    top: 100%;
+    left: 0;
     z-index: 1000;
+    margin-top: var(--#{$prefix}dropdown-spacer);
 
     &.dropdown-megamenu {
         padding: 20px;
@@ -32,6 +35,16 @@
     &[data-popper-placement="top-start"] {
         animation-name: DropDownSlideDown;
     }
+}
+
+.dropdown-menu-start {
+    right: auto;
+    left: 0;
+}
+
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
 }
 
 @keyframes DropDownSlide {
@@ -104,15 +117,6 @@
     width: 26rem;
 }
 
-[dir="ltr"] {
-    .dropdown-menu-start {
-        --#{$prefix}position: end;
-    }
-
-    .dropdown-menu-end {
-        --#{$prefix}position: start;
-    }
-}
 // Custom Dropdown with Tabs
 .dropdown-head{
     .nav-tabs-custom{

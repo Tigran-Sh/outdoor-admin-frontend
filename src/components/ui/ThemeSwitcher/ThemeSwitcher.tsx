@@ -17,6 +17,7 @@ function ThemeSwitcher({ className }: ThemeSwitcherProps) {
       variant="secondary"
       iconOnly
       className={["rounded-circle", className].filter(Boolean).join(" ")}
+      style={{ width: 40, height: 40 }}
       onClick={toggleTheme}
       aria-label={isDark ? t("common.switchToLightMode") : t("common.switchToDarkMode")}
     >

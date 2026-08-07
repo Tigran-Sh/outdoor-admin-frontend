@@ -38,6 +38,7 @@
 @import "./components/table";
 @import "./components/modal";
 @import "./components/pagination";
+@import "./components/dropzone";
 
 // Structure
 @import "./structure/footer";
@@ -47,3 +48,4 @@
 
 // Pages
 @import "./pages/authentication";
+@import "./pages/profile";

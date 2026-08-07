@@ -13,6 +13,7 @@ export const platformAdminMenu: SidebarNavSection[] = [
       {
         key: "clubs",
         labelKey: "sidebar.clubs",
+        path: "/admin/clubs",
         icon: "ri-building-line",
       },
       {

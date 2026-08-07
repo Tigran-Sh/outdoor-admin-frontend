@@ -6,6 +6,8 @@ import Button from "@/components/ui/Button/Button";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import Input from "@/components/ui/Input/Input";
 
+import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
+
 import AuthCard from "./components/AuthCard";
 import { getLoginSchema, type LoginFormValues } from "./LoginPage.schema";
 
@@ -26,6 +28,8 @@ function LoginPage() {
       navigate("/club/dashboard");
     },
   });
+
+  useRevalidateOnLanguageChange(formik.validateForm);
 
   return (
     <AuthCard>

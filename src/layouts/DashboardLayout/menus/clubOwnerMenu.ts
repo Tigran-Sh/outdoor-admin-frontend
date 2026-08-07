@@ -51,6 +51,7 @@ export const clubOwnerMenu: SidebarNavSection[] = [
       {
         key: "club-profile",
         labelKey: "sidebar.clubProfile",
+        path: "/club/profile",
         icon: "ri-building-line",
       },
       {
