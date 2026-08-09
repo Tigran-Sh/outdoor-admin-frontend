@@ -10,6 +10,7 @@
     "switchToLightMode": "Switch to light mode",
     "switchToDarkMode": "Switch to dark mode",
     "close": "Close",
+    "view": "View",
     "edit": "Edit",
     "delete": "Delete",
     "cancel": "Cancel",
@@ -159,6 +160,14 @@
     "durationTypes": {
       "single": "Single-day",
       "multi": "Multi-day"
+    },
+    "view": {
+      "editEvent": "Edit Event",
+      "notFound": "Event not found",
+      "notFoundMessage": "The event you're looking for doesn't exist or has been removed.",
+      "backToEvents": "Back to Events",
+      "openInMaps": "Open in Google Maps",
+      "notSpecified": "Not specified"
     },
     "form": {
       "title": "Create Event",
@@ -320,9 +329,13 @@
         "legal": "Legal"
       },
       "editProfile": "Edit Profile",
+      "editClub": "Edit Club",
       "contact": "Contact",
       "notProvided": "Not provided",
-      "notUploaded": "Not uploaded"
+      "notUploaded": "Not uploaded",
+      "notFound": "Club not found",
+      "notFoundMessage": "The club you're looking for doesn't exist or has been removed.",
+      "backToClubs": "Back to Clubs"
     },
     "confirmDelete": {
       "title": "Delete this club?",
@@ -424,6 +437,115 @@
         "entityTypeRequired": "Please select an entity type",
         "taxIdRequired": "Please enter a tax ID",
         "ownerIdDocumentRequired": "Please upload an owner ID document"
+      }
+    }
+  },
+  "team": {
+    "createMember": "Add Team Member",
+    "empty": "No team members yet.",
+    "deactivateMember": "Deactivate",
+    "activateMember": "Activate",
+    "table": {
+      "name": "Name",
+      "role": "Role",
+      "activityTypes": "Specializations",
+      "phone": "Phone",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "roles": {
+      "leadGuide": "Lead Guide",
+      "sweepGuide": "Sweep Guide",
+      "manager": "Manager",
+      "adminAssistant": "Admin Assistant"
+    },
+    "permissions": {
+      "qrCheckIn": "QR check-in for participants",
+      "participantsView": "View participant list (phone, emergency contact)",
+      "gpsTracking": "GPS tracking / event start-end",
+      "emergencyButton": "Emergency response button (rescue service contact)",
+      "eventManage": "Create / edit events",
+      "financeView": "View finances & reports"
+    },
+    "confirmDelete": {
+      "title": "Remove this team member?",
+      "message": "This action cannot be undone.",
+      "confirm": "Yes, remove"
+    },
+    "confirmDeactivate": {
+      "title": "Deactivate this team member?",
+      "message": "They will lose access to the tools below until reactivated.",
+      "confirm": "Yes, deactivate"
+    },
+    "confirmActivate": {
+      "title": "Activate this team member?",
+      "message": "They will regain access immediately.",
+      "confirm": "Yes, activate"
+    },
+    "view": {
+      "editMember": "Edit Member",
+      "notFound": "Team member not found",
+      "notFoundMessage": "The team member you're looking for doesn't exist or has been removed.",
+      "backToTeam": "Back to Team",
+      "notSpecified": "Not specified",
+      "joinedOn": "Joined on",
+      "noCertificates": "No certificates uploaded",
+      "noEvents": "No events assigned",
+      "permissions": "Permissions",
+      "assignedEvents": "Assigned Events"
+    },
+    "form": {
+      "title": "Add Team Member",
+      "editTitle": "Edit Team Member",
+      "cancel": "Cancel",
+      "submit": "Add Team Member",
+      "saveChanges": "Save Changes",
+      "steps": {
+        "basic": "Basic Information",
+        "roleAndPermissions": "Role & Permissions",
+        "specialization": "Specialization",
+        "events": "Assigned Events",
+        "status": "Status"
+      },
+      "fields": {
+        "firstName": { "label": "First Name", "placeholder": "Enter first name" },
+        "lastName": { "label": "Last Name", "placeholder": "Enter last name" },
+        "photo": { "label": "Profile Photo" },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "Enter phone number",
+          "helperText": "Confirmed via an SMS code."
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter email",
+          "helperText": "Used to invite this person to their own login, if needed."
+        },
+        "birthDate": { "label": "Date of Birth" },
+        "role": { "label": "Role / Position", "placeholder": "Select a role" },
+        "permissions": { "label": "Access & Permissions" },
+        "activityTypes": { "label": "Specializations" },
+        "languages": { "label": "Languages" },
+        "experienceYears": { "label": "Experience (years)" },
+        "bio": { "label": "Short Bio", "placeholder": "Describe their experience..." },
+        "certificates": { "label": "Certificates / Qualifications" },
+        "assignedEvents": { "label": "Assigned Events" },
+        "isActive": { "label": "Active" },
+        "joinedDate": { "label": "Joined On" }
+      },
+      "validation": {
+        "firstNameRequired": "Please enter a first name",
+        "lastNameRequired": "Please enter a last name",
+        "phoneRequired": "Please enter a phone number",
+        "emailInvalid": "Enter a valid email",
+        "roleRequired": "Please select a role",
+        "activityTypesRequired": "Please select at least one specialization",
+        "languagesRequired": "Please select at least one language",
+        "experienceYearsInvalid": "Enter a valid number of years"
       }
     }
   },

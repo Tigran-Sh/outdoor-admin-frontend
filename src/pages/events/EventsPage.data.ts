@@ -1,6 +1,8 @@
 import { ACTIVITY_TYPES, type ActivityTypeOption } from "@/constants/activityTypes";
 import { REGIONS, type RegionCode } from "@/constants/regions";
 
+import type { EventFormValues } from "./EventForm.schema";
+
 export const EVENT_CATEGORIES: ActivityTypeOption[] = ACTIVITY_TYPES;
 
 export interface EventGuideOption {
@@ -67,6 +69,78 @@ export function formatEventDate(date: string, time: string): string {
   if (Number.isNaN(parsed.getTime())) return date;
 
   return parsed.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+export function toEventFormValues(event: EventListItem): EventFormValues {
+  return {
+    name: event.name,
+    category: event.category,
+    region: event.region,
+    description: event.description,
+    date: event.date,
+    time: event.time,
+    durationType: event.durationType,
+    endDate: event.endDate,
+    guideId: event.guideId,
+    sweepGuideId: event.sweepGuideId,
+    languageIds: event.languageIds,
+    difficultyIds: event.difficultyIds,
+    distanceKm: event.distanceKm,
+    elevationGainM: event.elevationGainM,
+    meetingPointDescription: event.meetingPointDescription,
+    meetingPointCoordinates: event.meetingPointCoordinates,
+    maxParticipants: event.maxParticipants,
+    priceType: event.priceType,
+    price: event.price,
+    whatIsNecessary: event.whatIsNecessary,
+    includedItems: event.includedItems,
+    excludedItems: event.excludedItems,
+    cancellationPolicy: event.cancellationPolicy,
+    additionalInfo: event.additionalInfo,
+    coverImage: event.coverImage,
+    galleryImages: event.galleryImages,
+  };
+}
+
+export function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "status"> {
+  return {
+    name: values.name,
+    category: values.category,
+    region: (EVENT_REGIONS as readonly string[]).includes(values.region)
+      ? (values.region as EventRegion)
+      : EVENT_REGIONS[0],
+    date: values.date,
+    time: values.time,
+    durationType: (EVENT_DURATION_TYPES as readonly string[]).includes(values.durationType)
+      ? (values.durationType as EventDurationType)
+      : EVENT_DURATION_TYPES[0],
+    endDate: values.endDate,
+    guideId: values.guideId,
+    sweepGuideId: values.sweepGuideId,
+    languageIds: values.languageIds as EventLanguage[],
+    difficultyIds: values.difficultyIds as EventDifficulty[],
+    distanceKm: values.distanceKm,
+    elevationGainM: values.elevationGainM,
+    meetingPointDescription: values.meetingPointDescription,
+    meetingPointCoordinates: values.meetingPointCoordinates,
+    maxParticipants: values.maxParticipants,
+    priceType: (EVENT_PRICE_TYPES as readonly string[]).includes(values.priceType)
+      ? (values.priceType as EventPriceType)
+      : EVENT_PRICE_TYPES[0],
+    price: values.price,
+    whatIsNecessary: values.whatIsNecessary,
+    includedItems: values.includedItems,
+    excludedItems: values.excludedItems,
+    cancellationPolicy: values.cancellationPolicy,
+    additionalInfo: values.additionalInfo,
+    description: values.description,
+    coverImage: values.coverImage,
+    galleryImages: values.galleryImages,
+  };
+}
+
+export function getEventById(id: string): EventListItem | undefined {
+  return mockEvents.find((event) => event.id === id);
 }
 
 export const mockEvents: EventListItem[] = [

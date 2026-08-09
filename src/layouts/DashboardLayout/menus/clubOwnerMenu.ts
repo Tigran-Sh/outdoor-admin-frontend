@@ -31,6 +31,7 @@ export const clubOwnerMenu: SidebarNavSection[] = [
       {
         key: "team",
         labelKey: "sidebar.team",
+        path: "/club/team",
         icon: "ri-team-line",
       },
       {

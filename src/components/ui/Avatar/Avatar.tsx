@@ -15,7 +15,13 @@ function getInitials(name?: string) {
     .join("");
 }
 
-function Avatar({ src, name, size = "md", rounded = true, className }: AvatarProps) {
+function Avatar({
+  src,
+  name,
+  size = "md",
+  rounded = true,
+  className,
+}: AvatarProps) {
   const wrapperClassName = joinClassNames(
     `avatar-${size}`,
     "flex-shrink-0",
@@ -25,7 +31,7 @@ function Avatar({ src, name, size = "md", rounded = true, className }: AvatarPro
 
   if (src) {
     return (
-      <div className={joinClassNames(wrapperClassName, "overflow-hidden")}>
+      <div className={joinClassNames(wrapperClassName, "overflow-hidden ")}>
         <img
           src={src}
           alt={name ?? ""}
@@ -37,7 +43,9 @@ function Avatar({ src, name, size = "md", rounded = true, className }: AvatarPro
 
   return (
     <div className={wrapperClassName}>
-      <span className={joinClassNames("avatar-title", rounded && "rounded-circle")}>
+      <span
+        className={joinClassNames("avatar-title", rounded && "rounded-circle")}
+      >
         {getInitials(name)}
       </span>
     </div>

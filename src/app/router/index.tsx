@@ -10,10 +10,18 @@ import AdminDashboardPage from "@/pages/admin/DashboardPage";
 import ClubDashboardPage from "@/pages/club/DashboardPage";
 import EventsPage from "@/pages/events/EventsPage";
 import CreateEventPage from "@/pages/events/CreateEventPage";
+import EditEventPage from "@/pages/events/EditEventPage";
+import EventViewPage from "@/pages/events/EventViewPage";
 import ClubsPage from "@/pages/clubs/ClubsPage";
 import CreateClubPage from "@/pages/clubs/CreateClubPage";
+import EditClubPage from "@/pages/clubs/EditClubPage";
+import AdminClubViewPage from "@/pages/clubs/AdminClubViewPage";
 import ClubProfilePage from "@/pages/clubs/ClubProfilePage";
 import ClubViewPage from "@/pages/clubs/ClubViewPage";
+import TeamPage from "@/pages/team/TeamPage";
+import CreateTeamMemberPage from "@/pages/team/CreateTeamMemberPage";
+import EditTeamMemberPage from "@/pages/team/EditTeamMemberPage";
+import TeamMemberViewPage from "@/pages/team/TeamMemberViewPage";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +62,36 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "/club/events/:id/edit",
+        element: <EditEventPage />,
+      },
+
+      {
+        path: "/club/events/:id",
+        element: <EventViewPage />,
+      },
+
+      {
+        path: "/club/team",
+        element: <TeamPage />,
+      },
+
+      {
+        path: "/club/team/create",
+        element: <CreateTeamMemberPage />,
+      },
+
+      {
+        path: "/club/team/:id/edit",
+        element: <EditTeamMemberPage />,
+      },
+
+      {
+        path: "/club/team/:id",
+        element: <TeamMemberViewPage />,
+      },
+
+      {
         path: "/club/profile",
         element: <ClubViewPage />,
       },
@@ -71,6 +109,16 @@ const router = createBrowserRouter([
       {
         path: "/admin/clubs/create",
         element: <CreateClubPage />,
+      },
+
+      {
+        path: "/admin/clubs/:id/edit",
+        element: <EditClubPage />,
+      },
+
+      {
+        path: "/admin/clubs/:id",
+        element: <AdminClubViewPage />,
       },
     ],
   },

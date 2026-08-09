@@ -10,6 +10,7 @@
     "switchToLightMode": "Անցնել լուսավոր ռեժիմի",
     "switchToDarkMode": "Անցնել մուգ ռեժիմի",
     "close": "Փակել",
+    "view": "Դիտել",
     "edit": "Խմբագրել",
     "delete": "Ձելել",
     "cancel": "Չեղարկել",
@@ -159,6 +160,14 @@
     "durationTypes": {
       "single": "Մեկօրյա",
       "multi": "Բազմօրյա"
+    },
+    "view": {
+      "editEvent": "Խմբագրել միջոցառումը",
+      "notFound": "Միջոցառումը չի գտնվել",
+      "notFoundMessage": "Փնտրվող միջոցառումը գոյություն չունի կամ հեռացվել է։",
+      "backToEvents": "Վերադառնալ միջոցառումներին",
+      "openInMaps": "Բացել Google Maps-ում",
+      "notSpecified": "Նշված չէ"
     },
     "form": {
       "title": "Ստեղծել միջոցառում",
@@ -320,9 +329,13 @@
         "legal": "Իրավական"
       },
       "editProfile": "Խմբագրել պրոֆիլը",
+      "editClub": "Խմբագրել ակումբը",
       "contact": "Կոնտակտներ",
       "notProvided": "Նշված չէ",
-      "notUploaded": "Վերբեռնված չէ"
+      "notUploaded": "Վերբեռնված չէ",
+      "notFound": "Ակումբը չի գտնվել",
+      "notFoundMessage": "Փնտրվող ակումբը գոյություն չունի կամ հեռացվել է։",
+      "backToClubs": "Վերադառնալ ակումբներին"
     },
     "confirmDelete": {
       "title": "Ջնջել այս ակումբը՞",
@@ -424,6 +437,115 @@
         "entityTypeRequired": "Խնդրում ենք ընտրել իրավաբանական տեսակը",
         "taxIdRequired": "Խնդրում ենք մուտքագրել ՀՎՀՀ-ն",
         "ownerIdDocumentRequired": "Խնդրում ենք վերբեռնել սեփականատիրոջ անձնագիրը"
+      }
+    }
+  },
+  "team": {
+    "createMember": "Ավելացնել Թիմի Անդամ",
+    "empty": "Թիմի անդամներ դեռ չկան։",
+    "deactivateMember": "Ապաակտիվացնել",
+    "activateMember": "Ակտիվացնել",
+    "table": {
+      "name": "Անուն",
+      "role": "Դեր",
+      "activityTypes": "Մասնագիտացում",
+      "phone": "Հեռախոսահամար",
+      "status": "Կարգավիճակ",
+      "actions": "Գործողություններ"
+    },
+    "status": {
+      "active": "Ակտիվ",
+      "inactive": "Ոչ ակտիվ"
+    },
+    "roles": {
+      "leadGuide": "Գլխավոր Գիդ",
+      "sweepGuide": "Հետնապահ",
+      "manager": "Մենեջեր",
+      "adminAssistant": "Ադմին-օգնական"
+    },
+    "permissions": {
+      "qrCheckIn": "QR Check-in մասնակիցների",
+      "participantsView": "Մասնակիցների ցանկի դիտում (հեռախոսահամար, emergency contact)",
+      "gpsTracking": "GPS tracking / միջոցառման մեկնարկ-ավարտ",
+      "emergencyButton": "Արագ արձագանքման կոճակ (ԱԻՆ կապ)",
+      "eventManage": "Միջոցառում ստեղծելու/խմբագրելու իրավունք",
+      "financeView": "Ֆինանսների/ռեփորթի դիտում"
+    },
+    "confirmDelete": {
+      "title": "Հեռացնե՞լ այս թիմի անդամին",
+      "message": "Այս գործողությունը հնարավոր չէ հետարկել։",
+      "confirm": "Այո, հեռացնել"
+    },
+    "confirmDeactivate": {
+      "title": "Ապաակտիվացնե՞լ այս թիմի անդամին",
+      "message": "Նա կկորցնի հասանելիությունը գործիքներին, մինչև կրկին ակտիվացվի։",
+      "confirm": "Այո, ապաակտիվացնել"
+    },
+    "confirmActivate": {
+      "title": "Ակտիվացնե՞լ այս թիմի անդամին",
+      "message": "Նա անմիջապես կրկին կունենա հասանելիություն։",
+      "confirm": "Այո, ակտիվացնել"
+    },
+    "view": {
+      "editMember": "Խմբագրել Անդամին",
+      "notFound": "Թիմի անդամը չի գտնվել",
+      "notFoundMessage": "Փնտրվող թիմի անդամը գոյություն չունի կամ հեռացվել է։",
+      "backToTeam": "Վերադառնալ Թիմին",
+      "notSpecified": "Նշված չէ",
+      "joinedOn": "Միացել է՝",
+      "noCertificates": "Սերտիֆիկատներ վերբեռնված չեն",
+      "noEvents": "Կցված միջոցառումներ չկան",
+      "permissions": "Հասանելիություններ",
+      "assignedEvents": "Կցվող Միջոցառումներ"
+    },
+    "form": {
+      "title": "Ավելացնել Թիմի Անդամ",
+      "editTitle": "Խմբագրել Թիմի Անդամին",
+      "cancel": "Չեղարկել",
+      "submit": "Ավելացնել Թիմի Անդամ",
+      "saveChanges": "Պահպանել Փոփոխությունները",
+      "steps": {
+        "basic": "Հիմնական Տվյալներ",
+        "roleAndPermissions": "Դեր և Իրավունքներ",
+        "specialization": "Մասնագիտացում",
+        "events": "Կցվող Միջոցառումներ",
+        "status": "Կարգավիճակ"
+      },
+      "fields": {
+        "firstName": { "label": "Անուն", "placeholder": "Մուտքագրեք անունը" },
+        "lastName": { "label": "Ազգանուն", "placeholder": "Մուտքագրեք ազգանունը" },
+        "photo": { "label": "Նկար (Profile photo)" },
+        "phone": {
+          "label": "Հեռախոսահամար",
+          "placeholder": "Մուտքագրեք հեռախոսահամարը",
+          "helperText": "Հաստատվում է SMS կոդով։"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Մուտքագրեք email-ը",
+          "helperText": "Օգտագործվում է անհրաժեշտության դեպքում սեփական login հրավիրելու համար։"
+        },
+        "birthDate": { "label": "Ծննդյան Ամսաթիվ" },
+        "role": { "label": "Դեր/Պաշտոն", "placeholder": "Ընտրեք դերը" },
+        "permissions": { "label": "Հասանելիություններ" },
+        "activityTypes": { "label": "Ուղղություններ" },
+        "languages": { "label": "Լեզուներ" },
+        "experienceYears": { "label": "Փորձառություն (տարիներ)" },
+        "bio": { "label": "Կարճ Bio", "placeholder": "Նկարագրեք փորձառությունը..." },
+        "certificates": { "label": "Սերտիֆիկատներ/Որակավորումներ" },
+        "assignedEvents": { "label": "Կցվող Միջոցառումներ" },
+        "isActive": { "label": "Ակտիվ" },
+        "joinedDate": { "label": "Միացման Ամսաթիվ" }
+      },
+      "validation": {
+        "firstNameRequired": "Խնդրում ենք մուտքագրել անունը",
+        "lastNameRequired": "Խնդրում ենք մուտքագրել ազգանունը",
+        "phoneRequired": "Խնդրում ենք մուտքագրել հեռախոսահամարը",
+        "emailInvalid": "Մուտքագրեք վավեր email",
+        "roleRequired": "Խնդրում ենք ընտրել դեր",
+        "activityTypesRequired": "Խնդրում ենք ընտրել առնվազն մեկ ուղղություն",
+        "languagesRequired": "Խնդրում ենք ընտրել առնվազն մեկ լեզու",
+        "experienceYearsInvalid": "Մուտքագրեք վավեր տարիների քանակ"
       }
     }
   },

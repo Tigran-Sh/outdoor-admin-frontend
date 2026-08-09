@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
@@ -10,12 +10,12 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
 
-import ClubFormModal from "./components/ClubFormModal";
 import {
   ACTIVITY_TYPES,
   CLUB_STATUS_BADGE_VARIANT,
   getClubVerificationStatus,
   mockClubs,
+  toClubListItem,
   type ClubListItem,
 } from "./ClubsPage.data";
 import type { ClubFormValues } from "./ClubProfile.schema";
@@ -29,48 +29,8 @@ interface ConfirmActionState {
 
 interface ClubsPageLocationState {
   createdClub?: ClubFormValues;
-}
-
-function toClubFormValues(club: ClubListItem): ClubFormValues {
-  return {
-    name: club.name,
-    logo: club.logo,
-    coverImage: club.coverImage,
-    about: club.about,
-    activityTypeIds: club.activityTypeIds,
-    baseRegion: club.baseRegion,
-    yearFounded: club.yearFounded,
-    email: club.email,
-    phone: club.phone,
-    instagram: club.instagram,
-    facebook: club.facebook,
-    telegram: club.telegram,
-    website: club.website,
-    entityType: club.entityType,
-    taxId: club.taxId,
-    ownerIdDocument: club.ownerIdDocument,
-  };
-}
-
-function toClubListItem(values: ClubFormValues): Omit<ClubListItem, "id" | "identityVerified" | "paymentVerified"> {
-  return {
-    name: values.name,
-    logo: values.logo,
-    coverImage: values.coverImage,
-    about: values.about,
-    activityTypeIds: values.activityTypeIds,
-    baseRegion: values.baseRegion as ClubListItem["baseRegion"],
-    yearFounded: values.yearFounded,
-    email: values.email,
-    phone: values.phone,
-    instagram: values.instagram,
-    facebook: values.facebook,
-    telegram: values.telegram,
-    website: values.website,
-    entityType: values.entityType as ClubListItem["entityType"],
-    taxId: values.taxId,
-    ownerIdDocument: values.ownerIdDocument,
-  };
+  updatedClub?: ClubFormValues;
+  clubId?: string;
 }
 
 function ClubsPage() {
@@ -79,30 +39,30 @@ function ClubsPage() {
   const location = useLocation();
   const [clubs, setClubs] = useState<ClubListItem[]>(() => {
     const state = location.state as ClubsPageLocationState | null;
-    const createdClub = state?.createdClub;
-    if (!createdClub) return mockClubs;
 
-    return [
-      ...mockClubs,
-      {
-        id: crypto.randomUUID(),
-        ...toClubListItem(createdClub),
-        identityVerified: false,
-        paymentVerified: false,
-      },
-    ];
+    if (state?.createdClub) {
+      return [
+        ...mockClubs,
+        {
+          id: crypto.randomUUID(),
+          ...toClubListItem(state.createdClub),
+          identityVerified: false,
+          paymentVerified: false,
+        },
+      ];
+    }
+
+    if (state?.updatedClub && state.clubId) {
+      const updatedClub = state.updatedClub;
+      const clubId = state.clubId;
+      return mockClubs.map((club) =>
+        club.id === clubId ? { ...club, ...toClubListItem(updatedClub) } : club,
+      );
+    }
+
+    return mockClubs;
   });
-  const [editingClub, setEditingClub] = useState<ClubListItem | null>(null);
   const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(null);
-
-  function handleUpdateClub(values: ClubFormValues) {
-    setClubs((prev) =>
-      prev.map((club) =>
-        editingClub && club.id === editingClub.id ? { ...club, ...toClubListItem(values) } : club,
-      ),
-    );
-    setEditingClub(null);
-  }
 
   function handleConfirmAction() {
     if (!confirmAction) return;
@@ -121,7 +81,12 @@ function ClubsPage() {
   }
 
   const columns: TableColumn<ClubListItem>[] = [
-    { key: "name", header: t("clubs.table.name"), sortable: true },
+    {
+      key: "name",
+      header: t("clubs.table.name"),
+      sortable: true,
+      render: (row) => <Link to={`/admin/clubs/${row.id}`}>{row.name}</Link>,
+    },
     {
       key: "activityTypes",
       header: t("clubs.table.activityTypes"),
@@ -175,7 +140,7 @@ function ClubsPage() {
             size="sm"
             iconOnly
             aria-label={t("common.edit")}
-            onClick={() => setEditingClub(row)}
+            onClick={() => navigate(`/admin/clubs/${row.id}/edit`)}
           >
             <i className="ri-pencil-fill" aria-hidden="true" />
           </Button>
@@ -237,16 +202,6 @@ function ClubsPage() {
           />
         </CardBody>
       </Card>
-
-      {editingClub && (
-        <ClubFormModal
-          key={editingClub.id}
-          isOpen
-          initialValues={toClubFormValues(editingClub)}
-          onClose={() => setEditingClub(null)}
-          onSubmit={handleUpdateClub}
-        />
-      )}
 
       <ConfirmDialog
         isOpen={confirmAction !== null}

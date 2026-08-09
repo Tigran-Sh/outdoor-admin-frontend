@@ -2,6 +2,8 @@ import type { BadgeVariant } from "@/components/ui/Badge/Badge.types";
 import { ACTIVITY_TYPES } from "@/constants/activityTypes";
 import { REGIONS, type RegionCode } from "@/constants/regions";
 
+import type { ClubFormValues } from "./ClubProfile.schema";
+
 export { ACTIVITY_TYPES };
 export const CLUB_REGIONS = REGIONS;
 export type ClubRegion = RegionCode;
@@ -45,6 +47,54 @@ export interface ClubListItem {
   ownerIdDocument: File[];
   identityVerified: boolean;
   paymentVerified: boolean;
+}
+
+export function toClubFormValues(club: ClubListItem): ClubFormValues {
+  return {
+    name: club.name,
+    logo: club.logo,
+    coverImage: club.coverImage,
+    about: club.about,
+    activityTypeIds: club.activityTypeIds,
+    baseRegion: club.baseRegion,
+    yearFounded: club.yearFounded,
+    email: club.email,
+    phone: club.phone,
+    instagram: club.instagram,
+    facebook: club.facebook,
+    telegram: club.telegram,
+    website: club.website,
+    entityType: club.entityType,
+    taxId: club.taxId,
+    ownerIdDocument: club.ownerIdDocument,
+  };
+}
+
+export function toClubListItem(
+  values: ClubFormValues,
+): Omit<ClubListItem, "id" | "identityVerified" | "paymentVerified"> {
+  return {
+    name: values.name,
+    logo: values.logo,
+    coverImage: values.coverImage,
+    about: values.about,
+    activityTypeIds: values.activityTypeIds,
+    baseRegion: values.baseRegion as ClubListItem["baseRegion"],
+    yearFounded: values.yearFounded,
+    email: values.email,
+    phone: values.phone,
+    instagram: values.instagram,
+    facebook: values.facebook,
+    telegram: values.telegram,
+    website: values.website,
+    entityType: values.entityType as ClubListItem["entityType"],
+    taxId: values.taxId,
+    ownerIdDocument: values.ownerIdDocument,
+  };
+}
+
+export function getClubById(id: string): ClubListItem | undefined {
+  return mockClubs.find((club) => club.id === id);
 }
 
 export const mockClubs: ClubListItem[] = [
