@@ -1,39 +1,35 @@
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Button from "@/components/ui/Button/Button";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import Input from "@/components/ui/Input/Input";
 
-import AuthCard from "./components/AuthCard";
+import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
 
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
+import AuthCard from "./components/AuthCard";
+import { getLoginSchema, type LoginFormValues } from "./LoginPage.schema";
 
 function LoginPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const formik = useFormik<LoginFormValues>({
     initialValues: {
       email: "",
       password: "",
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email(t("auth.login.emailInvalid"))
-        .required(t("auth.login.emailRequired")),
-      password: Yup.string().required(t("auth.login.passwordRequired")),
-    }),
+    validationSchema: getLoginSchema(t),
     onSubmit: (values, { setSubmitting }) => {
       // TODO: wire up to the auth service.
       console.log(values);
       setSubmitting(false);
+      navigate("/club/dashboard");
     },
   });
+
+  useRevalidateOnLanguageChange(formik.validateForm);
 
   return (
     <AuthCard>

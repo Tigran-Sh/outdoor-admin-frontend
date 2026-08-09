@@ -5,7 +5,55 @@
   "common": {
     "language": "Язык",
     "showPassword": "Показать пароль",
-    "hidePassword": "Скрыть пароль"
+    "hidePassword": "Скрыть пароль",
+    "toggleMenu": "Показать/скрыть меню",
+    "switchToLightMode": "Переключить на светлую тему",
+    "switchToDarkMode": "Переключить на тёмную тему",
+    "close": "Закрыть",
+    "view": "Просмотр",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "myAccount": "Мой аккаунт",
+    "myProfile": "Мой профиль",
+    "settings": "Настройки",
+    "logout": "Выйти",
+    "table": {
+      "searchPlaceholder": "Поиск...",
+      "showing": "Показано {{from}}–{{to}} из {{total}} результатов",
+      "previous": "Назад",
+      "next": "Далее"
+    },
+    "imageUpload": {
+      "dropInstructions": "Перетащите файлы сюда или нажмите, чтобы загрузить.",
+      "removeImage": "Удалить изображение"
+    }
+  },
+  "sidebar": {
+    "groups": {
+      "main": "Меню"
+    },
+    "dashboard": "Панель управления",
+    "clubVerification": "Верификация клубов",
+    "clubs": "Клубы",
+    "users": "Пользователи",
+    "eventsModeration": "Модерация мероприятий",
+    "financePayouts": "Финансы и выплаты",
+    "reviewsDisputes": "Отзывы и споры",
+    "categoriesTags": "Категории и теги",
+    "announcements": "Объявления",
+    "rolesSettings": "Роли и настройки",
+    "events": "Мероприятия",
+    "participants": "Участники",
+    "checkIn": "Регистрация",
+    "team": "Команда",
+    "refundRequests": "Заявки на возврат",
+    "reviews": "Отзывы",
+    "clubProfile": "Профиль клуба",
+    "settings": "Настройки",
+    "myEvents": "Мои мероприятия",
+    "confirmCompletion": "Подтвердить завершение",
+    "myProfile": "Мой профиль"
   },
   "auth": {
     "tagline": "Полноценная платформа для создания, управления и обмена незабываемыми впечатлениями.",
@@ -34,6 +82,471 @@
       "submit": "Отправить ссылку",
       "rememberPassword": "Постойте, я вспомнил пароль...",
       "backToLogin": "Нажмите здесь"
+    }
+  },
+  "activityTypes": {
+    "hiking": "Пешие походы",
+    "trailRunning": "Трейлраннинг",
+    "cycling": "Велоспорт",
+    "climbing": "Скалолазание",
+    "zipline": "Зиплайн",
+    "skydiving": "Скайдайвинг",
+    "parachuting": "Парашютный спорт",
+    "paragliding": "Парапланеризм",
+    "hangGliding": "Дельтапланеризм",
+    "supBoarding": "Сап-бординг",
+    "yachting": "Яхтинг",
+    "surfing": "Сёрфинг",
+    "kayaking": "Каякинг",
+    "rafting": "Рафтинг",
+    "canyoneering": "Каньонинг",
+    "wakeboarding": "Вейкбординг",
+    "skiing": "Лыжи",
+    "snowboarding": "Сноуборд"
+  },
+  "regions": {
+    "yerevan": "Ереван",
+    "aragatsotn": "Арагацотн",
+    "ararat": "Арарат",
+    "armavir": "Армавир",
+    "gegharkunik": "Гегаркуник",
+    "kotayk": "Котайк",
+    "lori": "Лори",
+    "shirak": "Ширак",
+    "syunik": "Сюник",
+    "tavush": "Тавуш",
+    "vayotsDzor": "Вайоц Дзор"
+  },
+  "events": {
+    "createEvent": "Создать мероприятие",
+    "empty": "Мероприятий пока нет.",
+    "table": {
+      "name": "Название мероприятия",
+      "category": "Категория",
+      "region": "Регион",
+      "date": "Дата",
+      "guide": "Назначенный гид",
+      "actions": "Действия"
+    },
+    "status": {
+      "cancelled": "Отменено"
+    },
+    "cancelEvent": "Отменить мероприятие",
+    "confirmDelete": {
+      "title": "Удалить это мероприятие?",
+      "message": "Это действие нельзя отменить.",
+      "confirm": "Да, удалить"
+    },
+    "confirmCancel": {
+      "title": "Отменить это мероприятие?",
+      "message": "Участники будут уведомлены об отмене мероприятия.",
+      "confirm": "Да, отменить мероприятие"
+    },
+    "languages": {
+      "en": "Английский",
+      "hy": "Армянский",
+      "ru": "Русский"
+    },
+    "difficulties": {
+      "easy": "Легкий",
+      "medium": "Средний",
+      "hard": "Сложный",
+      "extreme": "Экстремальный"
+    },
+    "priceTypes": {
+      "free": "Бесплатно",
+      "paid": "Платно"
+    },
+    "durationTypes": {
+      "single": "Однодневное",
+      "multi": "Многодневное"
+    },
+    "view": {
+      "editEvent": "Редактировать мероприятие",
+      "notFound": "Мероприятие не найдено",
+      "notFoundMessage": "Мероприятие, которое вы ищете, не существует или было удалено.",
+      "backToEvents": "Назад к мероприятиям",
+      "openInMaps": "Открыть в Google Maps",
+      "notSpecified": "Не указано"
+    },
+    "form": {
+      "title": "Создать мероприятие",
+      "editTitle": "Редактировать мероприятие",
+      "cancel": "Отмена",
+      "submit": "Создать мероприятие",
+      "saveChanges": "Сохранить изменения",
+      "steps": {
+        "general": "Общее",
+        "schedule": "Расписание",
+        "route": "Маршрут",
+        "salesTerms": "Продажи и условия",
+        "media": "Медиа",
+        "details": "Детали"
+      },
+      "fields": {
+        "name": {
+          "label": "Название мероприятия",
+          "placeholder": "Введите название мероприятия"
+        },
+        "category": {
+          "label": "Категория",
+          "placeholder": "Выберите категорию"
+        },
+        "date": {
+          "label": "Дата"
+        },
+        "time": {
+          "label": "Время начала"
+        },
+        "durationType": {
+          "label": "Продолжительность"
+        },
+        "endDate": {
+          "label": "Дата окончания"
+        },
+        "guide": {
+          "label": "Назначенный гид",
+          "placeholder": "Выберите гида"
+        },
+        "sweepGuide": {
+          "label": "Замыкающий гид",
+          "placeholder": "Выберите замыкающего гида",
+          "helperText": "Необязательно. Гид, который замыкает группу."
+        },
+        "region": {
+          "label": "Регион (марз)",
+          "placeholder": "Выберите регион"
+        },
+        "difficulties": {
+          "label": "Сложность"
+        },
+        "distanceKm": {
+          "label": "Расстояние (км)"
+        },
+        "elevationGainM": {
+          "label": "Набор высоты (м)"
+        },
+        "meetingPointDescription": {
+          "label": "Место встречи",
+          "placeholder": "например, главный вход, центр для посетителей"
+        },
+        "meetingPointCoordinates": {
+          "label": "Координаты места встречи",
+          "placeholder": "например, 40.7397, 44.8639",
+          "helperText": "Используется для автоматического создания ссылки для навигации участников."
+        },
+        "maxParticipants": {
+          "label": "Максимальное число участников",
+          "placeholder": "напр., 18",
+          "helperText": "Когда будет достигнут лимит, мероприятие автоматически помечается как Sold Out."
+        },
+        "priceType": {
+          "label": "Тип цены",
+          "placeholder": "Выберите тип цены"
+        },
+        "price": {
+          "label": "Цена (АМД)",
+          "helperText": "Оставьте пустым, если мероприятие бесплатное."
+        },
+        "includedItems": {
+          "label": "Что включено",
+          "placeholder": "Укажите, что включено в цену..."
+        },
+        "excludedItems": {
+          "label": "Что не включено",
+          "placeholder": "Укажите, что не включено..."
+        },
+        "cancellationPolicy": {
+          "label": "Условия отмены",
+          "placeholder": "Опишите условия отмены..."
+        },
+        "additionalInfo": {
+          "label": "Дополнительная информация",
+          "placeholder": "Любая другая информация для участников..."
+        },
+        "coverImage": {
+          "label": "Обложка"
+        },
+        "galleryImages": {
+          "label": "Фотогалерея"
+        },
+        "whatIsNecessary": {
+          "label": "Что необходимо",
+          "placeholder": "Укажите, что участникам следует взять или подготовить..."
+        },
+        "languages": {
+          "label": "Рабочие языки гида"
+        },
+        "description": {
+          "label": "Описание",
+          "placeholder": "Опишите мероприятие..."
+        }
+      },
+      "validation": {
+        "nameRequired": "Пожалуйста, введите название мероприятия",
+        "categoryRequired": "Пожалуйста, выберите категорию",
+        "dateRequired": "Пожалуйста, выберите дату",
+        "timeRequired": "Пожалуйста, выберите время",
+        "endDateRequired": "Пожалуйста, выберите дату окончания",
+        "guideRequired": "Пожалуйста, выберите гида",
+        "languagesRequired": "Пожалуйста, выберите хотя бы один язык",
+        "regionRequired": "Пожалуйста, выберите регион",
+        "difficultiesRequired": "Пожалуйста, выберите хотя бы одну сложность",
+        "meetingPointDescriptionRequired": "Пожалуйста, опишите место встречи",
+        "distanceRequired": "Пожалуйста, введите расстояние",
+        "distanceInvalid": "Введите корректное расстояние",
+        "elevationRequired": "Пожалуйста, введите набор высоты",
+        "elevationInvalid": "Введите корректный набор высоты",
+        "coordinatesRequired": "Пожалуйста, введите координаты места встречи",
+        "maxParticipantsRequired": "Пожалуйста, введите максимальное число участников",
+        "maxParticipantsInvalid": "Введите корректное число",
+        "priceTypeRequired": "Пожалуйста, выберите тип цены",
+        "priceRequired": "Пожалуйста, введите цену",
+        "priceInvalid": "Введите корректную цену"
+      }
+    }
+  },
+  "clubs": {
+    "createClub": "Создать клуб",
+    "empty": "Клубов пока нет.",
+    "table": {
+      "name": "Название клуба",
+      "activityTypes": "Виды активности",
+      "baseRegion": "Основной регион",
+      "email": "Эл. почта",
+      "status": "Статус",
+      "actions": "Действия"
+    },
+    "status": {
+      "pending": "На рассмотрении",
+      "identityVerified": "Личность подтверждена",
+      "fullyVerified": "Полностью подтверждён"
+    },
+    "verifyIdentity": "Подтвердить личность",
+    "view": {
+      "tabs": {
+        "overview": "Обзор",
+        "legal": "Юридические данные"
+      },
+      "editProfile": "Редактировать профиль",
+      "editClub": "Редактировать клуб",
+      "contact": "Контакты",
+      "notProvided": "Не указано",
+      "notUploaded": "Не загружено",
+      "notFound": "Клуб не найден",
+      "notFoundMessage": "Клуб, который вы ищете, не существует или был удалён.",
+      "backToClubs": "Назад к клубам"
+    },
+    "confirmDelete": {
+      "title": "Удалить этот клуб?",
+      "message": "Это действие нельзя отменить.",
+      "confirm": "Да, удалить"
+    },
+    "confirmVerify": {
+      "title": "Подтвердить личность клуба?",
+      "message": "Клуб сможет создавать и публиковать мероприятия.",
+      "confirm": "Да, подтвердить"
+    },
+    "entityTypes": {
+      "individual": "Индивидуальный гид",
+      "soleTrader": "Индивидуальный предприниматель (ИП)",
+      "llc": "ООО",
+      "informal": "Неформальный клуб"
+    },
+    "form": {
+      "title": "Создать клуб",
+      "editTitle": "Редактировать клуб",
+      "cancel": "Отмена",
+      "submit": "Создать клуб",
+      "saveChanges": "Сохранить изменения",
+      "steps": {
+        "identity": "Идентификация",
+        "legal": "Юридические данные"
+      },
+      "fields": {
+        "name": {
+          "label": "Название клуба",
+          "placeholder": "Введите название клуба"
+        },
+        "logo": {
+          "label": "Логотип"
+        },
+        "coverImage": {
+          "label": "Обложка"
+        },
+        "about": {
+          "label": "О клубе / Описание",
+          "placeholder": "Расскажите участникам, чем занимается ваш клуб...",
+          "helperText": "Короткий профиль не вызывает доверия — напишите хотя бы пару предложений."
+        },
+        "activityTypes": {
+          "label": "Виды активности"
+        },
+        "baseRegion": {
+          "label": "Основной регион",
+          "placeholder": "Выберите регион"
+        },
+        "yearFounded": {
+          "label": "Год основания"
+        },
+        "email": {
+          "label": "Публичная эл. почта",
+          "placeholder": "Введите публичную эл. почту"
+        },
+        "phone": {
+          "label": "Публичный телефон",
+          "placeholder": "Введите публичный телефон"
+        },
+        "social": {
+          "label": "Социальные сети",
+          "instagramPlaceholder": "Instagram",
+          "facebookPlaceholder": "Facebook",
+          "telegramPlaceholder": "Telegram",
+          "helperText": "Укажите хотя бы одну сеть: Instagram, Facebook или Telegram."
+        },
+        "website": {
+          "label": "Веб-сайт",
+          "placeholder": "https://..."
+        },
+        "entityType": {
+          "label": "Тип организации",
+          "placeholder": "Выберите тип организации",
+          "helperText": "От этого зависит, какие документы потребуются ниже."
+        },
+        "taxId": {
+          "label": "УНН (ՀՎՀՀ)",
+          "placeholder": "Введите УНН"
+        },
+        "ownerIdDocument": {
+          "label": "Документ, удостоверяющий личность владельца"
+        }
+      },
+      "validation": {
+        "nameRequired": "Пожалуйста, введите название клуба",
+        "logoRequired": "Пожалуйста, загрузите логотип",
+        "aboutRequired": "Пожалуйста, введите описание",
+        "aboutTooShort": "Введите не менее {{min}} символов",
+        "activityTypesRequired": "Пожалуйста, выберите хотя бы один вид активности",
+        "baseRegionRequired": "Пожалуйста, выберите основной регион",
+        "yearFoundedInvalid": "Введите корректный год",
+        "emailRequired": "Пожалуйста, введите публичную эл. почту",
+        "emailInvalid": "Введите корректный email",
+        "phoneRequired": "Пожалуйста, введите публичный телефон",
+        "socialRequired": "Укажите хотя бы одну сеть: Instagram, Facebook или Telegram",
+        "websiteInvalid": "Введите корректную ссылку",
+        "entityTypeRequired": "Пожалуйста, выберите тип организации",
+        "taxIdRequired": "Пожалуйста, введите УНН",
+        "ownerIdDocumentRequired": "Пожалуйста, загрузите документ владельца"
+      }
+    }
+  },
+  "team": {
+    "createMember": "Добавить члена команды",
+    "empty": "Пока нет членов команды.",
+    "deactivateMember": "Деактивировать",
+    "activateMember": "Активировать",
+    "table": {
+      "name": "Имя",
+      "role": "Роль",
+      "activityTypes": "Специализация",
+      "phone": "Телефон",
+      "status": "Статус",
+      "actions": "Действия"
+    },
+    "status": {
+      "active": "Активен",
+      "inactive": "Неактивен"
+    },
+    "roles": {
+      "leadGuide": "Главный гид",
+      "sweepGuide": "Замыкающий гид",
+      "manager": "Менеджер",
+      "adminAssistant": "Администратор-ассистент"
+    },
+    "permissions": {
+      "qrCheckIn": "QR check-in участников",
+      "participantsView": "Просмотр списка участников (телефон, экстренный контакт)",
+      "gpsTracking": "GPS-трекинг / начало-конец мероприятия",
+      "emergencyButton": "Кнопка экстренного реагирования (связь со спасательной службой)",
+      "eventManage": "Создание/редактирование мероприятий",
+      "financeView": "Просмотр финансов/отчётов"
+    },
+    "confirmDelete": {
+      "title": "Удалить этого члена команды?",
+      "message": "Это действие нельзя отменить.",
+      "confirm": "Да, удалить"
+    },
+    "confirmDeactivate": {
+      "title": "Деактивировать этого члена команды?",
+      "message": "Он потеряет доступ к инструментам до повторной активации.",
+      "confirm": "Да, деактивировать"
+    },
+    "confirmActivate": {
+      "title": "Активировать этого члена команды?",
+      "message": "Доступ будет восстановлен немедленно.",
+      "confirm": "Да, активировать"
+    },
+    "view": {
+      "editMember": "Редактировать участника",
+      "notFound": "Член команды не найден",
+      "notFoundMessage": "Участник, которого вы ищете, не существует или был удалён.",
+      "backToTeam": "Назад к команде",
+      "notSpecified": "Не указано",
+      "joinedOn": "Дата присоединения:",
+      "noCertificates": "Сертификаты не загружены",
+      "noEvents": "Нет назначенных мероприятий",
+      "permissions": "Права доступа",
+      "assignedEvents": "Назначенные мероприятия"
+    },
+    "form": {
+      "title": "Добавить члена команды",
+      "editTitle": "Редактировать члена команды",
+      "cancel": "Отмена",
+      "submit": "Добавить члена команды",
+      "saveChanges": "Сохранить изменения",
+      "steps": {
+        "basic": "Основные данные",
+        "roleAndPermissions": "Роль и права доступа",
+        "specialization": "Специализация",
+        "events": "Назначенные мероприятия",
+        "status": "Статус"
+      },
+      "fields": {
+        "firstName": { "label": "Имя", "placeholder": "Введите имя" },
+        "lastName": { "label": "Фамилия", "placeholder": "Введите фамилию" },
+        "photo": { "label": "Фото профиля" },
+        "phone": {
+          "label": "Номер телефона",
+          "placeholder": "Введите номер телефона",
+          "helperText": "Подтверждается SMS-кодом."
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Введите email",
+          "helperText": "Используется для приглашения в отдельный аккаунт, если необходимо."
+        },
+        "birthDate": { "label": "Дата рождения" },
+        "role": { "label": "Роль / Должность", "placeholder": "Выберите роль" },
+        "permissions": { "label": "Доступы и права" },
+        "activityTypes": { "label": "Специализация" },
+        "languages": { "label": "Языки" },
+        "experienceYears": { "label": "Опыт (лет)" },
+        "bio": { "label": "Краткая биография", "placeholder": "Опишите опыт..." },
+        "certificates": { "label": "Сертификаты / Квалификации" },
+        "assignedEvents": { "label": "Назначенные мероприятия" },
+        "isActive": { "label": "Активен" },
+        "joinedDate": { "label": "Дата присоединения" }
+      },
+      "validation": {
+        "firstNameRequired": "Пожалуйста, введите имя",
+        "lastNameRequired": "Пожалуйста, введите фамилию",
+        "phoneRequired": "Пожалуйста, введите номер телефона",
+        "emailInvalid": "Введите корректный email",
+        "roleRequired": "Пожалуйста, выберите роль",
+        "activityTypesRequired": "Пожалуйста, выберите хотя бы одну специализацию",
+        "languagesRequired": "Пожалуйста, выберите хотя бы один язык",
+        "experienceYearsInvalid": "Введите корректное количество лет"
+      }
     }
   },
   "footer": {

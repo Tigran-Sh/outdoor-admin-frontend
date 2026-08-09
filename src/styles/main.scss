@@ -30,9 +30,22 @@
 @import "./components/form-check";
 @import "./components/forms";
 @import "./components/icons";
+@import "./components/dropdown";
+@import "./components/avatar";
+@import "./components/badge";
+@import "./components/nav";
+@import "./components/card";
+@import "./components/table";
+@import "./components/modal";
+@import "./components/pagination";
+@import "./components/dropzone";
 
 // Structure
 @import "./structure/footer";
+@import "./structure/topbar";
+@import "./structure/vertical";
+@import "./structure/page-head";
 
 // Pages
 @import "./pages/authentication";
+@import "./pages/profile";

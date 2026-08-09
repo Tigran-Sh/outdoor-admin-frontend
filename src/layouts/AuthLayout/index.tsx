@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher/LanguageSwitcher";
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher/ThemeSwitcher";
 
 function AuthLayout() {
   const { t } = useTranslation();
@@ -9,9 +10,10 @@ function AuthLayout() {
   return (
     <div className="auth-page-wrapper pt-5">
       <div
-        className="position-fixed top-0 m-3"
-        style={{ zIndex: 1000, right: "130px" }}
+        className="position-fixed top-0 end-0 m-3 d-flex align-items-center gap-2"
+        style={{ zIndex: 1000 }}
       >
+        <ThemeSwitcher className="text-white" />
         <LanguageSwitcher />
       </div>
 
