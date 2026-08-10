@@ -60,6 +60,18 @@
     "confirmCompletion": "Подтвердить завершение",
     "myProfile": "Мой профиль"
   },
+  "dashboard": {
+    "events": {
+      "totalEvents": "Всего мероприятий",
+      "ticketsSold": "Продано билетов",
+      "upcomingEvents": "Предстоящие мероприятия",
+      "ticketsSoldChartTitle": "Продано билетов",
+      "ticketsSoldSeriesName": "Продано билетов",
+      "ticketsSoldTooltip": "{{count}} билетов",
+      "totalRevenue": "{{amount}} ֏ дохода",
+      "eventsByTypeChartTitle": "Мероприятия по типам"
+    }
+  },
   "auth": {
     "tagline": "Полноценная платформа для создания, управления и обмена незабываемыми впечатлениями.",
     "login": {
@@ -538,7 +550,10 @@
         "experienceYears": { "label": "Опыт (лет)" },
         "bio": { "label": "Краткая биография", "placeholder": "Опишите опыт..." },
         "certificates": { "label": "Сертификаты / Квалификации" },
-        "assignedEvents": { "label": "Назначенные мероприятия" },
+        "assignedEvents": {
+          "label": "Назначенные мероприятия",
+          "placeholder": "Выберите мероприятия"
+        },
         "isActive": { "label": "Активен" },
         "joinedDate": { "label": "Дата присоединения" }
       },

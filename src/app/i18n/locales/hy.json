@@ -60,6 +60,18 @@
     "confirmCompletion": "Հաստատել ավարտը",
     "myProfile": "Իմ պրոֆիլը"
   },
+  "dashboard": {
+    "events": {
+      "totalEvents": "Միջոցառումների քանակ",
+      "ticketsSold": "Վաճառված տոմսեր",
+      "upcomingEvents": "Առաջիկա միջոցառումներ",
+      "ticketsSoldChartTitle": "Վաճառված տոմսեր",
+      "ticketsSoldSeriesName": "Վաճառված տոմսեր",
+      "ticketsSoldTooltip": "{{count}} տոմս",
+      "totalRevenue": "{{amount}} ֏ եկամուտ",
+      "eventsByTypeChartTitle": "Միջոցառումներ ըստ տեսակի"
+    }
+  },
   "auth": {
     "tagline": "Ամբողջական հարթակ՝ անմոռանալի փորձառություններ ստեղծելու, կազմակերպելու և կիսվելու համար։",
     "login": {
@@ -538,7 +550,10 @@
         "experienceYears": { "label": "Փորձառություն (տարիներ)" },
         "bio": { "label": "Կարճ Bio", "placeholder": "Նկարագրեք փորձառությունը..." },
         "certificates": { "label": "Սերտիֆիկատներ/Որակավորումներ" },
-        "assignedEvents": { "label": "Կցվող Միջոցառումներ" },
+        "assignedEvents": {
+          "label": "Կցվող Միջոցառումներ",
+          "placeholder": "Ընտրեք միջոցառումներ"
+        },
         "isActive": { "label": "Ակտիվ" },
         "joinedDate": { "label": "Միացման Ամսաթիվ" }
       },

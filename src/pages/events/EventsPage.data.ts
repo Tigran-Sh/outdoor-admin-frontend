@@ -62,6 +62,8 @@ export interface EventListItem {
   coverImage: File[];
   galleryImages: File[];
   status: EventStatus;
+  /** Number of tickets/spots booked so far. Used for dashboard statistics. */
+  soldCount: number;
 }
 
 export function formatEventDate(date: string, time: string): string {
@@ -102,7 +104,9 @@ export function toEventFormValues(event: EventListItem): EventFormValues {
   };
 }
 
-export function toEventListItem(values: EventFormValues): Omit<EventListItem, "id" | "status"> {
+export function toEventListItem(
+  values: EventFormValues,
+): Omit<EventListItem, "id" | "status" | "soldCount"> {
   return {
     name: values.name,
     category: values.category,
@@ -173,6 +177,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 15,
   },
   {
     id: "2",
@@ -203,6 +208,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 22,
   },
   {
     id: "3",
@@ -233,6 +239,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 9,
   },
   {
     id: "4",
@@ -263,6 +270,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 10,
   },
   {
     id: "5",
@@ -293,6 +301,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 27,
   },
   {
     id: "6",
@@ -323,6 +332,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 6,
   },
   {
     id: "7",
@@ -353,6 +363,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "cancelled",
+    soldCount: 12,
   },
   {
     id: "8",
@@ -383,6 +394,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 11,
   },
   {
     id: "9",
@@ -413,6 +425,7 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "scheduled",
+    soldCount: 5,
   },
   {
     id: "10",
@@ -443,5 +456,69 @@ export const mockEvents: EventListItem[] = [
     coverImage: [],
     galleryImages: [],
     status: "cancelled",
+    soldCount: 8,
   },
 ];
+
+export interface MonthlyTicketsSold {
+  /** ISO month key, e.g. "2026-06". */
+  month: string;
+  /** Short display label, e.g. "Jun 26". */
+  label: string;
+  sold: number;
+}
+
+export function getMonthlyTicketsSold(events: EventListItem[]): MonthlyTicketsSold[] {
+  const totals = new Map<string, number>();
+
+  events.forEach((event) => {
+    if (!event.date) return;
+    const month = event.date.slice(0, 7);
+    totals.set(month, (totals.get(month) ?? 0) + event.soldCount);
+  });
+
+  return Array.from(totals.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, sold]) => ({
+      month,
+      label: new Date(`${month}-01T00:00:00`).toLocaleDateString(undefined, {
+        month: "short",
+        year: "2-digit",
+      }),
+      sold,
+    }));
+}
+
+export interface EventTypeCount {
+  category: string;
+  count: number;
+}
+
+export function getEventCountByCategory(events: EventListItem[]): EventTypeCount[] {
+  const totals = new Map<string, number>();
+
+  events.forEach((event) => {
+    totals.set(event.category, (totals.get(event.category) ?? 0) + 1);
+  });
+
+  return Array.from(totals.entries())
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+export function getTotalTicketsSold(events: EventListItem[]): number {
+  return events.reduce((total, event) => total + event.soldCount, 0);
+}
+
+export function getTotalRevenue(events: EventListItem[]): number {
+  return events.reduce((total, event) => {
+    if (event.priceType !== "paid") return total;
+    const price = Number(event.price) || 0;
+    return total + price * event.soldCount;
+  }, 0);
+}
+
+export function getUpcomingEventsCount(events: EventListItem[], from: Date = new Date()): number {
+  return events.filter((event) => event.status === "scheduled" && new Date(event.date) >= from)
+    .length;
+}

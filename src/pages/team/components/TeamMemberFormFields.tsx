@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
+import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown/MultiSelectDropdown";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 
@@ -248,28 +249,20 @@ function TeamMemberFormFields({ formik, activeStep }: TeamMemberFormFieldsProps)
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("team.form.steps.events")}</h5>
 
-        <Select
+        <MultiSelectDropdown
           label={t("team.form.fields.assignedEvents.label")}
-          name="assignedEventIds"
-          multiple
-          size="lg"
+          placeholder={t("team.form.fields.assignedEvents.placeholder")}
+          options={TEAM_EVENTS.map((event) => ({
+            value: event.id,
+            label: `${event.name} — ${formatEventDate(event.date, event.time)}`,
+          }))}
           value={formik.values.assignedEventIds}
-          onChange={(event) => {
-            const selected = Array.from(event.target.selectedOptions, (option) => option.value);
-            formik.setFieldValue("assignedEventIds", selected);
-          }}
-          onBlur={formik.handleBlur}
+          onChange={(selected) => formik.setFieldValue("assignedEventIds", selected)}
           error={
             formik.touched.assignedEventIds ? String(formik.errors.assignedEventIds ?? "") : undefined
           }
           containerClassName="mb-0"
-        >
-          {TEAM_EVENTS.map((event) => (
-            <option key={event.id} value={event.id}>
-              {`${event.name} — ${formatEventDate(event.date, event.time)}`}
-            </option>
-          ))}
-        </Select>
+        />
       </div>
       )}
 

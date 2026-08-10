@@ -60,6 +60,18 @@
     "confirmCompletion": "Confirm Completion",
     "myProfile": "My Profile"
   },
+  "dashboard": {
+    "events": {
+      "totalEvents": "Total Events",
+      "ticketsSold": "Tickets Sold",
+      "upcomingEvents": "Upcoming Events",
+      "ticketsSoldChartTitle": "Tickets Sold",
+      "ticketsSoldSeriesName": "Tickets Sold",
+      "ticketsSoldTooltip": "{{count}} tickets",
+      "totalRevenue": "{{amount}} \u058f revenue",
+      "eventsByTypeChartTitle": "Events by Type"
+    }
+  },
   "auth": {
     "tagline": "A complete platform to create, manage, and share unforgettable experiences.",
     "login": {
@@ -538,7 +550,10 @@
         "experienceYears": { "label": "Experience (years)" },
         "bio": { "label": "Short Bio", "placeholder": "Describe their experience..." },
         "certificates": { "label": "Certificates / Qualifications" },
-        "assignedEvents": { "label": "Assigned Events" },
+        "assignedEvents": {
+          "label": "Assigned Events",
+          "placeholder": "Select events"
+        },
         "isActive": { "label": "Active" },
         "joinedDate": { "label": "Joined On" }
       },

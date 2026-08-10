@@ -47,6 +47,7 @@ function EventsPage() {
           id: crypto.randomUUID(),
           ...toEventListItem(state.createdEvent),
           status: "scheduled",
+          soldCount: 0,
         },
       ];
     }
