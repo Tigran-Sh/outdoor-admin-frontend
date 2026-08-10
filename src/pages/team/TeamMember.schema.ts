@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
+import type { FormWizardStep } from "@/hooks/useFormWizard";
+
 export interface TeamMemberFormValues {
   firstName: string;
   lastName: string;
@@ -36,6 +38,36 @@ export const initialTeamMemberFormValues: TeamMemberFormValues = {
   assignedEventIds: [],
   isActive: true,
 };
+
+export function getTeamMemberFormSteps(t: TFunction): FormWizardStep<TeamMemberFormValues>[] {
+  return [
+    {
+      id: "basic",
+      label: t("team.form.steps.basic"),
+      fields: ["firstName", "lastName", "photo", "phone", "email", "birthDate"],
+    },
+    {
+      id: "roleAndPermissions",
+      label: t("team.form.steps.roleAndPermissions"),
+      fields: ["role", "permissionIds"],
+    },
+    {
+      id: "specialization",
+      label: t("team.form.steps.specialization"),
+      fields: ["activityTypeIds", "languageIds", "experienceYears", "bio", "certificates"],
+    },
+    {
+      id: "events",
+      label: t("team.form.steps.events"),
+      fields: ["assignedEventIds"],
+    },
+    {
+      id: "status",
+      label: t("team.form.steps.status"),
+      fields: ["isActive"],
+    },
+  ];
+}
 
 export function getTeamMemberFormSchema(t: TFunction) {
   return Yup.object({

@@ -19,9 +19,10 @@ import type { TeamMemberFormValues } from "../TeamMember.schema";
 
 interface TeamMemberFormFieldsProps {
   formik: FormikProps<TeamMemberFormValues>;
+  activeStep: number;
 }
 
-function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
+function TeamMemberFormFields({ formik, activeStep }: TeamMemberFormFieldsProps) {
   const { t } = useTranslation();
 
   function toggleValue(
@@ -37,6 +38,7 @@ function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
 
   return (
     <>
+      {activeStep === 0 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("team.form.steps.basic")}</h5>
 
@@ -113,9 +115,9 @@ function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
           containerClassName="mb-0"
         />
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 1 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("team.form.steps.roleAndPermissions")}
@@ -153,9 +155,9 @@ function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
           </div>
         </div>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 2 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("team.form.steps.specialization")}
@@ -240,33 +242,38 @@ function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
           onChange={(files) => formik.setFieldValue("certificates", files)}
         />
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 3 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("team.form.steps.events")}</h5>
 
-        <div className="mb-0">
-          <span className="form-label d-block">
-            {t("team.form.fields.assignedEvents.label")}
-          </span>
-
-          <div className="d-flex flex-column gap-2">
-            {TEAM_EVENTS.map((event) => (
-              <Checkbox
-                key={event.id}
-                id={`team-event-${event.id}`}
-                label={`${event.name} — ${formatEventDate(event.date, event.time)}`}
-                checked={formik.values.assignedEventIds.includes(event.id)}
-                onChange={() => toggleValue("assignedEventIds", event.id)}
-              />
-            ))}
-          </div>
-        </div>
+        <Select
+          label={t("team.form.fields.assignedEvents.label")}
+          name="assignedEventIds"
+          multiple
+          size="lg"
+          value={formik.values.assignedEventIds}
+          onChange={(event) => {
+            const selected = Array.from(event.target.selectedOptions, (option) => option.value);
+            formik.setFieldValue("assignedEventIds", selected);
+          }}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.assignedEventIds ? String(formik.errors.assignedEventIds ?? "") : undefined
+          }
+          containerClassName="mb-0"
+        >
+          {TEAM_EVENTS.map((event) => (
+            <option key={event.id} value={event.id}>
+              {`${event.name} — ${formatEventDate(event.date, event.time)}`}
+            </option>
+          ))}
+        </Select>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 4 && (
       <div>
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("team.form.steps.status")}</h5>
 
@@ -279,6 +286,7 @@ function TeamMemberFormFields({ formik }: TeamMemberFormFieldsProps) {
           onChange={(event) => formik.setFieldValue("isActive", event.target.checked)}
         />
       </div>
+      )}
     </>
   );
 }

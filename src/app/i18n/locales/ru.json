@@ -27,6 +27,11 @@
     "imageUpload": {
       "dropInstructions": "Перетащите файлы сюда или нажмите, чтобы загрузить.",
       "removeImage": "Удалить изображение"
+    },
+    "stepper": {
+      "back": "Назад",
+      "next": "Далее",
+      "stepOf": "Шаг {{current}} из {{total}}"
     }
   },
   "sidebar": {

@@ -5,12 +5,18 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardFooter } from "@/components/ui/Card/Card";
+import Stepper from "@/components/ui/Stepper/Stepper";
 
+import { useFormWizard } from "@/hooks/useFormWizard";
 import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
 
 import TeamMemberFormFields from "./components/TeamMemberFormFields";
 import { getTeamMemberById, getTeamMemberFullName, toTeamMemberFormValues } from "./TeamPage.data";
-import { getTeamMemberFormSchema, type TeamMemberFormValues } from "./TeamMember.schema";
+import {
+  getTeamMemberFormSchema,
+  getTeamMemberFormSteps,
+  type TeamMemberFormValues,
+} from "./TeamMember.schema";
 
 function EditTeamMemberPage() {
   const { t } = useTranslation();
@@ -46,6 +52,12 @@ function EditTeamMemberPage() {
   });
 
   useRevalidateOnLanguageChange(formik.validateForm);
+
+  const steps = getTeamMemberFormSteps(t);
+  const { activeStep, isFirstStep, isLastStep, goNext, goBack, handleStepClick } = useFormWizard(
+    formik,
+    steps,
+  );
 
   function handleCancel() {
     navigate(member ? `/club/team/${member.id}` : "/club/team");
@@ -86,8 +98,17 @@ function EditTeamMemberPage() {
 
       <Card>
         <CardBody>
+          <Stepper
+            steps={steps}
+            activeStep={activeStep}
+            onStepChange={handleStepClick}
+            variant="arrow"
+            className="mb-4"
+            ariaLabel={t("team.form.editTitle")}
+          />
+
           <form noValidate onSubmit={formik.handleSubmit}>
-            <TeamMemberFormFields formik={formik} />
+            <TeamMemberFormFields formik={formik} activeStep={activeStep} />
           </form>
         </CardBody>
 
@@ -96,14 +117,26 @@ function EditTeamMemberPage() {
             {t("team.form.cancel")}
           </Button>
 
-          <Button
-            type="button"
-            variant="success"
-            loading={formik.isSubmitting}
-            onClick={() => formik.handleSubmit()}
-          >
-            {t("team.form.saveChanges")}
-          </Button>
+          {!isFirstStep && (
+            <Button appearance="outline" variant="secondary" onClick={goBack}>
+              {t("common.stepper.back")}
+            </Button>
+          )}
+
+          {isLastStep ? (
+            <Button
+              type="button"
+              variant="success"
+              loading={formik.isSubmitting}
+              onClick={() => formik.handleSubmit()}
+            >
+              {t("team.form.saveChanges")}
+            </Button>
+          ) : (
+            <Button type="button" variant="success" onClick={goNext}>
+              {t("common.stepper.next")}
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </>

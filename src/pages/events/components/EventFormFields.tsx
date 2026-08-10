@@ -20,9 +20,10 @@ import type { EventFormValues } from "../EventForm.schema";
 
 interface EventFormFieldsProps {
   formik: FormikProps<EventFormValues>;
+  activeStep: number;
 }
 
-function EventFormFields({ formik }: EventFormFieldsProps) {
+function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
   const { t } = useTranslation();
 
   function toggleValue(field: "languageIds" | "difficultyIds", value: string) {
@@ -35,6 +36,7 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
 
   return (
     <>
+      {activeStep === 0 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("events.form.steps.general")}
@@ -100,9 +102,9 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
           </div>
         </div>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 1 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("events.form.steps.media")}</h5>
 
@@ -125,9 +127,9 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
           </div>
         </div>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 2 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("events.form.steps.schedule")}
@@ -248,9 +250,9 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
           </div>
         </div>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 3 && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("events.form.steps.route")}</h5>
 
@@ -340,9 +342,9 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
           </div>
         </div>
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {activeStep === 4 && (
       <div>
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("events.form.steps.salesTerms")}
@@ -463,6 +465,7 @@ function EventFormFields({ formik }: EventFormFieldsProps) {
           containerClassName="mb-0"
         />
       </div>
+      )}
     </>
   );
 }

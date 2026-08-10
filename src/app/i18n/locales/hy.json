@@ -27,6 +27,11 @@
     "imageUpload": {
       "dropInstructions": "Կցեք ֆայլերը այստեղ կամ սեղմեք՝ վերբեռնելու համար։",
       "removeImage": "Հեռացնել նկարը"
+    },
+    "stepper": {
+      "back": "Հետ",
+      "next": "Հաջորդ",
+      "stepOf": "Քայլ {{current}}՝ {{total}}-ից"
     }
   },
   "sidebar": {

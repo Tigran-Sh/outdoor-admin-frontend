@@ -12,9 +12,12 @@ import type { ClubFormValues } from "../ClubProfile.schema";
 
 interface ClubFormFieldsProps {
   formik: FormikProps<ClubFormValues>;
+  /** Omit to render every section at once (e.g. a single-page profile form). */
+  activeStep?: number;
 }
 
-function ClubFormFields({ formik }: ClubFormFieldsProps) {
+function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
+  const showStep = (step: number) => activeStep === undefined || activeStep === step;
   const { t } = useTranslation();
 
   function toggleActivityType(value: string) {
@@ -31,6 +34,7 @@ function ClubFormFields({ formik }: ClubFormFieldsProps) {
 
   return (
     <>
+      {showStep(0) && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
           {t("clubs.form.steps.identity")}
@@ -216,9 +220,9 @@ function ClubFormFields({ formik }: ClubFormFieldsProps) {
           containerClassName="mb-0"
         />
       </div>
+      )}
 
-      <hr className="my-4" />
-
+      {showStep(1) && (
       <div>
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("clubs.form.steps.legal")}</h5>
 
@@ -264,6 +268,7 @@ function ClubFormFields({ formik }: ClubFormFieldsProps) {
           />
         )}
       </div>
+      )}
     </>
   );
 }

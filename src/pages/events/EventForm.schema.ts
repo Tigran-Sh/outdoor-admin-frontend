@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
+import type { FormWizardStep } from "@/hooks/useFormWizard";
+
 export interface EventFormValues {
   name: string;
   category: string;
@@ -58,6 +60,59 @@ export const initialEventFormValues: EventFormValues = {
   coverImage: [],
   galleryImages: [],
 };
+
+export function getEventFormSteps(t: TFunction): FormWizardStep<EventFormValues>[] {
+  return [
+    {
+      id: "general",
+      label: t("events.form.steps.general"),
+      fields: ["name", "description", "category", "region"],
+    },
+    {
+      id: "media",
+      label: t("events.form.steps.media"),
+      fields: ["coverImage", "galleryImages"],
+    },
+    {
+      id: "schedule",
+      label: t("events.form.steps.schedule"),
+      fields: [
+        "date",
+        "time",
+        "durationType",
+        "endDate",
+        "languageIds",
+        "guideId",
+        "sweepGuideId",
+      ],
+    },
+    {
+      id: "route",
+      label: t("events.form.steps.route"),
+      fields: [
+        "difficultyIds",
+        "distanceKm",
+        "elevationGainM",
+        "meetingPointDescription",
+        "meetingPointCoordinates",
+      ],
+    },
+    {
+      id: "salesTerms",
+      label: t("events.form.steps.salesTerms"),
+      fields: [
+        "maxParticipants",
+        "priceType",
+        "price",
+        "whatIsNecessary",
+        "includedItems",
+        "excludedItems",
+        "cancellationPolicy",
+        "additionalInfo",
+      ],
+    },
+  ];
+}
 
 export function getEventFormSchema(t: TFunction) {
   return Yup.object({

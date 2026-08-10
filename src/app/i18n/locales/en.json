@@ -27,6 +27,11 @@
     "imageUpload": {
       "dropInstructions": "Drop files here or click to upload.",
       "removeImage": "Remove image"
+    },
+    "stepper": {
+      "back": "Back",
+      "next": "Next",
+      "stepOf": "Step {{current}} of {{total}}"
     }
   },
   "sidebar": {

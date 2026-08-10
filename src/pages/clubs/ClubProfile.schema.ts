@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
+import type { FormWizardStep } from "@/hooks/useFormWizard";
+
 export interface ClubFormValues {
   name: string;
   logo: File[];
@@ -38,6 +40,35 @@ export const initialClubFormValues: ClubFormValues = {
   taxId: "",
   ownerIdDocument: [],
 };
+
+export function getClubFormSteps(t: TFunction): FormWizardStep<ClubFormValues>[] {
+  return [
+    {
+      id: "identity",
+      label: t("clubs.form.steps.identity"),
+      fields: [
+        "name",
+        "logo",
+        "coverImage",
+        "about",
+        "activityTypeIds",
+        "baseRegion",
+        "yearFounded",
+        "email",
+        "phone",
+        "instagram",
+        "facebook",
+        "telegram",
+        "website",
+      ],
+    },
+    {
+      id: "legal",
+      label: t("clubs.form.steps.legal"),
+      fields: ["entityType", "taxId", "ownerIdDocument"],
+    },
+  ];
+}
 
 const ABOUT_MIN_LENGTH = 50;
 
