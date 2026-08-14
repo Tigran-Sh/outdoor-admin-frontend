@@ -15,4 +15,8 @@ export interface ConfirmDialogProps {
   /** Remix Icon class rendered above the title. Defaults to `ri-error-warning-line`. */
   icon?: string;
   loading?: boolean;
+  /** Disables the confirm button, e.g. while a required field in `children` is unanswered. */
+  confirmDisabled?: boolean;
+  /** Extra content rendered between the message and the action buttons. */
+  children?: ReactNode;
 }

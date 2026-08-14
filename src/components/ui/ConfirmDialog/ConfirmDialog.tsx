@@ -14,6 +14,8 @@ function ConfirmDialog({
   confirmVariant = "danger",
   icon = "ri-error-warning-line",
   loading = false,
+  confirmDisabled = false,
+  children,
 }: ConfirmDialogProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md">
@@ -26,12 +28,20 @@ function ConfirmDialog({
         </div>
       </div>
 
+      {children && <div className="mt-3 text-start">{children}</div>}
+
       <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
         <Button appearance="outline" variant="secondary" className="w-sm" onClick={onClose}>
           {cancelLabel}
         </Button>
 
-        <Button variant={confirmVariant} className="w-sm" loading={loading} onClick={onConfirm}>
+        <Button
+          variant={confirmVariant}
+          className="w-sm"
+          loading={loading}
+          disabled={confirmDisabled}
+          onClick={onConfirm}
+        >
           {confirmLabel}
         </Button>
       </div>

@@ -7,16 +7,20 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card/Card";
 import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
+import Radio from "@/components/ui/Radio/Radio";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
+import Textarea from "@/components/ui/Textarea/Textarea";
 
 import type { EventFormValues } from "./EventForm.schema";
 import {
+  EVENT_CANCELLATION_REASONS,
   EVENT_CATEGORIES,
   EVENT_GUIDES,
   formatEventDate,
   mockEvents,
   toEventListItem,
+  type EventCancellationReason,
   type EventListItem,
 } from "./EventsPage.data";
 
@@ -65,12 +69,20 @@ function EventsPage() {
   const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(
     null,
   );
+  const [cancelReason, setCancelReason] = useState<EventCancellationReason | "">("");
+  const [cancelReasonOther, setCancelReasonOther] = useState("");
 
   useEffect(() => {
     if (!location.state) return;
     navigate(location.pathname, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
+
+  function closeConfirmAction() {
+    setConfirmAction(null);
+    setCancelReason("");
+    setCancelReasonOther("");
+  }
 
   function handleConfirmAction() {
     if (!confirmAction) return;
@@ -80,17 +92,23 @@ function EventsPage() {
         prev.filter((event) => event.id !== confirmAction.event.id),
       );
     } else {
+      const cancellationReason =
+        cancelReason === "other" ? cancelReasonOther.trim() : cancelReason;
       setEvents((prev) =>
         prev.map((event) =>
           event.id === confirmAction.event.id
-            ? { ...event, status: "cancelled" }
+            ? { ...event, status: "cancelled", cancellationReason: cancellationReason || undefined }
             : event,
         ),
       );
     }
 
-    setConfirmAction(null);
+    closeConfirmAction();
   }
+
+  const isCancelReasonMissing =
+    confirmAction?.type === "cancel" &&
+    (!cancelReason || (cancelReason === "other" && !cancelReasonOther.trim()));
 
   const columns: TableColumn<EventListItem>[] = [
     {
@@ -227,8 +245,9 @@ function EventsPage() {
 
       <ConfirmDialog
         isOpen={confirmAction !== null}
-        onClose={() => setConfirmAction(null)}
+        onClose={closeConfirmAction}
         onConfirm={handleConfirmAction}
+        confirmDisabled={isCancelReasonMissing}
         icon={
           confirmAction?.type === "delete"
             ? "ri-delete-bin-line"
@@ -251,7 +270,37 @@ function EventsPage() {
             : t("events.confirmCancel.confirm")
         }
         cancelLabel={t("common.cancel")}
-      />
+      >
+        {confirmAction?.type === "cancel" && (
+          <div>
+            <span className="form-label d-block">
+              {t("events.confirmCancel.reasonLabel")}
+            </span>
+
+            <div className="d-flex flex-column gap-2 mb-3">
+              {EVENT_CANCELLATION_REASONS.map((reason) => (
+                <Radio
+                  key={reason}
+                  name="cancellation-reason"
+                  label={t(`events.confirmCancel.reasons.${reason}`)}
+                  checked={cancelReason === reason}
+                  onChange={() => setCancelReason(reason)}
+                />
+              ))}
+            </div>
+
+            {cancelReason === "other" && (
+              <Textarea
+                label={t("events.confirmCancel.reasonOtherLabel")}
+                placeholder={t("events.confirmCancel.reasonOtherPlaceholder")}
+                value={cancelReasonOther}
+                onChange={(event) => setCancelReasonOther(event.target.value)}
+                containerClassName="mb-0"
+              />
+            )}
+          </div>
+        )}
+      </ConfirmDialog>
     </>
   );
 }

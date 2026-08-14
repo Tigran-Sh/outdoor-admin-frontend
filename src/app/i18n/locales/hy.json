@@ -157,7 +157,17 @@
     "confirmCancel": {
       "title": "Չեղարկել այս միջոցառումը՞",
       "message": "Մասնակիցները կիառացվեն միջոցառման չեղարկման մասին։",
-      "confirm": "Այո, չեղարկել միջոցառումը"
+      "confirm": "Այո, չեղարկել միջոցառումը",
+      "reasonLabel": "Չեղարկման պատճառը",
+      "reasons": {
+        "lowRegistrations": "Ցածր գրանցում",
+        "weatherConditions": "Եղանակային պայմաններ",
+        "guideUnavailable": "Ուղեկցորդը հասանելի չէ",
+        "safetyConcerns": "Անվտանգության մտահոգություններ",
+        "other": "Այլ"
+      },
+      "reasonOtherLabel": "Խնդրում ենք նշել",
+      "reasonOtherPlaceholder": "Նկարագրեք միջոցառումը չեղարկելու պատճառը..."
     },
     "languages": {
       "en": "Անգլերեն",
@@ -184,7 +194,8 @@
       "notFoundMessage": "Փնտրվող միջոցառումը գոյություն չունի կամ հեռացվել է։",
       "backToEvents": "Վերադառնալ միջոցառումներին",
       "openInMaps": "Բացել Google Maps-ում",
-      "notSpecified": "Նշված չէ"
+      "notSpecified": "Նշված չէ",
+      "cancellationReason": "Չեղարկման պատճառ"
     },
     "form": {
       "title": "Ստեղծել միջոցառում",

@@ -157,7 +157,17 @@
     "confirmCancel": {
       "title": "Отменить это мероприятие?",
       "message": "Участники будут уведомлены об отмене мероприятия.",
-      "confirm": "Да, отменить мероприятие"
+      "confirm": "Да, отменить мероприятие",
+      "reasonLabel": "Причина отмены",
+      "reasons": {
+        "lowRegistrations": "Мало регистраций",
+        "weatherConditions": "Погодные условия",
+        "guideUnavailable": "Гид недоступен",
+        "safetyConcerns": "Проблемы безопасности",
+        "other": "Другое"
+      },
+      "reasonOtherLabel": "Уточните причину",
+      "reasonOtherPlaceholder": "Опишите причину отмены мероприятия..."
     },
     "languages": {
       "en": "Английский",
@@ -184,7 +194,8 @@
       "notFoundMessage": "Мероприятие, которое вы ищете, не существует или было удалено.",
       "backToEvents": "Назад к мероприятиям",
       "openInMaps": "Открыть в Google Maps",
-      "notSpecified": "Не указано"
+      "notSpecified": "Не указано",
+      "cancellationReason": "Причина отмены"
     },
     "form": {
       "title": "Создать мероприятие",

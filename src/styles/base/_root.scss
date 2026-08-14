@@ -58,6 +58,60 @@
     //form
     --#{$prefix}input-bg-custom: #{$input-bg-custom};
     --#{$prefix}input-border-custom: #{$input-border-custom};
+
+    // Odex semantic tokens with no direct Bootstrap variable slot -- Light
+    --#{$prefix}surface-0: #{$surface-0};
+    --#{$prefix}surface-1: #{$surface-1};
+    --#{$prefix}surface-2: #{$surface-2};
+    --#{$prefix}border-default: #{$border-default};
+    --#{$prefix}border-strong: #{$border-strong};
+    --#{$prefix}border-focus: #{$border-focus};
+    --#{$prefix}text-primary: #{$text-primary};
+    --#{$prefix}text-secondary: #{$text-secondary};
+    --#{$prefix}text-muted: #{$text-muted};
+    --#{$prefix}text-on-photo: #{$text-on-photo};
+
+    --#{$prefix}brand-on-primary: #{$color-contrast-dark};
+    --#{$prefix}brand-on-secondary: #{map-get($-forest, "050")};
+    --#{$prefix}brand-accent: #{$brand-accent};
+    --#{$prefix}brand-on-accent: #{$brand-on-accent};
+    --#{$prefix}brand-accent-subtle: #{$brand-accent-subtle};
+    --#{$prefix}brand-secondary-hover: #{$brand-secondary-hover};
+    --#{$prefix}brand-secondary-pressed: #{$brand-secondary-pressed};
+
+    --#{$prefix}state-success-tint: #{$state-success-tint};
+    --#{$prefix}state-on-success-tint: #{$state-on-success-tint};
+    --#{$prefix}state-warning-tint: #{$state-warning-tint};
+    --#{$prefix}state-on-warning-tint: #{$state-on-warning-tint};
+    --#{$prefix}state-danger-tint: #{$state-danger-tint};
+    --#{$prefix}state-on-danger-tint: #{$state-on-danger-tint};
+    --#{$prefix}state-info-tint: #{$state-info-tint};
+    --#{$prefix}state-on-info-tint: #{$state-on-info-tint};
+    --#{$prefix}state-danger-hover: #{$state-danger-hover};
+
+    --#{$prefix}difficulty-easy-bg: #{$difficulty-easy-bg};
+    --#{$prefix}difficulty-easy-text: #{$difficulty-easy-text};
+    --#{$prefix}difficulty-moderate-bg: #{$difficulty-moderate-bg};
+    --#{$prefix}difficulty-moderate-text: #{$difficulty-moderate-text};
+    --#{$prefix}difficulty-hard-bg: #{$difficulty-hard-bg};
+    --#{$prefix}difficulty-hard-text: #{$difficulty-hard-text};
+    --#{$prefix}difficulty-extreme-bg: #{$difficulty-extreme-bg};
+    --#{$prefix}difficulty-extreme-text: #{$difficulty-extreme-text};
+
+    --#{$prefix}surface-hover: #{$surface-hover};
+    --#{$prefix}surface-pressed: #{$surface-pressed};
+    --#{$prefix}surface-locked: #{$surface-locked};
+
+    --#{$prefix}target-standard: #{$target-standard};
+    --#{$prefix}target-primary: #{$target-primary};
+    --#{$prefix}target-field: #{$target-field};
+
+    // Elevation
+    --#{$prefix}elevation-1: #{$box-shadow-sm};
+    --#{$prefix}elevation-2: #{$box-shadow-elevation-2};
+    --#{$prefix}elevation-3: #{$box-shadow};
+    --#{$prefix}elevation-4: #{$box-shadow-lg};
+    --#{$prefix}elevation-5: #{$box-shadow-elevation-5};
 }
 
 //sidebar light theme
@@ -222,6 +276,55 @@
         //form
         --#{$prefix}input-bg-custom: #{$input-bg-custom-dark};
         --#{$prefix}input-border-custom: #{$input-border-custom-dark};
+
+        // Odex semantic tokens -- Dark. Difficulty is identical in both modes (contrast lives
+        // inside the chip, not against the page) so those custom properties are not repeated.
+        --#{$prefix}surface-0: #{$surface-0-dark};
+        --#{$prefix}surface-1: #{$surface-1-dark};
+        --#{$prefix}surface-2: #{$surface-2-dark};
+        --#{$prefix}border-default: #{$border-default-dark};
+        --#{$prefix}border-strong: #{$border-strong-dark};
+        --#{$prefix}border-focus: #{$border-focus-dark};
+        --#{$prefix}text-primary: #{$text-primary-dark};
+        --#{$prefix}text-secondary: #{$text-secondary-dark};
+        --#{$prefix}text-muted: #{$text-muted-dark};
+        --#{$prefix}text-on-photo: #{$text-on-photo-dark};
+
+        --#{$prefix}brand-secondary-hover: #{$brand-secondary-hover-dark};
+        --#{$prefix}brand-secondary-pressed: #{$brand-secondary-pressed-dark};
+        --#{$prefix}brand-accent-subtle: #{$brand-accent-subtle-dark};
+
+        --#{$prefix}state-success-tint: #{$state-success-tint-dark};
+        --#{$prefix}state-on-success-tint: #{$state-on-success-tint-dark};
+        --#{$prefix}state-warning-tint: #{$state-warning-tint-dark};
+        --#{$prefix}state-on-warning-tint: #{$state-on-warning-tint-dark};
+        --#{$prefix}state-danger-tint: #{$state-danger-tint-dark};
+        --#{$prefix}state-on-danger-tint: #{$state-on-danger-tint-dark};
+        --#{$prefix}state-info-tint: #{$state-info-tint-dark};
+        --#{$prefix}state-on-info-tint: #{$state-on-info-tint-dark};
+        --#{$prefix}state-danger-hover: #{$state-danger-hover-dark};
+
+        --#{$prefix}surface-hover: #{$surface-hover-dark};
+        --#{$prefix}surface-pressed: #{$surface-pressed-dark};
+        --#{$prefix}surface-locked: #{$surface-locked-dark};
+
+        // brand/primary and brand/secondary themselves shift to lighter tints in dark mode for
+        // legibility on dark surfaces. Bootstrap compiles component colors (buttons, badges) from
+        // the Sass $primary/$secondary values directly rather than these custom properties, so
+        // this keeps utilities/focus rings/links correct; component fills are a known follow-up
+        // (see "Still outstanding" in the design foundations doc).
+        --#{$prefix}primary: #{map-get($-apricot, "300")};
+        --#{$prefix}primary-rgb: #{to-rgb(map-get($-apricot, "300"))};
+        --#{$prefix}secondary: #{map-get($-forest, "300")};
+        --#{$prefix}secondary-rgb: #{to-rgb(map-get($-forest, "300"))};
+        --#{$prefix}brand-on-primary: #{$color-contrast-dark};
+        --#{$prefix}brand-on-secondary: #{map-get($-forest, "900")};
+
+        // Table rows separate with border/default in dark mode, never alternating fills --
+        // striped rows that read cleanly on light grounds turn to mud on dark surfaces.
+        .table-striped {
+            --#{$prefix}table-striped-bg: transparent;
+        }
     }
 }
 

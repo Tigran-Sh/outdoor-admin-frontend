@@ -19,17 +19,21 @@ $vertical-menu-sub-item-padding-x:                1.5rem;
 $vertical-menu-sub-item-padding-y:                0.55rem;
 
 // Light Menu
-$vertical-menu-bg:                                #f6f8fa;
+$vertical-menu-bg:                                #f7f1e9; // Neutral/100 -- warm neutral, not grey
 $vertical-menu-border:                            $border-color;
-$vertical-menu-item-color:                        darken($gray-600, 10%);
-$vertical-menu-item-bg:                           rgba($primary, .15);
-$vertical-menu-item-hover-color:                  $primary;
+// Default: text/secondary. Hover: a subtle neutral wash (surface/pressed, one step darker than
+// the sidebar itself so it reads against it) with text/primary -- "the subtlest interactive
+// feedback in the system". Active: brand/primary text on brand/primary-subtle, clearly distinct
+// from both the default and hover states.
+$vertical-menu-item-color:                        $text-secondary;
+$vertical-menu-item-bg:                           $surface-pressed;
+$vertical-menu-item-hover-color:                  $text-primary;
 $vertical-menu-item-active-color:                 $primary;
-$vertical-menu-item-active-bg:                    rgba($primary, .15);
-$vertical-menu-sub-item-color:                    darken($gray-600, 4%);
-$vertical-menu-sub-item-hover-color:              $primary;
+$vertical-menu-item-active-bg:                    $primary-bg-subtle;
+$vertical-menu-sub-item-color:                    $text-secondary;
+$vertical-menu-sub-item-hover-color:              $text-primary;
 $vertical-menu-sub-item-active-color:             $primary;
-$vertical-menu-title-color:                       #919da9;
+$vertical-menu-title-color:                       $text-muted;
 $vertical-menu-box-shadow:                        none;
 $vertical-menu-dropdown-box-shadow:               0 2px 4px rgba(15, 34, 58, 0.12);
 
@@ -88,9 +92,9 @@ $header-bg:                                       $white;
 $header-border:                                   $border-color;
 $header-item-color:                               $gray-700;
 $header-item-bg:                                  rgba($secondary, .12);
-$header-item-sub-color:                           #878a99;  
-$topbar-user-bg:                                  #f3f3f9;
-$topbar-search-bg:                                #f3f3f9;
+$header-item-sub-color:                           $gray-600;
+$topbar-user-bg:                                  #f7f1e9; // Neutral/100
+$topbar-search-bg:                                #f7f1e9; // Neutral/100
 $topbar-search-color:                             $gray-700;
 
 //page title 
@@ -136,8 +140,8 @@ $boxed-body-bg:                                   darken($body-bg, 4%);
 
 // Footer
 $footer-height:                                   60px;
-$footer-bg:                                       #f6f8fa;
-$footer-color:                                    #98a6ad;
+$footer-bg:                                       #f7f1e9; // Neutral/100
+$footer-color:                                    $gray-600;
 
 // Chat
 $chat-primary-bg:                                 var(--#{$prefix}light);

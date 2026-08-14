@@ -157,7 +157,17 @@
     "confirmCancel": {
       "title": "Cancel this event?",
       "message": "Participants will be notified that the event was cancelled.",
-      "confirm": "Yes, cancel event"
+      "confirm": "Yes, cancel event",
+      "reasonLabel": "Reason for cancellation",
+      "reasons": {
+        "lowRegistrations": "Low registrations",
+        "weatherConditions": "Weather conditions",
+        "guideUnavailable": "Guide unavailable",
+        "safetyConcerns": "Safety concerns",
+        "other": "Other"
+      },
+      "reasonOtherLabel": "Please specify",
+      "reasonOtherPlaceholder": "Describe the reason for cancelling this event..."
     },
     "languages": {
       "en": "English",
@@ -184,7 +194,8 @@
       "notFoundMessage": "The event you're looking for doesn't exist or has been removed.",
       "backToEvents": "Back to Events",
       "openInMaps": "Open in Google Maps",
-      "notSpecified": "Not specified"
+      "notSpecified": "Not specified",
+      "cancellationReason": "Cancellation reason"
     },
     "form": {
       "title": "Create Event",

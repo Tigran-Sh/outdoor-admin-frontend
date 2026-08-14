@@ -33,10 +33,29 @@ function SidebarItem({ item, level = 0, onNavigate }: SidebarItemProps) {
     );
   }
 
+  // Items with no route yet (page not implemented) render as a disabled, non-navigating
+  // placeholder rather than a NavLink -- `to="#"` would resolve relative to the current
+  // location and match every page as active.
+  if (!item.path) {
+    return (
+      <li className="nav-item">
+        <span className={`${linkClassName} disabled`} aria-disabled="true">
+          {item.icon && <i className={item.icon} />}
+          <span>{t(item.labelKey)}</span>
+          {item.badge && (
+            <span className={`badge badge-pill bg-${item.badge.variant ?? "primary"}`}>
+              {item.badge.text}
+            </span>
+          )}
+        </span>
+      </li>
+    );
+  }
+
   return (
     <li className="nav-item">
       <NavLink
-        to={item.path ?? "#"}
+        to={item.path}
         end={item.end}
         onClick={onNavigate}
         className={({ isActive }) => `${linkClassName}${isActive ? " active" : ""}`}

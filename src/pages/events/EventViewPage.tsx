@@ -9,6 +9,7 @@ import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { useObjectUrls } from "@/hooks/useObjectUrls";
 
 import {
+  EVENT_CANCELLATION_REASONS,
   EVENT_CATEGORIES,
   EVENT_GUIDES,
   formatEventDate,
@@ -106,6 +107,18 @@ function EventViewPage() {
               </Badge>
             )}
           </div>
+
+          {event.status === "cancelled" && event.cancellationReason && (
+            <p className="text-danger fs-13 mb-2">
+              <i className="ri-error-warning-line align-middle me-1" aria-hidden="true" />
+              {t("events.view.cancellationReason")}:{" "}
+              {(EVENT_CANCELLATION_REASONS as readonly string[]).includes(
+                event.cancellationReason,
+              )
+                ? t(`events.confirmCancel.reasons.${event.cancellationReason}`)
+                : event.cancellationReason}
+            </p>
+          )}
 
           <p className="text-muted mb-0">
             {event.description || t("events.view.notSpecified")}

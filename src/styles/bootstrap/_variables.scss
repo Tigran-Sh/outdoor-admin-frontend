@@ -1,7 +1,12 @@
 // Variables
 
-// Google Font
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+// Web font
+// Mardoto (Armenian + Latin, SIL OFL) is the Odex brand typeface. It is not distributed via a
+// public font CDN, so the actual @font-face files must be added to src/assets/fonts/mardoto/
+// and declared in components/_icons.scss-style @font-face rules once available. Roboto covers
+// Cyrillic (Mardoto's Latin is built on Roboto's, so the two read as one family) and is loaded
+// below as the working fallback until Mardoto's webfont files are supplied.
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 //
 // custom-variables
@@ -12,9 +17,10 @@
 $variable-prefix: vz-; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix: $variable-prefix;
 
-// Font Family
-$font-family-primary: 'Open Sans', sans-serif;
-$font-family-secondary: 'Open Sans', sans-serif;
+// Font Family — Odex: Mardoto first (Armenian + Latin), Roboto covers Cyrillic with no visible
+// seam, system sans-serif as final fallback.
+$font-family-primary: 'Mardoto', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-family-secondary: $font-family-primary;
 
 //custom variables managed by
 //light mode
@@ -35,17 +41,19 @@ $sidebar-gradient-dark-mode: false;
 // Color system
 
 // scss-docs-start gray-color-variables
-$white: #fff;
-$gray-100: #f3f6f9;
-$gray-200: #eff2f7;
-$gray-300: #e9ebec;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #878a99;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
-$black: #000;
+// Odex Neutral primitive ramp — warm neutral, deliberately not grey. Aliased 1:1 onto
+// Bootstrap's grey slots so every component that reads $gray-* inherits the Odex palette.
+$white: #ffffff; // Neutral/000
+$gray-100: #f7f1e9; // Neutral/100
+$gray-200: #edeae3; // Neutral/150
+$gray-300: #e8daca; // Neutral/200
+$gray-400: #d5c3ae; // Neutral/300
+$gray-500: #a8a198; // Neutral/350
+$gray-600: #8c857c; // Neutral/450
+$gray-700: #786e62; // Neutral/500
+$gray-800: #6e645a; // Neutral/600
+$gray-900: #1c1b18; // Neutral/900 (also text/primary)
+$black: #1a1917; // Neutral/950 — warm near-black, never pure black
 
 // fusv-disable
 // scss-docs-start gray-colors-map
@@ -64,14 +72,18 @@ $grays: (
 // fusv-enable
 
 // scss-docs-start color-variables
-$blue: #32ccff;
+// Odex hues aliased from the primitive ramps: $orange/$green/$yellow/$red/$blue drive the
+// theme colors below (Apricot/Forest/Success/Warning/Danger/Info primitives, 500 stop).
+// $indigo/$purple/$pink/$teal/$cyan are undefined by Odex and kept as Bootstrap stock utility
+// hues (.bg-purple etc.) -- not used by any themed component.
+$blue: #2c6e9b; // Info/500
 $indigo: #516196;
 $purple: #8772f9;
 $pink: #f672a7;
-$red: #f06548;
-$orange: #f1963b;
-$yellow: #FFBC0A;
-$green: #00bd9d;
+$red: #c62828; // Danger/500
+$orange: #e86a25; // Apricot/500 (brand/primary)
+$yellow: #b8860b; // Warning/500
+$green: #2e7d4f; // Success/500
 $teal: #02a8b5;
 $cyan: #25a0e2;
 // scss-docs-end color-variables
@@ -96,10 +108,14 @@ $colors: (
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-$min-contrast-ratio: 1.30;
+// Odex fix: the template default of 1.30 makes Bootstrap pick white text on Apricot/500
+// (measured contrast 3.22), which fails WCAG AA. 4.5 forces the correct dark on-primary text.
+$min-contrast-ratio: 4.5;
 
 // Customize the light and dark text colors for use in our color contrast function.
-$color-contrast-dark: $black;
+// $color-contrast-dark is Odex brand/on-primary (Apricot/950) -- text on an apricot (or any
+// other light/mid-tone theme colour) fill is this warm brown, never pure black or white.
+$color-contrast-dark: #2a0e04;
 $color-contrast-light: $white;
 
 // fusv-disable
@@ -324,16 +340,15 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary: $cyan;
-$secondary: $gray-600;
-$success: $green;
-$info: $blue;
-$warning: $yellow;
-$danger: $red;
-$light: $gray-100;
-$dark: $gray-800;
-
-
+// Odex semantic/Light aliases
+$primary: #e86a25; // brand/primary -- Apricot/500
+$secondary: #2e6b5e; // brand/secondary -- Forest/600
+$success: #2e7d4f; // state/success -- Success/500
+$info: #2c6e9b; // state/info -- Info/500
+$warning: #b8860b; // state/warning -- Warning/500
+$danger: #c62828; // state/danger -- Danger/500
+$light: #fdfaf6; // surface/1 -- Neutral/050
+$dark: #1c1b18; // text/primary -- Neutral/900
 
 // scss-docs-end theme-color-variables
 
@@ -351,25 +366,27 @@ $theme-colors: (
 // scss-docs-end theme-colors-map
 
 // scss-docs-start theme-text-variables
-$primary-text-emphasis: shade-color($primary, 15%);
-$secondary-text-emphasis: shade-color($secondary, 15%);
-$success-text-emphasis: shade-color($success, 15%);
-$info-text-emphasis: shade-color($info, 15%);
-$warning-text-emphasis: shade-color($warning, 15%);
-$danger-text-emphasis: shade-color($danger, 15%);
-$light-text-emphasis: $gray-400;
-$dark-text-emphasis: $gray-800;
+// Odex state/on-*-tint and brand pressed tones (the colour used for text sitting on the
+// matching -bg-subtle tint below).
+$primary-text-emphasis: #a44112; // brand/primary-pressed -- Apricot/700
+$secondary-text-emphasis: #10302a; // brand-secondary pressed -- Forest/800
+$success-text-emphasis: #1c5433; // state/on-success-tint
+$info-text-emphasis: #1e4e6f; // state/on-info-tint
+$warning-text-emphasis: #8a6206; // state/on-warning-tint
+$danger-text-emphasis: #8e1b1b; // state/on-danger-tint
+$light-text-emphasis: #6e645a; // text/secondary -- Neutral/600
+$dark-text-emphasis: #1c1b18; // text/primary -- Neutral/900
 // scss-docs-end theme-text-variables
 
 // scss-docs-start theme-bg-subtle-variables
-$primary-bg-subtle: tint-color($primary, 85%);
-$secondary-bg-subtle: tint-color($secondary, 85%);
-$success-bg-subtle: tint-color($success, 85%);
-$info-bg-subtle: tint-color($info, 85%);
-$warning-bg-subtle: tint-color($warning, 85%);
-$danger-bg-subtle: tint-color($danger, 85%);
-$light-bg-subtle: mix($gray-100, $white);
-$dark-bg-subtle: $gray-300;
+$primary-bg-subtle: #fadcc2; // brand/primary-subtle -- Apricot/100
+$secondary-bg-subtle: #dce9e2; // brand/secondary-subtle -- Forest/100
+$success-bg-subtle: #e3f1e8; // state/success-tint
+$info-bg-subtle: #e2eff7; // state/info-tint
+$warning-bg-subtle: #fdf3d6; // state/warning-tint
+$danger-bg-subtle: #fbe4e4; // state/danger-tint
+$light-bg-subtle: #fdfaf6; // surface/1 -- Neutral/050
+$dark-bg-subtle: #d5c3ae; // Neutral/300
 // scss-docs-end theme-bg-subtle-variables
 
 // scss-docs-start theme-border-subtle-variables
@@ -379,8 +396,8 @@ $success-border-subtle: tint-color($success, 60%);
 $info-border-subtle: tint-color($info, 60%);
 $warning-border-subtle: tint-color($warning, 60%);
 $danger-border-subtle: tint-color($danger, 60%);
-$light-border-subtle: $gray-200;
-$dark-border-subtle: $gray-500;
+$light-border-subtle: #e8daca; // border/default -- Neutral/200
+$dark-border-subtle: #a8a198; // Neutral/350
 // scss-docs-end theme-border-subtle-variables
 
 // Characters which are escaped by the escape-svg function
@@ -407,7 +424,8 @@ $enable-grid-classes: true;
 $enable-container-classes: true;
 $enable-cssgrid: false;
 $enable-button-pointers: true;
-$enable-rfs: true;
+// Odex fix: RFS would fluidly resize type away from the single fixed scale below.
+$enable-rfs: false;
 $enable-validation-icons: true;
 $enable-negative-margins: true;
 $enable-deprecation-messages: true;
@@ -430,14 +448,42 @@ $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0));
 // You can add more entries to the $spacers map, should you need more variation.
 
 // scss-docs-start spacer-variables-maps
+// Odex 4px-base spacing scale. Bootstrap ships only six numeric steps (0-5) and has neither
+// 12px nor 32px, both needed constantly -- so the map is extended with the named Odex steps
+// rather than replaced, keeping every existing p-*/m-*/gap-* numeric utility working.
 $spacer: 1rem;
 $spacers: (
   0: 0,
   1: $spacer * .25,
+  // 4px -- space/2xs
   2: $spacer * .5,
+  // 8px -- space/xs
   3: $spacer,
+  // 16px -- space/md
   4: $spacer * 1.5,
+  // 24px -- space/lg
   5: $spacer * 3,
+  // 48px -- space/2xl
+  "3xs": 0.125rem,
+  // 2px
+  "2xs": 0.25rem,
+  // 4px
+  "xs": 0.5rem,
+  // 8px
+  "sm": 0.75rem,
+  // 12px
+  "md": 1rem,
+  // 16px
+  "lg": 1.5rem,
+  // 24px
+  "xl": 2rem,
+  // 32px
+  "2xl": 3rem,
+  // 48px
+  "3xl": 4rem,
+  // 64px
+  "4xl": 6rem,
+  // 96px
 );
 
 $negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
@@ -459,8 +505,8 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #ffffff;
-$body-color: $gray-900;
+$body-bg: #fdf0e4; // surface/0 -- Apricot/050, page ground on every screen
+$body-color: $gray-900; // text/primary -- Neutral/900
 $body-text-align: null;
 
 $body-secondary-color: $gray-600;
@@ -569,23 +615,38 @@ $border-color-translucent: $gray-400;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
-$border-radius: .25rem;
-$border-radius-sm: .2rem;
-$border-radius-lg: .3rem;
-$border-radius-xl: 1rem;
-$border-radius-xxl: 2rem;
-$border-radius-pill: 50rem;
+// Odex corner language: radius/sm (8, chips/inputs/buttons) is the Bootstrap default so every
+// Reactstrap component inherits it without per-component patching. radius/xs (4, control
+// indicators) is the single named exception, applied directly to the checkbox indicator only
+// -- see $form-check-input-border-radius below -- never to $border-radius-sm globally.
+$border-radius: .5rem; // 8px -- radius/sm
+$border-radius-sm: .5rem; // 8px -- radius/sm (uniform corner language, no scaled-down variant)
+$border-radius-lg: .75rem; // 12px -- radius/md (cards)
+$border-radius-xl: 1rem; // 16px -- radius/lg (modals, sheets)
+$border-radius-xxl: 1.5rem; // 24px -- large surfaces, no direct Odex token
+$border-radius-pill: 999px; // radius/full (avatars, pills)
 // scss-docs-end border-radius-variables
 // fusv-disable
 $border-radius-2xl: $border-radius-xxl; // Deprecated in v5.3.0
 // fusv-enable
 
 // scss-docs-start box-shadow-variables
-$box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
-$box-shadow-sm: 0 .125rem .25rem rgba($black, .075);
-$box-shadow-lg: 0 5px 10px rgba(30, 32, 37, 0.12);
-$box-shadow-inset: inset 0 1px 2px rgba($black, .075);
+// Odex elevation scale, cast in warm near-black (#1c1b18, text/primary / Neutral/900) rather
+// than pure black or neutral grey -- a cool shadow on the warm surface/0 ground reads as dirty.
+// $box-shadow-sm ~ Elevation/1 (card at rest), $box-shadow ~ Elevation/3 (dropdown, tooltip,
+// popover, sticky header), $box-shadow-lg ~ Elevation/4 (modal); see $modal-content-box-shadow
+// and $toast-box-shadow below for Elevation/4 and Elevation/5 respectively.
+$shadow-color: #1c1b18;
+$box-shadow-sm: 0 1px 3px rgba($shadow-color, .08), 0 1px 2px rgba($shadow-color, .06); // Elevation/1
+$box-shadow: 0 4px 8px rgba($shadow-color, .1), 0 2px 4px rgba($shadow-color, .06); // Elevation/3
+$box-shadow-lg: 0 12px 24px rgba($shadow-color, .16), 0 4px 8px rgba($shadow-color, .08); // Elevation/4
+$box-shadow-inset: inset 0 1px 2px rgba($shadow-color, .075);
 $element-shadow: none;
+
+// Elevation/2 (card hover) and Elevation/5 (toast) have no direct Bootstrap variable slot --
+// applied directly where needed, e.g. .card:hover and $toast-box-shadow.
+$box-shadow-elevation-2: 0 6px 12px rgba($shadow-color, .12), 0 2px 4px rgba($shadow-color, .06);
+$box-shadow-elevation-5: 0 16px 32px rgba($shadow-color, .18), 0 6px 12px rgba($shadow-color, .1);
 // scss-docs-end box-shadow-variables
 
 $component-active-color: $white;
@@ -637,10 +698,14 @@ $font-family-code: var(--#{$prefix}font-monospace);
 
 // $font-size-root affects the value of `rem`, which is used for as well font sizes, paddings, and margins
 // $font-size-base affects the font size of the body text
+// Odex one-scale type system (Display/H1/H2/H3/Body/Body small/Label/Caption/Label large).
+// Responsiveness comes from which style is used, not from resizing -- see $enable-rfs: false
+// above and components/_type.scss for the full named scale (Label, Caption, Label large, etc.)
+// that has no direct Bootstrap variable slot.
 $font-size-root: null;
-$font-size-base: 0.875rem; // Assumes the browser default, typically `16px`
-$font-size-sm: $font-size-base * .875;
-$font-size-lg: $font-size-base * 1.25;
+$font-size-base: 0.9375rem; // 15px -- Body, 155% line-height
+$font-size-sm: 0.8125rem; // 13px -- Body small / Label, 150%/140% line-height
+$font-size-lg: 1rem; // 16px
 
 $font-weight-lighter: lighter;
 $font-weight-light: 300;
@@ -652,16 +717,16 @@ $font-weight-bolder: bolder;
 
 $font-weight-base: $font-weight-normal;
 
-$line-height-base: 1.5;
-$line-height-sm: 1.25;
-$line-height-lg: 2;
+$line-height-base: 1.55; // Body -- 155%, the floor on Body small is 1.5, never negotiable downward
+$line-height-sm: 1.5; // Body small -- 150%
+$line-height-lg: 1.4; // Label large -- 140%
 
-$h1-font-size: $font-size-base * 2.5;
-$h2-font-size: $font-size-base * 2;
-$h3-font-size: $font-size-base * 1.75;
-$h4-font-size: $font-size-base * 1.5;
-$h5-font-size: $font-size-base * 1.25;
-$h6-font-size: $font-size-base;
+$h1-font-size: 1.5rem; // 24px -- H1, 125% line-height, -1% tracking
+$h2-font-size: 1.25rem; // 20px -- H2, 130% line-height
+$h3-font-size: 1rem; // 16px -- H3, 140% line-height
+$h4-font-size: 0.9375rem; // 15px -- ~Body
+$h5-font-size: 0.8125rem; // 13px -- ~Label
+$h6-font-size: 0.6875rem; // 11px -- ~Caption
 // scss-docs-end font-variables
 
 // scss-docs-start font-sizes
@@ -679,25 +744,27 @@ $font-sizes: (
 $headings-margin-bottom: $spacer * .5;
 $headings-font-family: $font-family-primary;
 $headings-font-style: null;
-$headings-font-weight: 600;
-$headings-line-height: 1.2;
-$headings-color: $gray-700;
+$headings-font-weight: 500; // Medium, every level of the Odex scale
+$headings-line-height: 1.3; // per-level overrides (125%/130%/140%) in components/_type.scss
+$headings-color: null; // inherit text/primary ($body-color), not a muted grey
 // scss-docs-end headings-variables
 
 // scss-docs-start display-headings
+// Odex Display is a single 32px/120%/-1% style, desktop and tablet only (swap to H1 below md
+// rather than shrinking it -- see the breakpoint-gated .fs-display rule in components/_type.scss).
 $display-font-sizes: (
-  1: 5rem,
-  2: 4.5rem,
-  3: 4rem,
-  4: 3.5rem,
-  5: 3rem,
-  6: 2.5rem
+  1: 2rem,
+  2: 1.75rem,
+  3: 1.5rem,
+  4: 1.25rem,
+  5: 1rem,
+  6: 0.875rem
 );
 
 $display-font-family: null;
 $display-font-style: null;
-$display-font-weight: 300;
-$display-line-height: $headings-line-height;
+$display-font-weight: 500; // Medium
+$display-line-height: 1.2; // 120%
 // scss-docs-end display-headings
 
 //Font size custom
@@ -989,7 +1056,9 @@ $form-check-input-active-filter: brightness(90%);
 
 $form-check-input-bg: $input-bg;
 $form-check-input-border: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color-translucent);
-$form-check-input-border-radius: .25em;
+// radius/xs (4px) -- the single named exception to the 8/12/16 corner language, control
+// indicators only: at 18px, radius/sm would read as a circle and collide with the radio.
+$form-check-input-border-radius: .25rem;
 $form-check-radio-border-radius: 50%;
 $form-check-input-focus-border: $input-focus-border-color;
 $form-check-input-focus-box-shadow: $focus-ring-box-shadow;
@@ -1288,7 +1357,7 @@ $dropdown-border-width: 0;
 $dropdown-inner-border-radius: calc(#{$dropdown-border-radius} - #{$dropdown-border-width}); // stylelint-disable-line function-disallowed-list
 $dropdown-divider-bg: $dropdown-border-color;
 $dropdown-divider-margin-y: $spacer * .5;
-$dropdown-box-shadow: $box-shadow-lg;
+$dropdown-box-shadow: $box-shadow; // Elevation/3
 
 $dropdown-link-color: var(--#{$prefix}body-color);
 $dropdown-link-hover-color: $dropdown-link-color;
@@ -1477,7 +1546,7 @@ $popover-border-width: var(--#{$prefix}border-width);
 $popover-border-color: var(--#{$prefix}border-color);
 $popover-border-radius: var(--#{$prefix}border-radius);
 $popover-inner-border-radius: calc(#{$popover-border-radius} - #{$popover-border-width}); // stylelint-disable-line function-disallowed-list
-$popover-box-shadow: $box-shadow-lg;
+$popover-box-shadow: $box-shadow; // Elevation/3
 
 $popover-header-font-size: $font-size-base;
 $popover-header-bg: var(--#{$prefix}secondary-bg);
@@ -1511,7 +1580,7 @@ $toast-background-color: var(--#{$prefix}secondary-bg);
 $toast-border-width: var(--#{$prefix}border-width);
 $toast-border-color: var(--#{$prefix}border-color);
 $toast-border-radius: var(--#{$prefix}border-radius);
-$toast-box-shadow: var(--#{$prefix}box-shadow);
+$toast-box-shadow: #{$box-shadow-elevation-5}; // Elevation/5
 $toast-spacing: $container-padding-x;
 
 $toast-header-color: var(--#{$prefix}secondary-color);
@@ -1548,10 +1617,10 @@ $modal-content-color: null;
 $modal-content-bg: var(--#{$prefix}secondary-bg);
 $modal-content-border-color: var(--#{$prefix}border-color);
 $modal-content-border-width: var(--#{$prefix}border-width);
-$modal-content-border-radius: var(--#{$prefix}border-radius-lg);
+$modal-content-border-radius: var(--#{$prefix}border-radius-xl); // radius/lg -- modals, sheets
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width);
 $modal-content-box-shadow-xs: $box-shadow-sm;
-$modal-content-box-shadow-sm-up: $box-shadow;
+$modal-content-box-shadow-sm-up: $box-shadow-lg; // Elevation/4
 
 $modal-backdrop-bg: $black;
 $modal-backdrop-opacity: .5;

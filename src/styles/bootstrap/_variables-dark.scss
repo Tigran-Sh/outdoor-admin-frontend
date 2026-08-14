@@ -6,29 +6,30 @@
 // Global colors
 //
 
-$body-bg-dark:                                                      #1a1d21;
+$body-bg-dark:                                                      #1a1917; // surface/0 dark -- Neutral/950
 
 // scss-docs-start sass-dark-mode-vars
 // scss-docs-start theme-text-body-variables
-$primary-text-emphasis-dark:                                        tint-color($primary, 20%);
-$secondary-text-emphasis-dark:                                      tint-color($secondary, 20%);
-$success-text-emphasis-dark:                                        tint-color($success, 20%);
-$info-text-emphasis-dark:                                           tint-color($info, 20%);
-$warning-text-emphasis-dark:                                        tint-color($warning, 20%);
-$danger-text-emphasis-dark:                                         tint-color($danger, 20%);
-$light-text-emphasis-dark:                                          tint-color($body-bg-dark, 25%);
-$dark-text-emphasis-dark:                                           tint-color($body-bg-dark, 30%);
+// Odex dark tints invert: the Light 100 tint becomes the on-tint text colour and vice-versa.
+$primary-text-emphasis-dark:                                        #fadcc2; // brand/primary-pressed dark -- Apricot/100
+$secondary-text-emphasis-dark:                                      #dce9e2; // Forest/100
+$success-text-emphasis-dark:                                        #e3f1e8; // state/on-success-tint dark
+$info-text-emphasis-dark:                                           #e2eff7; // state/on-info-tint dark
+$warning-text-emphasis-dark:                                        #fdf3d6; // state/on-warning-tint dark
+$danger-text-emphasis-dark:                                         #fbe4e4; // state/on-danger-tint dark
+$light-text-emphasis-dark:                                          #a8a198; // Neutral/350
+$dark-text-emphasis-dark:                                           #edeae3; // Neutral/150
 // scss-docs-end theme-text-body-variables
 
 // scss-docs-start theme-bg-subtle-dark-variables
-$primary-bg-subtle-dark:                                            rgba($primary, 0.15);
-$secondary-bg-subtle-dark:                                          rgba($secondary, 0.15);
-$success-bg-subtle-dark:                                            rgba($success, 0.15);
-$info-bg-subtle-dark:                                               rgba($info, 0.15);
-$warning-bg-subtle-dark:                                            rgba($warning, 0.15);
-$danger-bg-subtle-dark:                                             rgba($danger, 0.15);
-$light-bg-subtle-dark:                                              tint-color($body-bg-dark, 5%);
-$dark-bg-subtle-dark:                                               tint-color($body-bg-dark, 10%);
+$primary-bg-subtle-dark:                                            #4a1b06; // brand/primary-subtle dark -- Apricot/900
+$secondary-bg-subtle-dark:                                          #10302a; // brand/secondary-subtle dark -- Forest/800
+$success-bg-subtle-dark:                                            #1c5433; // state/success-tint dark
+$info-bg-subtle-dark:                                               #1e4e6f; // state/info-tint dark
+$warning-bg-subtle-dark:                                            #8a6206; // state/warning-tint dark
+$danger-bg-subtle-dark:                                             #8e1b1b; // state/danger-tint dark
+$light-bg-subtle-dark:                                              #232220; // Neutral/925
+$dark-bg-subtle-dark:                                               #2e2c29; // Neutral/875
 // scss-docs-end theme-bg-subtle-dark-variables
 
 // scss-docs-start theme-border-subtle-dark-variables
@@ -38,21 +39,21 @@ $success-border-subtle-dark:                                        shade-color(
 $info-border-subtle-dark:                                           shade-color($info, 50%);
 $warning-border-subtle-dark:                                        shade-color($warning, 50%);
 $danger-border-subtle-dark:                                         shade-color($danger, 50%);
-$light-border-subtle-dark:                                          tint-color($body-bg-dark, 12%);
-$dark-border-subtle-dark:                                           tint-color($body-bg-dark, 15%);
+$light-border-subtle-dark:                                          #38352f; // border/default dark -- Neutral/825
+$dark-border-subtle-dark:                                           #4a463e; // border/strong dark -- Neutral/775
 // scss-docs-end theme-border-subtle-dark-variables
 
-$body-color-dark:                                                   #ced4da;
-$body-secondary-color-dark:                                         #878a99;
-$body-secondary-bg-dark:                                            #212529;
-$body-tertiary-color-dark:                                          rgba($body-color-dark, .75);
-$body-tertiary-bg-dark:                                             tint-color($body-bg-dark, 7%);
+$body-color-dark:                                                   #edeae3; // text/primary dark -- Neutral/150
+$body-secondary-color-dark:                                         #a8a198; // text/secondary dark -- Neutral/350
+$body-secondary-bg-dark:                                            #232220; // surface/1 dark -- Neutral/925
+$body-tertiary-color-dark:                                          #8c857c; // text/muted dark -- Neutral/450
+$body-tertiary-bg-dark:                                             #2e2c29; // surface/2 dark -- Neutral/875
 $body-emphasis-color-dark:                                          $white;
-$border-color-dark:                                                 #32383e;
-$border-color-translucent-dark:                                     #32383e;
-$headings-color-dark:                                               #ced4da;
-$link-color-dark:                                                   tint-color($primary, 80%);
-$link-hover-color-dark:                                             shift-color($link-color-dark, -$link-shade-percentage);
+$border-color-dark:                                                 #38352f; // border/default dark -- Neutral/825
+$border-color-translucent-dark:                                     #4a463e; // border/strong dark -- Neutral/775
+$headings-color-dark:                                               #edeae3; // text/primary dark
+$link-color-dark:                                                   #f09b62; // brand/primary dark -- Apricot/300
+$link-hover-color-dark:                                             #f5be93; // brand/primary-hover dark -- Apricot/200
 $code-color-dark:                                                   $code-color;
 
 //custom only default themes colors
@@ -145,15 +146,18 @@ $footer-color-dark:                                                 #878a99;
 //sidebar light 
 $vertical-menu-bg-dark:                                             $white;
 $vertical-menu-border-dark:                                         $white;
-$vertical-menu-item-color-dark:                                     darken($gray-600, 10%);
-$vertical-menu-item-bg-dark:                                        rgba($primary, .15);
-$vertical-menu-item-hover-color-dark:                               $primary;
+// Sidebar stays on a light (white) surface in this skin even while the app is in dark mode,
+// so it keeps the same Light nav-item tokens as _variables-custom.scss rather than the dark
+// text tokens (which are illegible against white).
+$vertical-menu-item-color-dark:                                     $text-secondary;
+$vertical-menu-item-bg-dark:                                        $surface-pressed;
+$vertical-menu-item-hover-color-dark:                               $text-primary;
 $vertical-menu-item-active-color-dark:                              $primary;
-$vertical-menu-item-active-bg-dark:                                 rgba($primary, .15);
-$vertical-menu-sub-item-color-dark:                                 darken($gray-600, 4%);
-$vertical-menu-sub-item-hover-color-dark:                           $primary;
+$vertical-menu-item-active-bg-dark:                                 $primary-bg-subtle;
+$vertical-menu-sub-item-color-dark:                                 $text-secondary;
+$vertical-menu-sub-item-hover-color-dark:                           $text-primary;
 $vertical-menu-sub-item-active-color-dark:                          $primary;
-$vertical-menu-title-color-dark:                                    #919da9;
+$vertical-menu-title-color-dark:                                    $text-muted;
 
 //sidebar dark 
 $dark-vertical-menu-bg-dark:                                        #212428;

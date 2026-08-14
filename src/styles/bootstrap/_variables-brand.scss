@@ -1,0 +1,204 @@
+//
+// _variables-brand.scss
+//
+// Odex design foundations that sit outside Bootstrap's own variable surface: the raw
+// primitive ramps, the semantic tokens that have no 1:1 Bootstrap slot (surfaces, difficulty,
+// interaction states, the Accent ramp), and sizing constants (touch targets).
+//
+// Two-layer token system:
+//   1. PRIMITIVES -- raw ramps below. Never consume these directly in components.
+//   2. SEMANTIC    -- Light/Dark aliases. This is the only layer components should read from,
+//                      either via the Sass variables further down or the --#{$prefix}* custom
+//                      properties written to :root / [data-bs-theme="dark"] in base/_root.scss.
+//
+// Bootstrap-native tokens (brand/primary, brand/secondary, state/success|warning|danger|info,
+// surface/0, text/primary, border/default) are wired directly into Bootstrap's own variables in
+// bootstrap/_variables.scss instead of being duplicated here.
+
+// ---------------------------------------------------------------------------------------------
+// PRIMITIVES -- scoped to nothing. Do not use outside this file.
+// ---------------------------------------------------------------------------------------------
+
+$-apricot: (
+  "050": #fdf0e4,
+  "100": #fadcc2,
+  "200": #f5be93,
+  "300": #f09b62,
+  "400": #ed7f3b,
+  "500": #e86a25,
+  "600": #c9541a,
+  "700": #a44112,
+  "800": #7a2f0c,
+  "900": #4a1b06,
+  "950": #2a0e04,
+);
+
+$-forest: (
+  "050": #e8f2ee,
+  "100": #dce9e2,
+  "200": #c7e0d6,
+  "300": #8fbcaa,
+  "400": #5e9683,
+  "500": #3f7c6b,
+  "600": #2e6b5e,
+  "700": #1b4a3e,
+  "800": #10302a,
+  "900": #0a1f1b,
+);
+
+$-neutral: (
+  "000": #ffffff,
+  "050": #fdfaf6,
+  "100": #f7f1e9,
+  "150": #edeae3,
+  "200": #e8daca,
+  "300": #d5c3ae,
+  "350": #a8a198,
+  "400": #b5a491,
+  "450": #8c857c,
+  "500": #786e62,
+  "600": #6e645a,
+  "700": #4a423a,
+  "775": #4a463e,
+  "800": #2e2822,
+  "825": #38352f,
+  "875": #2e2c29,
+  "900": #1c1b18,
+  "925": #232220,
+  "950": #1a1917,
+);
+
+$-accent: (
+  "100": #fbeed2,
+  "500": #e5b23c,
+  "900": #4a3405,
+);
+
+$-success-primitive: (
+  "100": #e3f1e8,
+  "500": #2e7d4f,
+  "700": #1c5433,
+);
+
+$-warning-primitive: (
+  "100": #fdf3d6,
+  "500": #b8860b,
+  "700": #8a6206,
+);
+
+$-danger-primitive: (
+  "100": #fbe4e4,
+  "500": #c62828,
+  "700": #8e1b1b,
+);
+
+$-info-primitive: (
+  "100": #e2eff7,
+  "500": #2c6e9b,
+  "700": #1e4e6f,
+);
+
+// ---------------------------------------------------------------------------------------------
+// SEMANTIC -- Light
+// ---------------------------------------------------------------------------------------------
+
+$brand-accent: map-get($-accent, "500");
+$brand-on-accent: map-get($-accent, "900");
+$brand-accent-subtle: map-get($-accent, "100");
+
+$surface-0: map-get($-apricot, "050"); // = $body-bg
+$surface-1: map-get($-neutral, "050"); // = $light
+$surface-2: map-get($-neutral, "000"); // = $white
+
+$border-default: map-get($-neutral, "200"); // = $border-color
+$border-strong: map-get($-neutral, "300"); // = $border-color-translucent
+$border-focus: map-get($-apricot, "500"); // = $primary
+
+$text-primary: map-get($-neutral, "900"); // = $body-color
+$text-secondary: map-get($-neutral, "600");
+$text-muted: map-get($-neutral, "500");
+$text-on-photo: map-get($-neutral, "000");
+
+$state-success-tint: map-get($-success-primitive, "100");
+$state-on-success-tint: map-get($-success-primitive, "700");
+$state-warning-tint: map-get($-warning-primitive, "100");
+$state-on-warning-tint: map-get($-warning-primitive, "700");
+$state-danger-tint: map-get($-danger-primitive, "100");
+$state-on-danger-tint: map-get($-danger-primitive, "700");
+$state-info-tint: map-get($-info-primitive, "100");
+$state-on-info-tint: map-get($-info-primitive, "700");
+
+// Difficulty is a single-hue Forest density ramp, identical in Light and Dark by design --
+// contrast lives inside the chip, not against the page. Never use colour alone: every chip
+// carries its text label and icon at every size (see components/_badge.scss / difficulty chip).
+$difficulty-easy-bg: map-get($-forest, "100");
+$difficulty-easy-text: map-get($-forest, "700");
+$difficulty-moderate-bg: map-get($-forest, "300");
+$difficulty-moderate-text: map-get($-forest, "800");
+$difficulty-hard-bg: map-get($-forest, "600");
+$difficulty-hard-text: map-get($-forest, "050");
+$difficulty-extreme-bg: map-get($-forest, "800");
+$difficulty-extreme-text: map-get($-forest, "100");
+
+$brand-secondary-hover: map-get($-forest, "700");
+$brand-secondary-pressed: map-get($-forest, "800");
+$state-danger-hover: map-get($-danger-primitive, "700");
+$surface-hover: map-get($-neutral, "100");
+$surface-pressed: map-get($-neutral, "200");
+$surface-locked: map-get($-neutral, "100");
+
+// ---------------------------------------------------------------------------------------------
+// SEMANTIC -- Dark
+// ---------------------------------------------------------------------------------------------
+
+$brand-accent-dark: map-get($-accent, "500");
+$brand-on-accent-dark: map-get($-accent, "900");
+$brand-accent-subtle-dark: map-get($-accent, "900");
+
+$surface-0-dark: map-get($-neutral, "950");
+$surface-1-dark: map-get($-neutral, "925");
+$surface-2-dark: map-get($-neutral, "875");
+
+$border-default-dark: map-get($-neutral, "825");
+$border-strong-dark: map-get($-neutral, "775");
+$border-focus-dark: map-get($-apricot, "300");
+
+$text-primary-dark: map-get($-neutral, "150");
+$text-secondary-dark: map-get($-neutral, "350");
+$text-muted-dark: map-get($-neutral, "450");
+$text-on-photo-dark: map-get($-neutral, "000");
+
+$state-success-tint-dark: map-get($-success-primitive, "700");
+$state-on-success-tint-dark: map-get($-success-primitive, "100");
+$state-warning-tint-dark: map-get($-warning-primitive, "700");
+$state-on-warning-tint-dark: map-get($-warning-primitive, "100");
+$state-danger-tint-dark: map-get($-danger-primitive, "700");
+$state-on-danger-tint-dark: map-get($-danger-primitive, "100");
+$state-info-tint-dark: map-get($-info-primitive, "700");
+$state-on-info-tint-dark: map-get($-info-primitive, "100");
+
+$difficulty-easy-bg-dark: $difficulty-easy-bg;
+$difficulty-easy-text-dark: $difficulty-easy-text;
+$difficulty-moderate-bg-dark: $difficulty-moderate-bg;
+$difficulty-moderate-text-dark: $difficulty-moderate-text;
+$difficulty-hard-bg-dark: $difficulty-hard-bg;
+$difficulty-hard-text-dark: $difficulty-hard-text;
+$difficulty-extreme-bg-dark: $difficulty-extreme-bg;
+$difficulty-extreme-text-dark: $difficulty-extreme-text;
+
+$brand-secondary-hover-dark: map-get($-forest, "200");
+$brand-secondary-pressed-dark: map-get($-forest, "100");
+$state-danger-hover-dark: map-get($-danger-primitive, "700");
+$surface-hover-dark: map-get($-neutral, "875");
+$surface-pressed-dark: map-get($-neutral, "825");
+$surface-locked-dark: map-get($-neutral, "875");
+
+// ---------------------------------------------------------------------------------------------
+// Touch targets
+// ---------------------------------------------------------------------------------------------
+// target/field (56) is deliberate and narrow in scope: QR scan / confirm-completion controls
+// operated outdoors in gloves ONLY. Never reuse it elsewhere or it stops signalling anything.
+
+$target-standard: 44px; // every standard interactive element
+$target-primary: 48px; // primary CTAs -- Book, Pay, Create event, Publish
+$target-field: 56px; // QR scan / confirm-completion controls only

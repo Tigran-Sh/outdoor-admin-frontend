@@ -41,17 +41,35 @@
         .nav-link {
             display: flex;
             align-items: center;
+            margin: 1px 0.5rem;
+            width: calc(100% - 1rem);
             padding: $vertical-menu-item-padding-y $vertical-menu-item-padding-x;
             color: var(--#{$prefix}vertical-menu-item-color);
             font-size: $vertical-menu-item-font-size;
             font-family: $vertical-menu-item-font-family;
+            border-radius: var(--#{$prefix}border-radius);
+            transition: color .15s ease-in-out, background-color .15s ease-in-out;
 
+            // Active: brand/primary text on brand/primary-subtle -- distinct from both the
+            // default and hover treatments below.
             &.active {
                 color: var(--#{$prefix}vertical-menu-item-active-color);
+                background-color: var(--#{$prefix}vertical-menu-item-active-bg);
+                font-weight: $font-weight-medium;
             }
 
-            &:hover {
+            // Hover: the subtlest interactive feedback -- a neutral surface wash, never the
+            // active/brand color, so the two states can never be confused with each other.
+            &:hover:not(.active) {
                 color: var(--#{$prefix}vertical-menu-item-hover-color);
+                background-color: var(--#{$prefix}vertical-menu-item-bg);
+            }
+
+            // Not-yet-implemented pages render as a non-interactive placeholder.
+            &.disabled {
+                color: var(--#{$prefix}text-muted);
+                cursor: not-allowed;
+                pointer-events: none;
             }
 
             i {
@@ -73,9 +91,7 @@
                 z-index: 1;
             }
 
-            &:hover {
-                color: var(--#{$prefix}vertical-menu-item-hover-color);
-
+            &:hover:not(.active) {
                 .icon-dual {
                     color: var(--#{$prefix}vertical-menu-item-hover-color);
                     fill: rgba($primary, 0.16);
@@ -147,8 +163,9 @@
                     opacity: 0.5;
                 }
 
-                &:hover {
+                &:hover:not(.active) {
                     color: var(--#{$prefix}vertical-menu-sub-item-hover-color);
+                    background-color: var(--#{$prefix}vertical-menu-item-bg);
 
                     &:before {
                         background-color: var(--#{$prefix}vertical-menu-sub-item-hover-color) !important;
@@ -158,10 +175,19 @@
 
                 &.active {
                     color: var(--#{$prefix}vertical-menu-item-active-color);
+                    background-color: var(--#{$prefix}vertical-menu-item-active-bg);
+                    font-weight: $font-weight-medium;
 
                     &:before {
                         background-color: var(--#{$prefix}vertical-menu-item-active-color);
+                        opacity: 1;
                     }
+                }
+
+                &.disabled {
+                    color: var(--#{$prefix}text-muted);
+                    cursor: not-allowed;
+                    pointer-events: none;
                 }
             }
 

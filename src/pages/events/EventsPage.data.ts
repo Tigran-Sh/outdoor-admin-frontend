@@ -64,7 +64,19 @@ export interface EventListItem {
   status: EventStatus;
   /** Number of tickets/spots booked so far. Used for dashboard statistics. */
   soldCount: number;
+  /** Reason provided when the event was cancelled. */
+  cancellationReason?: string;
 }
+
+export const EVENT_CANCELLATION_REASONS = [
+  "lowRegistrations",
+  "weatherConditions",
+  "guideUnavailable",
+  "safetyConcerns",
+  "other",
+] as const;
+
+export type EventCancellationReason = (typeof EVENT_CANCELLATION_REASONS)[number];
 
 export function formatEventDate(date: string, time: string): string {
   const parsed = new Date(`${date}T${time}`);
@@ -364,6 +376,7 @@ export const mockEvents: EventListItem[] = [
     galleryImages: [],
     status: "cancelled",
     soldCount: 12,
+    cancellationReason: "lowRegistrations",
   },
   {
     id: "8",
@@ -457,6 +470,7 @@ export const mockEvents: EventListItem[] = [
     galleryImages: [],
     status: "cancelled",
     soldCount: 8,
+    cancellationReason: "weatherConditions",
   },
 ];
 
