@@ -4,6 +4,7 @@ import type { TFunction } from "i18next";
 export interface LoginFormValues {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 export function getLoginSchema(t: TFunction) {

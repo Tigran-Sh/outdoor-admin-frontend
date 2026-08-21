@@ -14,6 +14,11 @@
     "edit": "Edit",
     "delete": "Delete",
     "cancel": "Cancel",
+    "save": "Save",
+    "active": "Active",
+    "inactive": "Inactive",
+    "loadError": "Failed to load data. Please try again.",
+    "retry": "Retry",
     "myAccount": "My account",
     "myProfile": "My profile",
     "settings": "Settings",
@@ -42,6 +47,7 @@
     "clubVerification": "Club Verification",
     "clubs": "Clubs",
     "users": "Users",
+    "roles": "Roles & Capabilities",
     "eventsModeration": "Events Moderation",
     "financePayouts": "Finance & Payouts",
     "reviewsDisputes": "Reviews & Disputes",
@@ -86,7 +92,9 @@
       "signIn": "Sign In",
       "emailRequired": "Please enter your email",
       "emailInvalid": "Enter a valid email",
-      "passwordRequired": "Please enter your password"
+      "passwordRequired": "Please enter your password",
+      "invalidCredentials": "Unable to log in with provided credentials.",
+      "genericError": "Something went wrong. Please try again."
     },
     "forgotPassword": {
       "title": "Forgot Password?",
@@ -337,6 +345,9 @@
   "clubs": {
     "createClub": "Create Club",
     "empty": "No clubs yet.",
+    "filters": {
+      "all": "All"
+    },
     "table": {
       "name": "Club Name",
       "activityTypes": "Activity Types",
@@ -577,6 +588,139 @@
         "activityTypesRequired": "Please select at least one specialization",
         "languagesRequired": "Please select at least one language",
         "experienceYearsInvalid": "Enter a valid number of years"
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "Users",
+      "createUser": "Create user",
+      "empty": "No users found.",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "createdBy": "Created by",
+        "createdAt": "Created",
+        "actions": "Actions"
+      },
+      "filters": {
+        "all": "All",
+        "searchPlaceholder": "Search by name or email...",
+        "allRoles": "All roles",
+        "allStatuses": "All statuses"
+      },
+      "blocked": "Blocked",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "changeRole": "Change role",
+      "manageCapabilities": "Manage capabilities",
+      "createdByPlatform": "Seeded",
+      "confirmDeactivate": {
+        "title": "Deactivate this user?",
+        "message": "They will no longer be able to log in.",
+        "confirm": "Yes, deactivate"
+      },
+      "confirmActivate": {
+        "title": "Activate this user?",
+        "message": "They will regain access immediately.",
+        "confirm": "Yes, activate"
+      },
+      "create": {
+        "title": "Create user",
+        "submit": "Create user"
+      },
+      "edit": {
+        "title": "Edit user",
+        "submit": "Save changes"
+      },
+      "view": {
+        "notFound": "User not found",
+        "notFoundMessage": "The user you're looking for doesn't exist or has been removed.",
+        "backToUsers": "Back to Users",
+        "editUser": "Edit user",
+        "accountInfo": "Account",
+        "capabilities": "Capabilities",
+        "memberSince": "Member since",
+        "createdBy": "Created by",
+        "updatedAt": "Last updated",
+        "noCapabilities": "No capabilities assigned."
+      },
+      "changeRoleModal": {
+        "title": "Change role",
+        "submit": "Save"
+      },
+      "capabilitiesModal": {
+        "title": "Manage capabilities",
+        "helperText": "Only applies to Internal Admin accounts.",
+        "submit": "Save"
+      },
+      "fields": {
+        "fullName": { "label": "Full name", "placeholder": "Enter full name" },
+        "email": { "label": "Email", "placeholder": "Enter email" },
+        "role": { "label": "Role", "placeholder": "Select a role" },
+        "password": { "label": "Password", "placeholder": "Enter a temporary password" },
+        "capabilities": { "label": "Capabilities", "placeholder": "Select capabilities" }
+      },
+      "validation": {
+        "fullNameRequired": "Please enter a full name",
+        "emailRequired": "Please enter an email",
+        "emailInvalid": "Enter a valid email",
+        "roleRequired": "Please select a role",
+        "passwordRequired": "Please enter a password",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "capabilitiesRequired": "Select at least one capability for Internal Admin accounts"
+      }
+    },
+    "roles": {
+      "title": "Roles & Capabilities",
+      "capabilitiesSectionTitle": "All capabilities"
+    },
+    "roleNames": {
+      "participant": "Participant",
+      "club_owner": "Club Owner",
+      "guide": "Guide",
+      "internal_admin": "Internal Admin",
+      "platform_admin": "Platform Admin"
+    },
+    "capabilityNames": {
+      "edit_club_profile": "Edit club profile",
+      "create_event": "Create event",
+      "edit_event": "Edit event",
+      "publish_event": "Publish event",
+      "view_participants": "View participants",
+      "export_participants": "Export participants",
+      "qr_check_in": "QR check-in",
+      "confirm_completion": "Confirm completion",
+      "view_finances": "View finances",
+      "manage_team_members": "Manage team members",
+      "cancel_event": "Cancel event",
+      "request_refund": "Request refund",
+      "verify_club": "Verify club",
+      "suspend_club": "Suspend club",
+      "issue_refund": "Issue refund"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "changePassword": {
+      "title": "Change password",
+      "submit": "Update password",
+      "success": "Your password has been updated.",
+      "fields": {
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "newPasswordHelper": "At least 8 characters, not all numbers.",
+        "confirmNewPassword": "Confirm new password"
+      },
+      "validation": {
+        "currentRequired": "Please enter your current password",
+        "newRequired": "Please enter a new password",
+        "newMinLength": "Password must be at least 8 characters",
+        "newSameAsCurrent": "New password must be different from the current password",
+        "confirmRequired": "Please confirm your new password",
+        "confirmMismatch": "Passwords do not match"
       }
     }
   },

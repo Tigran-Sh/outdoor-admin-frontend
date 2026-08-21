@@ -19,7 +19,14 @@ export const platformAdminMenu: SidebarNavSection[] = [
       {
         key: "users",
         labelKey: "sidebar.users",
+        path: "/admin/users",
         icon: "ri-group-line",
+      },
+      {
+        key: "roles",
+        labelKey: "sidebar.roles",
+        path: "/admin/roles",
+        icon: "ri-shield-user-line",
       },
       {
         key: "events-moderation",

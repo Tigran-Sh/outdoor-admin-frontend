@@ -39,6 +39,7 @@
 
     .navbar-nav {
         .nav-link {
+            position: relative;
             display: flex;
             align-items: center;
             margin: 1px 0.5rem;
@@ -50,12 +51,23 @@
             border-radius: var(--#{$prefix}border-radius);
             transition: color .15s ease-in-out, background-color .15s ease-in-out;
 
-            // Active: brand/primary text on brand/primary-subtle -- distinct from both the
-            // default and hover treatments below.
+            // Active: brand/primary text on brand/primary-subtle, plus a brand-coloured accent
+            // bar on the leading edge -- distinct from both the default and hover treatments.
             &.active {
                 color: var(--#{$prefix}vertical-menu-item-active-color);
                 background-color: var(--#{$prefix}vertical-menu-item-active-bg);
                 font-weight: $font-weight-medium;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 20%;
+                    bottom: 20%;
+                    left: 0;
+                    width: 3px;
+                    border-radius: var(--#{$prefix}border-radius-pill);
+                    background-color: var(--#{$prefix}vertical-menu-item-active-color);
+                }
             }
 
             // Hover: the subtlest interactive feedback -- a neutral surface wash, never the
@@ -216,10 +228,45 @@
     }
 }
 
+// Account switcher pinned to the bottom of the sidebar, in the space the
+// vertical menu already reserves via its bottom padding (see .navbar-menu above).
+.sidebar-user-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.5rem;
+    border-top: 1px solid var(--#{$prefix}vertical-menu-border);
+
+    .sidebar-user-toggle {
+        padding: 0.5rem;
+        border-radius: var(--#{$prefix}border-radius);
+        color: var(--#{$prefix}vertical-menu-item-color);
+
+        &:hover,
+        &:focus,
+        &[aria-expanded="true"] {
+            color: var(--#{$prefix}vertical-menu-item-hover-color);
+            background-color: var(--#{$prefix}vertical-menu-item-bg);
+        }
+    }
+
+    .dropdown-menu {
+        min-width: calc(100% - 0.5rem);
+    }
+}
+
 .navbar-brand-box {
     padding: 0 1.3rem;
-    text-align: center;
     transition: all .1s ease-out;
+
+    .logo-text {
+        font-weight: 300;
+        font-size: 16px;
+        margin-left: 10px;
+        font-style: normal;
+        color: var(--#{$prefix}dark-text-emphasis);
+    }
 
     @media (max-width: 767.98px) {
         display: none;
@@ -536,8 +583,6 @@
 
     &[data-sidebar-size="sm"] {
         @media (min-width: 768px) {
-            min-height: 1400px;
-
             .main-content {
                 margin-left: var(--#{$prefix}vertical-menu-width-sm);
             }
@@ -566,24 +611,22 @@
             }
         }
 
-        // Side menu
+        // Side menu. Deliberately NOT overriding `position` here -- it stays the
+        // base rule's `position: fixed` (pinned to the viewport, full height), so
+        // .sidebar-user-footer (position: absolute; bottom: 0 inside it) always
+        // stays on-screen. Velzon's original port set this to `position: absolute`
+        // with a paired `min-height: 1400px` on the <html> element above, which
+        // made the whole page (not just the nav list) scroll to reach it.
         .navbar-menu {
-            position: absolute;
             width: var(--#{$prefix}vertical-menu-width-sm) !important;
             padding-top: $header-height;
 
-            .simplebar-mask,
-            .simplebar-content-wrapper {
-                overflow: visible !important;
-            }
-
-            .simplebar-scrollbar,
             .vertical-menu-btn {
                 display: none !important;
             }
 
-            .simplebar-offset {
-                bottom: 0 !important;
+            .sidebar-role-badge {
+                display: none;
             }
 
             // Sidebar Menu
@@ -608,20 +651,29 @@
                 }
 
                 .nav-link {
+                    margin: 0;
+                    // Full-width, no horizontal padding, centered content -- the
+                    // base rule's padding (1.5rem a side) plus its `width: calc(100%
+                    // - 1rem)` left only a few px for the icon in the 70px-wide
+                    // collapsed column, which is what was pushing/clipping icons
+                    // off-center.
+                    width: 100%;
+                    padding: $vertical-menu-item-padding-y 0;
+                    justify-content: center;
+
                     span {
                         display: none;
                     }
 
                     i {
                         font-size: 22px;
+                        min-width: unset;
                     }
 
-                    svg {
-                        margin-right: 0px;
-                    }
-
-                    &:after,
-                    &:before {
+                    // Hide any accordion-toggle caret, but NOT `::before` -- that's
+                    // the active-item accent bar (see the base .nav-link.active rule
+                    // above), which should stay visible in collapsed mode too.
+                    &:after {
                         display: none;
                     }
                 }
@@ -633,78 +685,6 @@
 
                 .nav-item {
                     position: relative;
-
-                    &:hover {
-
-                        >a.menu-link {
-                            position: relative;
-                            width: calc(200px + var(--#{$prefix}vertical-menu-width-sm));
-                            transition: none;
-                            background-color: var(--#{$prefix}vertical-menu-bg);
-
-                            .icon-dual {
-                                fill: rgba($white, 0.16);
-                            }
-
-                            span {
-                                display: inline-block;
-                                padding-left: 25px;
-                            }
-
-                            &:after {
-                                display: block;
-                                transform: rotate(90deg);
-                                color: $white;
-                            }
-                        }
-
-                        .nav-link {
-                            span {
-                                display: inline-block;
-                            }
-                        }
-
-                        >.menu-dropdown {
-                            display: block;
-                            left: var(--#{$prefix}vertical-menu-width-sm);
-                            position: absolute;
-                            width: 200px;
-                            background: var(--#{$prefix}vertical-menu-bg);
-                            height: auto !important;
-                            padding: 0.5rem 0;
-                            border-radius: 0 0 3px 3px;
-                            box-shadow: $vertical-menu-dropdown-box-shadow;
-                        }
-                    }
-                }
-
-                .nav-sm {
-                    padding: 0;
-
-                    .nav-item {
-                        &:hover {
-                            >.nav-link {
-                                color: var(--#{$prefix}vertical-menu-item-hover-color);
-
-                                &:after {
-                                    color: inherit;
-                                }
-                            }
-                        }
-                    }
-
-                    .nav-link {
-                        &:after {
-                            display: block !important;
-                            transform: rotate(0deg) !important;
-                        }
-                    }
-
-                    .menu-dropdown {
-                        left: 100% !important;
-                        top: 0;
-                        border-radius: 3px !important;
-                    }
                 }
             }
         }

@@ -8,6 +8,8 @@
   background: var(--#{$prefix}secondary-bg);
   border-radius: 6px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   .dz-message {
     font-size: 24px;

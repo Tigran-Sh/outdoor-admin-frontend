@@ -5,13 +5,7 @@ import ThemeSwitcher from "@/components/ui/ThemeSwitcher/ThemeSwitcher";
 
 import { useLayout } from "@/app/providers/useLayout";
 
-import UserMenu from "./UserMenu";
-
-interface TopbarProps {
-  userName: string;
-}
-
-function Topbar({ userName }: TopbarProps) {
+function Topbar() {
   const { t } = useTranslation();
   const { toggleSidebar } = useLayout();
 
@@ -37,7 +31,6 @@ function Topbar({ userName }: TopbarProps) {
           <div className="d-flex align-items-center">
             <ThemeSwitcher className="header-item" />
             <LanguageSwitcher className="header-item" />
-            <UserMenu name={userName} />
           </div>
         </div>
       </div>

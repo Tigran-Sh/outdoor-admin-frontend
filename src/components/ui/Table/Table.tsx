@@ -86,11 +86,11 @@ function Table<T>({
   const tableElement = (
     <table
       className={joinClassNames(
-        "table align-middle table-nowrap mb-0",
+        "table align-middle table-hover mb-0 rounded-sm",
         className,
       )}
     >
-      <thead className="table-light text-muted text-uppercase">
+      <thead className="bg-secondary-subtle text-secondary">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {

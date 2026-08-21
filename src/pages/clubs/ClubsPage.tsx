@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import Avatar from "@/components/ui/Avatar/Avatar";
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card/Card";
 import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
+import RowActionsMenu from "@/components/ui/RowActionsMenu/RowActionsMenu";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
 
@@ -17,6 +19,7 @@ import {
   mockClubs,
   toClubListItem,
   type ClubListItem,
+  type ClubVerificationStatus,
 } from "./ClubsPage.data";
 import type { ClubFormValues } from "./ClubProfile.schema";
 
@@ -62,17 +65,46 @@ function ClubsPage() {
 
     return mockClubs;
   });
-  const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(null);
+  const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(
+    null,
+  );
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | ClubVerificationStatus
+  >("all");
+
+  const statusCounts = useMemo(() => {
+    const counts: Record<ClubVerificationStatus, number> = {
+      pending: 0,
+      identityVerified: 0,
+      fullyVerified: 0,
+    };
+    for (const club of clubs) counts[getClubVerificationStatus(club)] += 1;
+    return counts;
+  }, [clubs]);
+
+  const filteredClubs = useMemo(
+    () =>
+      statusFilter === "all"
+        ? clubs
+        : clubs.filter(
+            (club) => getClubVerificationStatus(club) === statusFilter,
+          ),
+    [clubs, statusFilter],
+  );
 
   function handleConfirmAction() {
     if (!confirmAction) return;
 
     if (confirmAction.type === "delete") {
-      setClubs((prev) => prev.filter((club) => club.id !== confirmAction.club.id));
+      setClubs((prev) =>
+        prev.filter((club) => club.id !== confirmAction.club.id),
+      );
     } else {
       setClubs((prev) =>
         prev.map((club) =>
-          club.id === confirmAction.club.id ? { ...club, identityVerified: true } : club,
+          club.id === confirmAction.club.id
+            ? { ...club, identityVerified: true }
+            : club,
         ),
       );
     }
@@ -85,7 +117,15 @@ function ClubsPage() {
       key: "name",
       header: t("clubs.table.name"),
       sortable: true,
-      render: (row) => <Link to={`/admin/clubs/${row.id}`}>{row.name}</Link>,
+      render: (row) => (
+        <Link
+          to={`/admin/clubs/${row.id}`}
+          className="d-flex align-items-center gap-2"
+        >
+          <Avatar name={row.name} size="xs" />
+          <span className="fw-medium">{row.name}</span>
+        </Link>
+      ),
     },
     {
       key: "activityTypes",
@@ -93,11 +133,22 @@ function ClubsPage() {
       render: (row) => (
         <div className="d-flex flex-wrap gap-1">
           {row.activityTypeIds.map((activityTypeId) => {
-            const activityType = ACTIVITY_TYPES.find((item) => item.id === activityTypeId);
+            const activityType = ACTIVITY_TYPES.find(
+              (item) => item.id === activityTypeId,
+            );
             if (!activityType) return null;
 
             return (
-              <Badge key={activityTypeId} variant={activityType.variant} appearance="subtle">
+              <Badge
+                key={activityTypeId}
+                variant={activityType.variant}
+                appearance="subtle"
+                pill
+              >
+                <i
+                  className={`${activityType.icon} align-middle me-1`}
+                  aria-hidden="true"
+                />
                 {t(`activityTypes.${activityTypeId}`)}
               </Badge>
             );
@@ -121,7 +172,11 @@ function ClubsPage() {
       render: (row) => {
         const status = getClubVerificationStatus(row);
         return (
-          <Badge variant={CLUB_STATUS_BADGE_VARIANT[status]} appearance="subtle">
+          <Badge
+            variant={CLUB_STATUS_BADGE_VARIANT[status]}
+            appearance="subtle"
+            pill
+          >
             {t(`clubs.status.${status}`)}
           </Badge>
         );
@@ -133,42 +188,31 @@ function ClubsPage() {
       headerClassName: "text-end",
       className: "text-end",
       render: (row) => (
-        <div className="d-flex justify-content-end gap-2">
-          <Button
-            appearance="soft"
-            variant="primary"
-            size="sm"
-            iconOnly
-            aria-label={t("common.edit")}
-            onClick={() => navigate(`/admin/clubs/${row.id}/edit`)}
-          >
-            <i className="ri-pencil-fill" aria-hidden="true" />
-          </Button>
-
-          {!row.identityVerified && (
-            <Button
-              appearance="soft"
-              variant="success"
-              size="sm"
-              iconOnly
-              aria-label={t("clubs.verifyIdentity")}
-              onClick={() => setConfirmAction({ type: "verify", club: row })}
-            >
-              <i className="ri-checkbox-circle-line" aria-hidden="true" />
-            </Button>
-          )}
-
-          <Button
-            appearance="soft"
-            variant="danger"
-            size="sm"
-            iconOnly
-            aria-label={t("common.delete")}
-            onClick={() => setConfirmAction({ type: "delete", club: row })}
-          >
-            <i className="ri-delete-bin-5-fill" aria-hidden="true" />
-          </Button>
-        </div>
+        <RowActionsMenu
+          ariaLabel={t("clubs.table.actions")}
+          actions={[
+            {
+              key: "edit",
+              label: t("common.edit"),
+              icon: "ri-pencil-fill",
+              onClick: () => navigate(`/admin/clubs/${row.id}/edit`),
+            },
+            {
+              key: "verify",
+              label: t("clubs.verifyIdentity"),
+              icon: "ri-checkbox-circle-line",
+              hidden: row.identityVerified,
+              onClick: () => setConfirmAction({ type: "verify", club: row }),
+            },
+            {
+              key: "delete",
+              label: t("common.delete"),
+              icon: "ri-delete-bin-5-fill",
+              variant: "danger",
+              onClick: () => setConfirmAction({ type: "delete", club: row }),
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -191,14 +235,55 @@ function ClubsPage() {
           }
         />
         <CardBody>
+          <div className="d-flex flex-wrap gap-2 mb-3">
+            {(
+              [
+                {
+                  key: "all",
+                  label: t("clubs.filters.all"),
+                  count: clubs.length,
+                },
+                {
+                  key: "fullyVerified",
+                  label: t("clubs.status.fullyVerified"),
+                  count: statusCounts.fullyVerified,
+                },
+                {
+                  key: "identityVerified",
+                  label: t("clubs.status.identityVerified"),
+                  count: statusCounts.identityVerified,
+                },
+                {
+                  key: "pending",
+                  label: t("clubs.status.pending"),
+                  count: statusCounts.pending,
+                },
+              ] as const
+            ).map((tab) => (
+              <Button
+                key={tab.key}
+                type="button"
+                size="sm"
+                variant={tab.key === "all" ? "primary" : "secondary"}
+                appearance={statusFilter === tab.key ? "soft" : "ghost"}
+                className="rounded-pill"
+                onClick={() => setStatusFilter(tab.key)}
+              >
+                {tab.label}
+                <span className="ms-1">{tab.count}</span>
+              </Button>
+            ))}
+          </div>
+
           <Table
             columns={columns}
-            data={clubs}
+            data={filteredClubs}
             getRowKey={(row) => row.id}
             emptyMessage={t("clubs.empty")}
             searchable
             pageSize={5}
             card
+            className="bg-light"
           />
         </CardBody>
       </Card>
@@ -207,7 +292,11 @@ function ClubsPage() {
         isOpen={confirmAction !== null}
         onClose={() => setConfirmAction(null)}
         onConfirm={handleConfirmAction}
-        icon={confirmAction?.type === "delete" ? "ri-delete-bin-line" : "ri-checkbox-circle-line"}
+        icon={
+          confirmAction?.type === "delete"
+            ? "ri-delete-bin-line"
+            : "ri-checkbox-circle-line"
+        }
         confirmVariant={confirmAction?.type === "delete" ? "danger" : "success"}
         title={
           confirmAction?.type === "delete"

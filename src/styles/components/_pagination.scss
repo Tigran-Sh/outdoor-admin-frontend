@@ -7,7 +7,28 @@
     .page-item {
         .page-link {
             margin-left: 0.35rem;
-            border-radius: var(--#{$prefix}border-radius);
+            border-radius: var(--#{$prefix}border-radius-pill);
+        }
+
+        // Ghost styling for every state except active: no border/fill, just
+        // muted text with a subtle surface wash on hover.
+        &:not(.active) .page-link {
+            border-color: transparent;
+            background-color: transparent;
+            color: var(--#{$prefix}text-secondary);
+
+            &:hover {
+                background-color: var(--#{$prefix}surface-hover);
+                color: var(--#{$prefix}text-primary);
+            }
+        }
+
+        &.disabled .page-link {
+            background-color: transparent;
+        }
+
+        &.active .page-link {
+            border-color: transparent;
         }
     }
 }

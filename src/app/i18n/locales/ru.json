@@ -14,6 +14,11 @@
     "edit": "Изменить",
     "delete": "Удалить",
     "cancel": "Отмена",
+    "save": "Сохранить",
+    "active": "Активен",
+    "inactive": "Неактивен",
+    "loadError": "Не удалось загрузить данные. Попробуйте ещё раз.",
+    "retry": "Повторить",
     "myAccount": "Мой аккаунт",
     "myProfile": "Мой профиль",
     "settings": "Настройки",
@@ -42,6 +47,7 @@
     "clubVerification": "Верификация клубов",
     "clubs": "Клубы",
     "users": "Пользователи",
+    "roles": "Роли и права",
     "eventsModeration": "Модерация мероприятий",
     "financePayouts": "Финансы и выплаты",
     "reviewsDisputes": "Отзывы и споры",
@@ -86,7 +92,9 @@
       "signIn": "Войти",
       "emailRequired": "Пожалуйста, введите email",
       "emailInvalid": "Введите корректный email",
-      "passwordRequired": "Пожалуйста, введите пароль"
+      "passwordRequired": "Пожалуйста, введите пароль",
+      "invalidCredentials": "Не удалось войти с указанными учётными данными.",
+      "genericError": "Что-то пошло не так. Попробуйте ещё раз."
     },
     "forgotPassword": {
       "title": "Забыли пароль?",
@@ -337,6 +345,9 @@
   "clubs": {
     "createClub": "Создать клуб",
     "empty": "Клубов пока нет.",
+    "filters": {
+      "all": "Все"
+    },
     "table": {
       "name": "Название клуба",
       "activityTypes": "Виды активности",
@@ -577,6 +588,139 @@
         "activityTypesRequired": "Пожалуйста, выберите хотя бы одну специализацию",
         "languagesRequired": "Пожалуйста, выберите хотя бы один язык",
         "experienceYearsInvalid": "Введите корректное количество лет"
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "Пользователи",
+      "createUser": "Создать пользователя",
+      "empty": "Пользователи не найдены.",
+      "table": {
+        "name": "Имя",
+        "email": "Эл. почта",
+        "role": "Роль",
+        "status": "Статус",
+        "createdBy": "Создал",
+        "createdAt": "Создан",
+        "actions": "Действия"
+      },
+      "filters": {
+        "all": "Все",
+        "searchPlaceholder": "Поиск по имени или email...",
+        "allRoles": "Все роли",
+        "allStatuses": "Все статусы"
+      },
+      "blocked": "Заблокирован",
+      "activate": "Активировать",
+      "deactivate": "Деактивировать",
+      "changeRole": "Изменить роль",
+      "manageCapabilities": "Управление правами",
+      "createdByPlatform": "Создан системой",
+      "confirmDeactivate": {
+        "title": "Деактивировать этого пользователя?",
+        "message": "Он больше не сможет войти в систему.",
+        "confirm": "Да, деактивировать"
+      },
+      "confirmActivate": {
+        "title": "Активировать этого пользователя?",
+        "message": "Доступ будет восстановлен немедленно.",
+        "confirm": "Да, активировать"
+      },
+      "create": {
+        "title": "Создать пользователя",
+        "submit": "Создать пользователя"
+      },
+      "edit": {
+        "title": "Редактировать пользователя",
+        "submit": "Сохранить изменения"
+      },
+      "view": {
+        "notFound": "Пользователь не найден",
+        "notFoundMessage": "Искомый пользователь не существует или был удалён.",
+        "backToUsers": "Назад к пользователям",
+        "editUser": "Редактировать пользователя",
+        "accountInfo": "Аккаунт",
+        "capabilities": "Права",
+        "memberSince": "Участник с",
+        "createdBy": "Создал",
+        "updatedAt": "Последнее обновление",
+        "noCapabilities": "Права не назначены."
+      },
+      "changeRoleModal": {
+        "title": "Изменить роль",
+        "submit": "Сохранить"
+      },
+      "capabilitiesModal": {
+        "title": "Управление правами",
+        "helperText": "Применимо только к учётным записям внутреннего администратора.",
+        "submit": "Сохранить"
+      },
+      "fields": {
+        "fullName": { "label": "Полное имя", "placeholder": "Введите полное имя" },
+        "email": { "label": "Эл. почта", "placeholder": "Введите email" },
+        "role": { "label": "Роль", "placeholder": "Выберите роль" },
+        "password": { "label": "Пароль", "placeholder": "Введите временный пароль" },
+        "capabilities": { "label": "Права", "placeholder": "Выберите права" }
+      },
+      "validation": {
+        "fullNameRequired": "Пожалуйста, введите полное имя",
+        "emailRequired": "Пожалуйста, введите email",
+        "emailInvalid": "Введите корректный email",
+        "roleRequired": "Пожалуйста, выберите роль",
+        "passwordRequired": "Пожалуйста, введите пароль",
+        "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+        "capabilitiesRequired": "Выберите хотя бы одно право для внутреннего администратора"
+      }
+    },
+    "roles": {
+      "title": "Роли и права",
+      "capabilitiesSectionTitle": "Все права"
+    },
+    "roleNames": {
+      "participant": "Участник",
+      "club_owner": "Владелец клуба",
+      "guide": "Гид",
+      "internal_admin": "Внутренний администратор",
+      "platform_admin": "Администратор платформы"
+    },
+    "capabilityNames": {
+      "edit_club_profile": "Редактирование профиля клуба",
+      "create_event": "Создание мероприятия",
+      "edit_event": "Редактирование мероприятия",
+      "publish_event": "Публикация мероприятия",
+      "view_participants": "Просмотр участников",
+      "export_participants": "Экспорт участников",
+      "qr_check_in": "QR-регистрация",
+      "confirm_completion": "Подтверждение завершения",
+      "view_finances": "Просмотр финансов",
+      "manage_team_members": "Управление командой",
+      "cancel_event": "Отмена мероприятия",
+      "request_refund": "Запрос возврата",
+      "verify_club": "Верификация клуба",
+      "suspend_club": "Приостановка клуба",
+      "issue_refund": "Оформление возврата"
+    }
+  },
+  "profile": {
+    "title": "Мой профиль",
+    "changePassword": {
+      "title": "Изменить пароль",
+      "submit": "Обновить пароль",
+      "success": "Ваш пароль был успешно обновлён.",
+      "fields": {
+        "currentPassword": "Текущий пароль",
+        "newPassword": "Новый пароль",
+        "newPasswordHelper": "Не менее 8 символов, не только цифры.",
+        "confirmNewPassword": "Подтвердите новый пароль"
+      },
+      "validation": {
+        "currentRequired": "Пожалуйста, введите текущий пароль",
+        "newRequired": "Пожалуйста, введите новый пароль",
+        "newMinLength": "Пароль должен содержать не менее 8 символов",
+        "newSameAsCurrent": "Новый пароль должен отличаться от текущего",
+        "confirmRequired": "Пожалуйста, подтвердите новый пароль",
+        "confirmMismatch": "Пароли не совпадают"
       }
     }
   },

@@ -53,7 +53,10 @@ function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         />
       </Button>
 
-      <div className={["dropdown-menu", "dropdown-menu-end", isOpen ? "show" : ""].join(" ")}>
+      <div
+        className={["dropdown-menu", "dropdown-menu-end", isOpen ? "show" : ""].join(" ")}
+        data-bs-popper="static"
+      >
         {(Object.keys(languages) as LanguageCode[]).map((code) => (
           <button
             key={code}

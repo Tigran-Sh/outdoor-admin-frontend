@@ -3,9 +3,9 @@
 //
 
 // Vertical menu
-$vertical-menu-width:                             250px;
+$vertical-menu-width:                             300px;
 $vertical-menu-width-md:                          180px;
-$vertical-menu-width-sm:                          70px;
+$vertical-menu-width-sm:                          88px;
 
 $vertical-menu-z-index:                           1002;
 $vertical-menu-item-font-size:                    0.9375rem;
@@ -19,7 +19,7 @@ $vertical-menu-sub-item-padding-x:                1.5rem;
 $vertical-menu-sub-item-padding-y:                0.55rem;
 
 // Light Menu
-$vertical-menu-bg:                                #f7f1e9; // Neutral/100 -- warm neutral, not grey
+$vertical-menu-bg:                                #FDFAF6; // Neutral/100 -- warm neutral, not grey
 $vertical-menu-border:                            $border-color;
 // Default: text/secondary. Hover: a subtle neutral wash (surface/pressed, one step darker than
 // the sidebar itself so it reads against it) with text/primary -- "the subtlest interactive

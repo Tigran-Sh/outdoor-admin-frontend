@@ -130,3 +130,41 @@ export const Disabled: Story = {
     children: "Disabled",
   },
 };
+
+const stateVariants: ButtonVariant[] = ["primary", "secondary", "danger"];
+
+export const States: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Default / hover / active / disabled for the three variants with a named Odex " +
+          "interaction ramp (brand/primary, brand/secondary, state/danger). Hover and " +
+          "pressed can be tried live by interacting with the buttons below; disabled is " +
+          "static. Every other theme color follows the same three-tier pattern via " +
+          "Bootstrap's shade-color() fallback in components/_buttons.scss.",
+      },
+    },
+  },
+  render: () => (
+    <div className="d-flex flex-column gap-4">
+      {appearances.map((appearance) => (
+        <div key={appearance}>
+          <div className="text-muted fs-13 text-uppercase mb-2">{appearance}</div>
+          <div className="d-flex flex-wrap gap-3">
+            {stateVariants.map((variant) => (
+              <div key={variant} className="d-flex align-items-center gap-2">
+                <Button variant={variant} appearance={appearance}>
+                  {variant}
+                </Button>
+                <Button variant={variant} appearance={appearance} disabled>
+                  {variant}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};

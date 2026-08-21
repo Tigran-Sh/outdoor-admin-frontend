@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App";
 
-import { I18nProvider, QueryProvider, ThemeProvider } from "./app/providers";
+import { AuthProvider, I18nProvider, QueryProvider, ThemeProvider } from "./app/providers";
 
 import "./styles/main.scss";
 
@@ -12,7 +12,9 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider>
       <I18nProvider>
         <QueryProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </QueryProvider>
       </I18nProvider>
     </ThemeProvider>

@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from "@/components/ui/Button/Button";
 
+import { useAuth } from "@/app/providers/useAuth";
+
 interface UserMenuProps {
   name: string;
+  placement?: "topbar" | "sidebar";
 }
 
-function UserMenu({ name }: UserMenuProps) {
+function UserMenu({ name, placement = "topbar" }: UserMenuProps) {
   const { t } = useTranslation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +31,69 @@ function UserMenu({ name }: UserMenuProps) {
 
   function handleItemClick() {
     setIsOpen(false);
+  }
+
+  async function handleLogout() {
+    setIsOpen(false);
+    await logout();
+    navigate("/", { replace: true });
+  }
+
+  const menuItems = (
+    <>
+      <Link to="/profile" className="dropdown-item" onClick={handleItemClick}>
+        <i className="ri-user-line text-muted fs-16 align-middle me-1" />
+        <span className="align-middle">{t("common.myProfile")}</span>
+      </Link>
+      <Link to="/settings" className="dropdown-item" onClick={handleItemClick}>
+        <i className="ri-settings-3-line text-muted fs-16 align-middle me-1" />
+        <span className="align-middle">{t("common.settings")}</span>
+      </Link>
+      <div className="dropdown-divider" />
+      <button type="button" className="dropdown-item" onClick={handleLogout}>
+        <i className="ri-logout-box-r-line text-muted fs-16 align-middle me-1" />
+        <span className="align-middle">{t("common.logout")}</span>
+      </button>
+    </>
+  );
+
+  if (placement === "sidebar") {
+    return (
+      <div ref={containerRef} className="dropdown dropup sidebar-user">
+        <Button
+          type="button"
+          appearance="ghost"
+          variant="secondary"
+          className="dropdown-toggle sidebar-user-toggle w-100 d-flex align-items-center justify-content-between"
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-expanded={isOpen}
+        >
+          <span className="d-flex align-items-center gap-2 overflow-hidden">
+            <span
+              className="avatar-xs rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+              aria-hidden="true"
+            >
+              <i className="ri-user-line" />
+            </span>
+            <span className="text-start overflow-hidden">
+              <span className="d-block fw-medium user-name-text text-truncate">{name}</span>
+              {user && (
+                <span className="d-block fs-12 text-muted text-truncate">
+                  {t(`admin.roleNames.${user.role}`)}
+                </span>
+              )}
+            </span>
+          </span>
+        </Button>
+
+        <div
+          className={["dropdown-menu", isOpen ? "show" : ""].join(" ")}
+          data-bs-popper="static"
+        >
+          {menuItems}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -51,20 +119,11 @@ function UserMenu({ name }: UserMenuProps) {
         </span>
       </Button>
 
-      <div className={["dropdown-menu", "dropdown-menu-end", isOpen ? "show" : ""].join(" ")}>
-        <Link to="/profile" className="dropdown-item" onClick={handleItemClick}>
-          <i className="ri-user-line text-muted fs-16 align-middle me-1" />
-          <span className="align-middle">{t("common.myProfile")}</span>
-        </Link>
-        <Link to="/settings" className="dropdown-item" onClick={handleItemClick}>
-          <i className="ri-settings-3-line text-muted fs-16 align-middle me-1" />
-          <span className="align-middle">{t("common.settings")}</span>
-        </Link>
-        <div className="dropdown-divider" />
-        <button type="button" className="dropdown-item" onClick={handleItemClick}>
-          <i className="ri-logout-box-r-line text-muted fs-16 align-middle me-1" />
-          <span className="align-middle">{t("common.logout")}</span>
-        </button>
+      <div
+        className={["dropdown-menu", "dropdown-menu-end", isOpen ? "show" : ""].join(" ")}
+        data-bs-popper="static"
+      >
+        {menuItems}
       </div>
     </div>
   );

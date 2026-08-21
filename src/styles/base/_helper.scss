@@ -68,6 +68,30 @@ $border-style-mixing: double, dashed, groove, outset, ridge, dotted, inset;
     min-width: 160px;
 }
 
+// Semantic border-radius utilities, named after the design's own radius
+// tokens (radius/sm, radius/md, radius/lg, radius/full -- see the
+// $border-radius-* comments in bootstrap/_variables.scss) rather than
+// Bootstrap's opaque numbered .rounded-1/2/3/4/5 scale, so a className
+// documents which token it's using instead of an index you have to look up.
+// Same underlying CSS variables, `!important` included, so they're
+// interchangeable with (and override just as predictably as) Bootstrap's own
+// .rounded-* utilities.
+.rounded-sm {
+    border-radius: var(--#{$prefix}border-radius-sm) !important;
+}
+
+.rounded-md {
+    border-radius: var(--#{$prefix}border-radius-lg) !important;
+}
+
+.rounded-lg {
+    border-radius: var(--#{$prefix}border-radius-xl) !important;
+}
+
+.rounded-full {
+    border-radius: var(--#{$prefix}border-radius-pill) !important;
+}
+
 // Icons Sizes
 .icon-xs {
     height: 16px;

@@ -77,6 +77,7 @@ function MultiSelectDropdown({
         <div
           className={["dropdown-menu", "w-100", isOpen ? "show" : ""].filter(Boolean).join(" ")}
           style={{ maxHeight: 260, overflowY: "auto" }}
+          data-bs-popper="static"
         >
           {options.map((option) => (
             <div key={option.value} className="dropdown-item">

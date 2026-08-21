@@ -40,19 +40,50 @@ a {
 }
 
 //
-// Soft Buttons
-// 
+// Button state colors
+//
+// Odex defines real named hover/pressed stops for brand/primary (Apricot 600/700),
+// brand/secondary (Forest 700/800) and state/danger-hover (Danger 700). Every other theme
+// color falls back to Bootstrap's own shade-color() progression (which, now that $black is a
+// warm near-black rather than pure black, already lands close to the hand-authored ramps).
+// Without this map, hover and active/pressed resolved to the exact same value everywhere.
+$btn-hover-emphasis-colors: (
+    "primary": map-get($-apricot, "600"),
+    "secondary": $brand-secondary-hover,
+    "danger": $state-danger-hover,
+);
+$btn-active-emphasis-colors: (
+    "primary": map-get($-apricot, "700"),
+    "secondary": $brand-secondary-pressed,
+    "danger": shade-color($state-danger-hover, 15%),
+);
 
-@each $state in map-keys($theme-colors) {
+@function btn-hover-emphasis($state, $value) {
+    @if map-has-key($btn-hover-emphasis-colors, $state) {
+        @return map-get($btn-hover-emphasis-colors, $state);
+    }
+
+    @return shade-color($value, $btn-hover-bg-shade-amount);
+}
+
+@function btn-active-emphasis($state, $value) {
+    @if map-has-key($btn-active-emphasis-colors, $state) {
+        @return map-get($btn-active-emphasis-colors, $state);
+    }
+
+    @return shade-color($value, $btn-active-bg-shade-amount);
+}
+
+@each $state, $value in $theme-colors {
 
     .btn-#{$state} {
         --#{$prefix}btn-bg: var(--#{$prefix}#{$state});
         --#{$prefix}btn-border-color: var(--#{$prefix}#{$state});
-        --#{$prefix}btn-hover-bg: var(--#{$prefix}#{$state}-text-emphasis);
-        --#{$prefix}btn-hover-border-color: var(--#{$prefix}#{$state}-text-emphasis);
+        --#{$prefix}btn-hover-bg: #{btn-hover-emphasis($state, $value)};
+        --#{$prefix}btn-hover-border-color: #{btn-hover-emphasis($state, $value)};
         --#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}#{$state}-rgb);
-        --#{$prefix}btn-active-bg: var(--#{$prefix}#{$state}-text-emphasis);
-        --#{$prefix}btn-active-border-color: var(--#{$prefix}#{$state}-text-emphasis);
+        --#{$prefix}btn-active-bg: #{btn-active-emphasis($state, $value)};
+        --#{$prefix}btn-active-border-color: #{btn-active-emphasis($state, $value)};
     }
 
     .btn-outline-#{$state} {
@@ -62,8 +93,8 @@ a {
         --#{$prefix}btn-hover-bg: var(--#{$prefix}#{$state});
         --#{$prefix}btn-hover-border-color: var(--#{$prefix}#{$state});
         --#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}#{$state}-rgb);
-        --#{$prefix}btn-active-bg: var(--#{$prefix}#{$state});
-        --#{$prefix}btn-active-border-color: var(--#{$prefix}#{$state});
+        --#{$prefix}btn-active-bg: #{btn-active-emphasis($state, $value)};
+        --#{$prefix}btn-active-border-color: #{btn-active-emphasis($state, $value)};
     }
 
     // soft Buttons
@@ -74,11 +105,12 @@ a {
         --#{$prefix}btn-hover-bg: var(--#{$prefix}#{$state});
         --#{$prefix}btn-hover-border-color: transparent;
         --#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}#{$state}-rgb);
-        --#{$prefix}btn-active-bg: var(--#{$prefix}#{$state});
+        --#{$prefix}btn-active-bg: #{btn-active-emphasis($state, $value)};
         --#{$prefix}btn-active-border-color: transparent;
     }
 
-    // Ghost Buttons
+    // Ghost Buttons -- default and hover already differ (transparent -> bg-subtle); active
+    // steps one tier further into the color's own border-subtle tint, distinct from hover.
     .btn-ghost-#{$state} {
         --#{$prefix}btn-color: var(--#{$prefix}#{$state});
         --#{$prefix}btn-bg: transparent;
@@ -88,7 +120,7 @@ a {
         --#{$prefix}btn-hover-border-color: transparent;
         --#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}#{$state}-rgb);
         --#{$prefix}btn-active-color: var(--#{$prefix}#{$state});
-        --#{$prefix}btn-active-bg: var(--#{$prefix}#{$state}-bg-subtle);
+        --#{$prefix}btn-active-bg: var(--#{$prefix}#{$state}-border-subtle);
         --#{$prefix}btn-active-border-color: transparent;
     }
 }

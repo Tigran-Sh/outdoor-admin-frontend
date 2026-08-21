@@ -373,6 +373,11 @@
                 left: var(--#{$prefix}vertical-menu-width-sm);
             }
         }
+
+        .logo {
+            text-align: center;
+            width: 100%;
+        }
     }
 
     &[data-sidebar-size="md"] {

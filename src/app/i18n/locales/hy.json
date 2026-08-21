@@ -12,8 +12,13 @@
     "close": "Փակել",
     "view": "Դիտել",
     "edit": "Խմբագրել",
-    "delete": "Ձելել",
+    "delete": "Ջնջել",
     "cancel": "Չեղարկել",
+    "save": "Պահպանել",
+    "active": "Ակտիվ",
+    "inactive": "Ոչ ակտիվ",
+    "loadError": "Չհաջողվեց բեռնել տվյալները։ Խնդրում ենք փորձել կրկին։",
+    "retry": "Կրկին փորձել",
     "myAccount": "Իմ հաշիվը",
     "myProfile": "Իմ պրոֆիլը",
     "settings": "Կարգավորումներ",
@@ -39,12 +44,13 @@
       "main": "Ընտրացանկ"
     },
     "dashboard": "Վահանակ",
-    "clubVerification": "Ակումբների վավերացում",
+    "clubVerification": "Վավերացում",
     "clubs": "Ակումբներ",
     "users": "Օգտատերեր",
-    "eventsModeration": "Միջոցառումների մոդերացիա",
-    "financePayouts": "Ֆինանսներ և վճարումներ",
-    "reviewsDisputes": "Կարծիքներ և վեճեր",
+    "roles": "Դերեր և իրավասություններ",
+    "eventsModeration": "Մոդերացիա",
+    "financePayouts": "Ֆինանսներ",
+    "reviewsDisputes": "Կարծիքներ",
     "categoriesTags": "Կատեգորիաներ և պիտակներ",
     "announcements": "Հայտարարություններ",
     "rolesSettings": "Դերեր և կարգավորումներ",
@@ -86,7 +92,9 @@
       "signIn": "Մուտք գործել",
       "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
       "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
-      "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառը"
+      "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառը",
+      "invalidCredentials": "Չհաջողվեց մուտք գործել տրված տվյալներով։",
+      "genericError": "Ինչ-որ բան այն չէ։ Խնդրում ենք փորձել կրկին։"
     },
     "forgotPassword": {
       "title": "Մոռացե՞լ եք գաղտնաբառը",
@@ -337,6 +345,9 @@
   "clubs": {
     "createClub": "Ստեղծել ակումբ",
     "empty": "Դեռ ակումբներ չկան։",
+    "filters": {
+      "all": "Բոլորը"
+    },
     "table": {
       "name": "Ակումբի անվանում",
       "activityTypes": "Ակտիվության տեսակներ",
@@ -577,6 +588,139 @@
         "activityTypesRequired": "Խնդրում ենք ընտրել առնվազն մեկ ուղղություն",
         "languagesRequired": "Խնդրում ենք ընտրել առնվազն մեկ լեզու",
         "experienceYearsInvalid": "Մուտքագրեք վավեր տարիների քանակ"
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "Օգտատերեր",
+      "createUser": "Ստեղծել օգտատեր",
+      "empty": "Օգտատերեր չեն գտնվել։",
+      "table": {
+        "name": "Անուն",
+        "email": "Էլ. փոստ",
+        "role": "Դեր",
+        "status": "Կարգավիճակ",
+        "createdBy": "Ստեղծված է",
+        "createdAt": "Ստեղծվել է",
+        "actions": "Գործողություններ"
+      },
+      "filters": {
+        "all": "Բոլորը",
+        "searchPlaceholder": "Փնտրել ըստ անվան կամ էլ. փոստի...",
+        "allRoles": "Բոլոր դերերը",
+        "allStatuses": "Բոլոր կարգավիճակները"
+      },
+      "blocked": "Արգելափակված",
+      "activate": "Ակտիվացնել",
+      "deactivate": "Ապաակտիվացնել",
+      "changeRole": "Փոխել դերը",
+      "manageCapabilities": "Կառավարել իրավասությունները",
+      "createdByPlatform": "Նախապես ավելացված",
+      "confirmDeactivate": {
+        "title": "Ապաակտիվացնե՞լ այս օգտատիրոջը։",
+        "message": "Նա այլևս չի կարողանա մուտք գործել։",
+        "confirm": "Այո, ապաակտիվացնել"
+      },
+      "confirmActivate": {
+        "title": "Ակտիվացնե՞լ այս օգտատիրոջը։",
+        "message": "Նա անմիջապես կվերականգնի հասանելիությունը։",
+        "confirm": "Այո, ակտիվացնել"
+      },
+      "create": {
+        "title": "Ստեղծել օգտատեր",
+        "submit": "Ստեղծել օգտատեր"
+      },
+      "edit": {
+        "title": "Խմբագրել օգտատիրոջը",
+        "submit": "Պահպանել փոփոխությունները"
+      },
+      "view": {
+        "notFound": "Օգտատերը չի գտնվել",
+        "notFoundMessage": "Փնտրվող օգտատերը գոյություն չունի կամ հեռացվել է։",
+        "backToUsers": "Վերադառնալ Օգտատերեր",
+        "editUser": "Խմբագրել օգտատիրոջը",
+        "accountInfo": "Հաշիվ",
+        "capabilities": "Իրավասություններ",
+        "memberSince": "Անդամ է",
+        "createdBy": "Ստեղծված է",
+        "updatedAt": "Վերջին թարմացումը",
+        "noCapabilities": "Իրավասություններ նշանակված չեն։"
+      },
+      "changeRoleModal": {
+        "title": "Փոխել դերը",
+        "submit": "Պահպանել"
+      },
+      "capabilitiesModal": {
+        "title": "Կառավարել իրավասությունները",
+        "helperText": "Կիրառվում է միայն ներքին ադմինիստրատորի հաշիվների համար։",
+        "submit": "Պահպանել"
+      },
+      "fields": {
+        "fullName": { "label": "Անուն ազգանուն", "placeholder": "Մուտքագրեք անուն ազգանունը" },
+        "email": { "label": "Էլ. փոստ", "placeholder": "Մուտքագրեք էլ. փոստը" },
+        "role": { "label": "Դեր", "placeholder": "Ընտրեք դեր" },
+        "password": { "label": "Գաղտնաբառ", "placeholder": "Մուտքագրեք ժամանակավոր գաղտնաբառ" },
+        "capabilities": { "label": "Իրավասություններ", "placeholder": "Ընտրեք իրավասությունները" }
+      },
+      "validation": {
+        "fullNameRequired": "Խնդրում ենք մուտքագրել անուն ազգանունը",
+        "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
+        "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
+        "roleRequired": "Խնդրում ենք ընտրել դեր",
+        "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառը",
+        "passwordMinLength": "Գաղտնաբառը պետք է պարունակի առնվազն 8 նիշ",
+        "capabilitiesRequired": "Ընտրեք առնվազն մեկ իրավասություն ներքին ադմինիստրատորի համար"
+      }
+    },
+    "roles": {
+      "title": "Դերեր և իրավասություններ",
+      "capabilitiesSectionTitle": "Բոլոր իրավասությունները"
+    },
+    "roleNames": {
+      "participant": "Մասնակից",
+      "club_owner": "Ակումբի սեփականատեր",
+      "guide": "Ուղեկցորդ",
+      "internal_admin": "Ներքին ադմինիստրատոր",
+      "platform_admin": "Հարթակի ադմինիստրատոր"
+    },
+    "capabilityNames": {
+      "edit_club_profile": "Խմբագրել ակումբի պրոֆիլը",
+      "create_event": "Ստեղծել միջոցառում",
+      "edit_event": "Խմբագրել միջոցառումը",
+      "publish_event": "Հրապարակել միջոցառումը",
+      "view_participants": "Դիտել մասնակիցներին",
+      "export_participants": "Արտահանել մասնակիցներին",
+      "qr_check_in": "QR գրանցում",
+      "confirm_completion": "Հաստատել ավարտը",
+      "view_finances": "Դիտել ֆինանսները",
+      "manage_team_members": "Կառավարել թիմի անդամներին",
+      "cancel_event": "Չեղարկել միջոցառումը",
+      "request_refund": "Հայցել վերադարձ",
+      "verify_club": "Հաստատել ակումբը",
+      "suspend_club": "Կասեցնել ակումբը",
+      "issue_refund": "Իրականացնել վերադարձ"
+    }
+  },
+  "profile": {
+    "title": "Իմ էջը",
+    "changePassword": {
+      "title": "Փոխել գաղտնաբառը",
+      "submit": "Թարմացնել գաղտնաբառը",
+      "success": "Ձեր գաղտնաբառը հաջողությամբ թարմացվել է։",
+      "fields": {
+        "currentPassword": "Ընթացիկ գաղտնաբառ",
+        "newPassword": "Նոր գաղտնաբառ",
+        "newPasswordHelper": "Առնվազն 8 նիշ, ոչ միայն թվեր։",
+        "confirmNewPassword": "Հաստատեք նոր գաղտնաբառը"
+      },
+      "validation": {
+        "currentRequired": "Խնդրում ենք մուտքագրել ձեր ընթացիկ գաղտնաբառը",
+        "newRequired": "Խնդրում ենք մուտքագրել նոր գաղտնաբառ",
+        "newMinLength": "Գաղտնաբառը պետք է պարունակի առնվազն 8 նիշ",
+        "newSameAsCurrent": "Նոր գաղտնաբառը պետք է տարբերվի ընթացիկից",
+        "confirmRequired": "Խնդրում ենք հաստատել նոր գաղտնաբառը",
+        "confirmMismatch": "Գաղտնաբառերը չեն համընկնում"
       }
     }
   },

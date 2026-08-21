@@ -19,6 +19,7 @@ function SidebarItem({ item, level = 0, onNavigate }: SidebarItemProps) {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           data-bs-toggle="collapse"
+          title={t(item.labelKey)}
         >
           {item.icon && <i className={item.icon} />}
           <span>{t(item.labelKey)}</span>
@@ -39,11 +40,11 @@ function SidebarItem({ item, level = 0, onNavigate }: SidebarItemProps) {
   if (!item.path) {
     return (
       <li className="nav-item">
-        <span className={`${linkClassName} disabled`} aria-disabled="true">
+        <span className={`${linkClassName} disabled`} aria-disabled="true" title={t(item.labelKey)}>
           {item.icon && <i className={item.icon} />}
           <span>{t(item.labelKey)}</span>
           {item.badge && (
-            <span className={`badge badge-pill bg-${item.badge.variant ?? "primary"}`}>
+            <span className={`badge rounded-pill bg-${item.badge.variant ?? "primary"}`}>
               {item.badge.text}
             </span>
           )}
@@ -59,11 +60,12 @@ function SidebarItem({ item, level = 0, onNavigate }: SidebarItemProps) {
         end={item.end}
         onClick={onNavigate}
         className={({ isActive }) => `${linkClassName}${isActive ? " active" : ""}`}
+        title={t(item.labelKey)}
       >
         {item.icon && <i className={item.icon} />}
         <span>{t(item.labelKey)}</span>
         {item.badge && (
-          <span className={`badge badge-pill bg-${item.badge.variant ?? "primary"}`}>
+          <span className={`badge rounded-pill bg-${item.badge.variant ?? "primary"}`}>
             {item.badge.text}
           </span>
         )}
