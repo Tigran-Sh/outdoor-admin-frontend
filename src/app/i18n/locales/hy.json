@@ -351,7 +351,7 @@
     "table": {
       "name": "Ակումբի անվանում",
       "activityTypes": "Ակտիվության տեսակներ",
-      "baseRegion": "Հիմնական մարզ",
+      "baseRegion": "Մարզ",
       "email": "Էլ. փոստ",
       "status": "Կարգավիճակ",
       "actions": "Գործողություններ"
@@ -422,7 +422,7 @@
           "label": "Ակտիվության տեսակներ"
         },
         "baseRegion": {
-          "label": "Հիմնական մարզ",
+          "label": "Մարզ",
           "placeholder": "Ընտրեք մարզը"
         },
         "yearFounded": {
@@ -466,7 +466,7 @@
         "aboutRequired": "Խնդրում ենք մուտքագրել նկարագրություն",
         "aboutTooShort": "Խնդրում ենք մուտքագրել առնվազն {{min}} նիշ",
         "activityTypesRequired": "Խնդրում ենք ընտրել առնվազն մեկ ակտիվության տեսակ",
-        "baseRegionRequired": "Խնդրում ենք ընտրել հիմնական մարզը",
+        "baseRegionRequired": "Խնդրում ենք ընտրել մարզը",
         "yearFoundedInvalid": "Մուտքագրեք վավեր տարեթիվ",
         "emailRequired": "Խնդրում ենք մուտքագրել էլ. փոստը",
         "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
