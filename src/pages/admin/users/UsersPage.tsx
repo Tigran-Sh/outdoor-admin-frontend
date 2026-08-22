@@ -186,11 +186,6 @@ function UsersPage() {
       ),
     },
     {
-      key: "created_by",
-      header: t("admin.users.table.createdBy"),
-      render: (row) => row.created_by ?? t("admin.users.createdByPlatform"),
-    },
-    {
       key: "created_at",
       header: sortableHeader("created_at", t("admin.users.table.createdAt")),
       render: (row) => new Date(row.created_at).toLocaleDateString(),
