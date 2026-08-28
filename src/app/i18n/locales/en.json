@@ -399,7 +399,10 @@
       "submit": "Create Club",
       "saveChanges": "Save Changes",
       "steps": {
-        "identity": "Identity",
+        "general": "General",
+        "media": "Media",
+        "activity": "Activity & Location",
+        "contact": "Contact",
         "legal": "Legal"
       },
       "fields": {

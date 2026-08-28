@@ -44,23 +44,24 @@ export const initialClubFormValues: ClubFormValues = {
 export function getClubFormSteps(t: TFunction): FormWizardStep<ClubFormValues>[] {
   return [
     {
-      id: "identity",
-      label: t("clubs.form.steps.identity"),
-      fields: [
-        "name",
-        "logo",
-        "coverImage",
-        "about",
-        "activityTypeIds",
-        "baseRegion",
-        "yearFounded",
-        "email",
-        "phone",
-        "instagram",
-        "facebook",
-        "telegram",
-        "website",
-      ],
+      id: "general",
+      label: t("clubs.form.steps.general"),
+      fields: ["name", "about"],
+    },
+    {
+      id: "media",
+      label: t("clubs.form.steps.media"),
+      fields: ["logo", "coverImage"],
+    },
+    {
+      id: "activity",
+      label: t("clubs.form.steps.activity"),
+      fields: ["activityTypeIds", "baseRegion", "yearFounded"],
+    },
+    {
+      id: "contact",
+      label: t("clubs.form.steps.contact"),
+      fields: ["email", "phone", "instagram", "facebook", "telegram", "website"],
     },
     {
       id: "legal",

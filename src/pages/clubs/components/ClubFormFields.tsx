@@ -37,7 +37,7 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
       {showStep(0) && (
       <div className="mb-4">
         <h5 className="fs-14 text-uppercase text-muted mb-3">
-          {t("clubs.form.steps.identity")}
+          {t("clubs.form.steps.general")}
         </h5>
 
         <Input
@@ -49,6 +49,24 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
           value={formik.values.name}
           error={formik.touched.name ? formik.errors.name : undefined}
         />
+
+        <Textarea
+          label={t("clubs.form.fields.about.label")}
+          name="about"
+          placeholder={t("clubs.form.fields.about.placeholder")}
+          helperText={t("clubs.form.fields.about.helperText")}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.about}
+          error={formik.touched.about ? formik.errors.about : undefined}
+          containerClassName="mb-0"
+        />
+      </div>
+      )}
+
+      {showStep(1) && (
+      <div className="mb-4">
+        <h5 className="fs-14 text-uppercase text-muted mb-3">{t("clubs.form.steps.media")}</h5>
 
         <div className="row">
           <div className="col-sm-6">
@@ -68,17 +86,14 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
             />
           </div>
         </div>
+      </div>
+      )}
 
-        <Textarea
-          label={t("clubs.form.fields.about.label")}
-          name="about"
-          placeholder={t("clubs.form.fields.about.placeholder")}
-          helperText={t("clubs.form.fields.about.helperText")}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.about}
-          error={formik.touched.about ? formik.errors.about : undefined}
-        />
+      {showStep(2) && (
+      <div className="mb-4">
+        <h5 className="fs-14 text-uppercase text-muted mb-3">
+          {t("clubs.form.steps.activity")}
+        </h5>
 
         <div className="mb-3">
           <span className="form-label d-block">
@@ -134,9 +149,18 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
               onBlur={formik.handleBlur}
               value={formik.values.yearFounded}
               error={formik.touched.yearFounded ? formik.errors.yearFounded : undefined}
+              containerClassName="mb-0"
             />
           </div>
         </div>
+      </div>
+      )}
+
+      {showStep(3) && (
+      <div className="mb-4">
+        <h5 className="fs-14 text-uppercase text-muted mb-3">
+          {t("clubs.form.steps.contact")}
+        </h5>
 
         <div className="row">
           <div className="col-sm-6">
@@ -222,7 +246,7 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
       </div>
       )}
 
-      {showStep(1) && (
+      {showStep(4) && (
       <div>
         <h5 className="fs-14 text-uppercase text-muted mb-3">{t("clubs.form.steps.legal")}</h5>
 
