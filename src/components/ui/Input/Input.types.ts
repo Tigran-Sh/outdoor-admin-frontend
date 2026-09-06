@@ -2,7 +2,9 @@ import type { InputHTMLAttributes, ReactNode } from "react";
 
 export type InputSize = "sm" | "md" | "lg";
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+// `size` is redefined below as Bootstrap sizing, so the numeric native attr is omitted.
+export interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Label rendered above the field. */
   label?: ReactNode;
   /** Content (e.g. a "Forgot password?" link) floated to the end of the label row. */
