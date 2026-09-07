@@ -88,6 +88,7 @@ export interface EventApi {
   club_name: string;
   status: string;
   title: string;
+  description: string;
   category: string;
   cover_image: string | null;
   gallery_images: EventGalleryImageApi[];
@@ -129,6 +130,7 @@ export interface Event {
   clubName: string;
   status: EventStatus;
   title: string;
+  description: string;
   category: string;
   coverImage: string | null;
   galleryImages: EventGalleryImage[];
@@ -171,6 +173,7 @@ export function mapEventFromApi(raw: EventApi): Event {
     clubName: raw.club_name,
     status: raw.status as EventStatus,
     title: raw.title,
+    description: raw.description,
     category: activityTypeFromApi(raw.category),
     coverImage: raw.cover_image,
     galleryImages: raw.gallery_images,
@@ -236,10 +239,10 @@ function parseCoordinates(value: string): { lat: string; lng: string } | null {
  * Builds the multipart payload sent to `POST/PATCH /api/v1/events/`.
  *
  * Only fields with an actual value are included, so partial saves from an
- * earlier/later wizard step are never overwritten with blanks. `description`
- * and `sweepGuideId` have no backend equivalent and are intentionally never
- * sent (the UI fields stay, per the existing wizard, they just aren't
- * persisted -- same as `team_role` used to be harmless-but-ignored).
+ * earlier/later wizard step are never overwritten with blanks.
+ * `sweepGuideId` has no backend equivalent and is intentionally never sent
+ * (the UI field stays, per the existing wizard, it just isn't persisted --
+ * same as `team_role` used to be harmless-but-ignored).
  */
 export function buildEventFormData(values: EventFormValues, club?: string): FormData {
   const formData = new FormData();
@@ -247,6 +250,7 @@ export function buildEventFormData(values: EventFormValues, club?: string): Form
   if (club) formData.append("club", club);
 
   formData.append("title", values.name);
+  if (values.description) formData.append("description", values.description);
   if (values.category) formData.append("category", activityTypeToApi(values.category));
   if (values.region) formData.append("region", regionToApi(values.region));
 
@@ -319,7 +323,7 @@ export function eventToFormValues(event: Event): EventFormValues {
     name: event.title,
     category: event.category,
     region: event.region,
-    description: "",
+    description: event.description,
     date,
     time,
     durationType: event.durationType || "single",

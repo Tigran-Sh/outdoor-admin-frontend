@@ -1,7 +1,6 @@
 import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
-import Button from "@/components/ui/Button/Button";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
@@ -106,21 +105,17 @@ function TeamMemberFormFields({
                 <Input
                   label={t("team.form.fields.password.label")}
                   labelAddon={
-                    <Button
+                    <button
                       type="button"
-                      appearance="ghost"
-                      variant="secondary"
-                      size="sm"
-                      iconOnly
-                      aria-label={t("common.generatePassword")}
-                      title={t("common.generatePassword")}
+                      className="btn btn-link p-0 text-muted text-decoration-none fs-13"
                       onClick={() => {
                         formik.setFieldValue("password", generatePassword());
                         formik.setFieldTouched("password", true, false);
                       }}
                     >
-                      <i className="ri-refresh-line" aria-hidden="true" />
-                    </Button>
+                      <i className="ri-refresh-line align-middle me-1" aria-hidden="true" />
+                      {t("common.generatePassword")}
+                    </button>
                   }
                   name="password"
                   type="password"
