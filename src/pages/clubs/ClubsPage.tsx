@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Avatar from "@/components/ui/Avatar/Avatar";
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card/Card";
+import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import Input from "@/components/ui/Input/Input";
 import Pagination from "@/components/ui/Pagination/Pagination";
+import RowActionsMenu from "@/components/ui/RowActionsMenu/RowActionsMenu";
 import Select from "@/components/ui/Select/Select";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
@@ -17,7 +19,7 @@ import type { TableColumn } from "@/components/ui/Table/Table.types";
 import { ACTIVITY_TYPES } from "@/constants/activityTypes";
 import { REGIONS } from "@/constants/regions";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { listAdminClubs } from "@/services/clubs.api";
+import { listAdminClubs, setClubStatus } from "@/services/clubs.api";
 import {
   CLUB_VERIFICATION_BADGE_VARIANT,
   ENTITY_TYPES,
@@ -35,8 +37,10 @@ type VerifiedFilter = "" | "true" | "false";
 function ClubsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [page, setPage] = useState(1);
+  const [clubToToggle, setClubToToggle] = useState<Club | null>(null);
   const [searchInput, setSearchInput] = useState("");
   const [entityTypeFilter, setEntityTypeFilter] = useState("");
   const [regionFilter, setRegionFilter] = useState("");
@@ -68,6 +72,15 @@ function ClubsPage() {
           identityVerifiedFilter === "" ? undefined : identityVerifiedFilter === "true",
         ordering,
       }),
+  });
+
+  const toggleStatusMutation = useMutation({
+    mutationFn: (club: Club) =>
+      setClubStatus(club.id, club.status === "suspended" ? "approved" : "suspended"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-clubs"] });
+      setClubToToggle(null);
+    },
   });
 
   function toggleOrdering(field: ClubOrderingField) {
@@ -157,6 +170,42 @@ function ClubsPage() {
           </Badge>
         );
       },
+    },
+    {
+      key: "actions",
+      header: t("clubs.table.actions"),
+      headerClassName: "text-end",
+      className: "text-end",
+      render: (row) => (
+        <RowActionsMenu
+          ariaLabel={t("clubs.table.actions")}
+          actions={[
+            {
+              key: "view",
+              label: t("common.view"),
+              icon: "ri-eye-line",
+              onClick: () => navigate(`/admin/clubs/${row.id}`),
+            },
+            {
+              key: "edit",
+              label: t("common.edit"),
+              icon: "ri-pencil-fill",
+              onClick: () => navigate(`/admin/clubs/${row.id}/edit`),
+            },
+            {
+              key: "toggleStatus",
+              label:
+                row.status === "suspended"
+                  ? t("clubs.activateClub")
+                  : t("clubs.deactivateClub"),
+              icon:
+                row.status === "suspended" ? "ri-checkbox-circle-line" : "ri-forbid-line",
+              variant: row.status === "suspended" ? "default" : "danger",
+              onClick: () => setClubToToggle(row),
+            },
+          ]}
+        />
+      ),
     },
   ];
 
@@ -272,6 +321,31 @@ function ClubsPage() {
           )}
         </CardBody>
       </Card>
+
+      <ConfirmDialog
+        isOpen={clubToToggle !== null}
+        onClose={() => setClubToToggle(null)}
+        onConfirm={() => clubToToggle && toggleStatusMutation.mutate(clubToToggle)}
+        loading={toggleStatusMutation.isPending}
+        icon={clubToToggle?.status === "suspended" ? "ri-checkbox-circle-line" : "ri-forbid-line"}
+        confirmVariant={clubToToggle?.status === "suspended" ? "success" : "danger"}
+        title={
+          clubToToggle?.status === "suspended"
+            ? t("clubs.confirmActivate.title")
+            : t("clubs.confirmDeactivate.title")
+        }
+        message={
+          clubToToggle?.status === "suspended"
+            ? t("clubs.confirmActivate.message")
+            : t("clubs.confirmDeactivate.message")
+        }
+        confirmLabel={
+          clubToToggle?.status === "suspended"
+            ? t("clubs.confirmActivate.confirm")
+            : t("clubs.confirmDeactivate.confirm")
+        }
+        cancelLabel={t("common.cancel")}
+      />
     </>
   );
 }

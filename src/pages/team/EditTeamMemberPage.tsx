@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -49,20 +49,32 @@ function EditTeamMemberPage() {
     enableReinitialize: true,
     initialValues,
     validationSchema: getTeamMemberFormSchema(t, "edit"),
-    onSubmit: async (values, { setSubmitting, setStatus }) => {
-      setStatus(undefined);
-      try {
-        const updated = await updateMutation.mutateAsync(values);
-        queryClient.setQueryData(["team-member", id], updated);
-        queryClient.invalidateQueries({ queryKey: ["team-members"] });
-        navigate("/club/team");
-      } catch (error) {
-        setStatus(error instanceof ApiError ? error.message : t("team.form.saveError"));
-      } finally {
-        setSubmitting(false);
-      }
-    },
+    onSubmit: () => undefined,
   });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string>();
+
+  /**
+   * Saving from any step intentionally bypasses the wizard's full-schema
+   * validation -- otherwise saving partial progress from an early step
+   * could silently fail with no visible error if a later, not-currently-
+   * rendered step happened to be invalid.
+   */
+  async function handleSaveChanges() {
+    setIsSaving(true);
+    setSaveError(undefined);
+    try {
+      const updated = await updateMutation.mutateAsync(formik.values);
+      queryClient.setQueryData(["team-member", id], updated);
+      queryClient.invalidateQueries({ queryKey: ["team-members"] });
+      navigate("/club/team");
+    } catch (error) {
+      setSaveError(error instanceof ApiError ? error.message : t("team.form.saveError"));
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   useRevalidateOnLanguageChange(formik.validateForm);
 
@@ -127,7 +139,7 @@ function EditTeamMemberPage() {
             ariaLabel={t("team.form.editTitle")}
           />
 
-          <form noValidate onSubmit={formik.handleSubmit}>
+          <form noValidate onSubmit={(event) => event.preventDefault()}>
             <TeamMemberFormFields
               formik={formik}
               activeStep={activeStep}
@@ -137,7 +149,7 @@ function EditTeamMemberPage() {
             />
           </form>
 
-          {formik.status && <div className="text-danger fs-13 mt-2">{formik.status}</div>}
+          {saveError && <div className="text-danger fs-13 mt-2">{saveError}</div>}
         </CardBody>
 
         <CardFooter className="d-flex justify-content-end gap-2">
@@ -151,20 +163,15 @@ function EditTeamMemberPage() {
             </Button>
           )}
 
-          {isLastStep ? (
-            <Button
-              type="button"
-              variant="success"
-              loading={formik.isSubmitting}
-              onClick={() => formik.handleSubmit()}
-            >
-              {t("team.form.saveChanges")}
-            </Button>
-          ) : (
-            <Button type="button" variant="success" onClick={goNext}>
+          {!isLastStep && (
+            <Button appearance="outline" variant="success" onClick={goNext}>
               {t("common.stepper.next")}
             </Button>
           )}
+
+          <Button type="button" variant="success" loading={isSaving} onClick={handleSaveChanges}>
+            {t("team.form.saveChanges")}
+          </Button>
         </CardFooter>
       </Card>
     </>

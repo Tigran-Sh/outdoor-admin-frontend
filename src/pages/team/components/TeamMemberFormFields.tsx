@@ -1,6 +1,7 @@
 import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
+import Button from "@/components/ui/Button/Button";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
@@ -15,6 +16,7 @@ import {
   type TeamMemberFormMode,
   type TeamMemberFormValues,
 } from "@/types/teamMember";
+import { generatePassword } from "@/utils/generatePassword";
 
 interface ExistingCertificate {
   id: string;
@@ -103,6 +105,23 @@ function TeamMemberFormFields({
               {mode === "create" && (
                 <Input
                   label={t("team.form.fields.password.label")}
+                  labelAddon={
+                    <Button
+                      type="button"
+                      appearance="ghost"
+                      variant="secondary"
+                      size="sm"
+                      iconOnly
+                      aria-label={t("common.generatePassword")}
+                      title={t("common.generatePassword")}
+                      onClick={() => {
+                        formik.setFieldValue("password", generatePassword());
+                        formik.setFieldTouched("password", true, false);
+                      }}
+                    >
+                      <i className="ri-refresh-line" aria-hidden="true" />
+                    </Button>
+                  }
                   name="password"
                   type="password"
                   placeholder={t("team.form.fields.password.placeholder")}

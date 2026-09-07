@@ -114,6 +114,24 @@ export function getEventFormSteps(t: TFunction): FormWizardStep<EventFormValues>
   ];
 }
 
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+function imageArraySchema(t: TFunction) {
+  return Yup.array()
+    .of(Yup.mixed<File>())
+    .test(
+      "file-size",
+      t("events.form.validation.fileTooLarge"),
+      (files) => !files || files.every((file) => !file || file.size <= MAX_IMAGE_SIZE),
+    )
+    .test(
+      "file-type",
+      t("events.form.validation.imageTypeInvalid"),
+      (files) => !files || files.every((file) => !file || IMAGE_TYPES.includes(file.type)),
+    );
+}
+
 export function getEventFormSchema(t: TFunction) {
   return Yup.object({
     name: Yup.string().required(t("events.form.validation.nameRequired")),
@@ -168,7 +186,7 @@ export function getEventFormSchema(t: TFunction) {
     excludedItems: Yup.string(),
     cancellationPolicy: Yup.string(),
     additionalInfo: Yup.string(),
-    coverImage: Yup.array(),
-    galleryImages: Yup.array(),
+    coverImage: imageArraySchema(t),
+    galleryImages: imageArraySchema(t),
   });
 }

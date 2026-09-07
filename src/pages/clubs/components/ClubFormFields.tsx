@@ -231,6 +231,7 @@ function ClubFormFields({
             <div className="col-sm-4">
               <Input
                 name="instagram"
+                type="url"
                 placeholder={t("clubs.form.fields.social.instagramPlaceholder")}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -243,10 +244,12 @@ function ClubFormFields({
             <div className="col-sm-4">
               <Input
                 name="facebook"
+                type="url"
                 placeholder={t("clubs.form.fields.social.facebookPlaceholder")}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.facebook}
+                error={formik.touched.facebook ? formik.errors.facebook : undefined}
                 containerClassName="mb-0"
               />
             </div>
@@ -254,10 +257,12 @@ function ClubFormFields({
             <div className="col-sm-4">
               <Input
                 name="telegram"
+                type="url"
                 placeholder={t("clubs.form.fields.social.telegramPlaceholder")}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.telegram}
+                error={formik.touched.telegram ? formik.errors.telegram : undefined}
                 containerClassName="mb-0"
               />
             </div>

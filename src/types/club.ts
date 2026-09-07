@@ -364,3 +364,27 @@ export function buildAdminClubCreateFormData(values: ClubFormValues, ownerId: st
   formData.append("owner", ownerId);
   return formData;
 }
+
+/** The staff-only fields a Platform Admin may additionally set on `PATCH /api/v1/admin/clubs/{id}/`. */
+export interface AdminClubUpdateExtra {
+  status: ClubStatus;
+  identityVerified: boolean;
+  paymentVerified: boolean;
+}
+
+/**
+ * Builds the multipart payload for `PATCH /api/v1/admin/clubs/{id}/`: the
+ * same full profile payload as `buildClubFormData`, plus the staff-only
+ * `status`/`identity_verified`/`payment_verified` fields only a Platform
+ * Admin may set.
+ */
+export function buildAdminClubUpdateFormData(
+  values: ClubFormValues,
+  extra: AdminClubUpdateExtra,
+): FormData {
+  const formData = buildClubFormData(values);
+  formData.append("status", clubStatusToApi(extra.status));
+  formData.append("identity_verified", String(extra.identityVerified));
+  formData.append("payment_verified", String(extra.paymentVerified));
+  return formData;
+}

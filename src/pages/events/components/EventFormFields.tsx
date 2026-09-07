@@ -11,19 +11,35 @@ import {
   EVENT_CATEGORIES,
   EVENT_DIFFICULTIES,
   EVENT_DURATION_TYPES,
-  EVENT_GUIDES,
   EVENT_LANGUAGES,
   EVENT_PRICE_TYPES,
   EVENT_REGIONS,
-} from "../EventsPage.data";
+  type EventGuideOption,
+} from "@/types/event";
 import type { EventFormValues } from "../EventForm.schema";
+
+interface EventGalleryImagePreview {
+  id: string;
+  image: string;
+}
 
 interface EventFormFieldsProps {
   formik: FormikProps<EventFormValues>;
   activeStep: number;
+  guideOptions?: EventGuideOption[];
+  /** Current cover image URL, shown until a new file replaces it (edit mode). */
+  currentCoverImageUrl?: string | null;
+  /** Already-uploaded gallery images (edit mode); new ones are appended, not replaced. */
+  currentGalleryImages?: EventGalleryImagePreview[];
 }
 
-function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
+function EventFormFields({
+  formik,
+  activeStep,
+  guideOptions = [],
+  currentCoverImageUrl,
+  currentGalleryImages = [],
+}: EventFormFieldsProps) {
   const { t } = useTranslation();
 
   function toggleValue(field: "languageIds" | "difficultyIds", value: string) {
@@ -33,6 +49,19 @@ function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
       : [...current, value];
     formik.setFieldValue(field, next);
   }
+
+  /**
+   * Marks the field touched immediately (rather than waiting for blur, which
+   * a file input never fires) so an invalid format/size is caught and shown
+   * right on this step -- instead of silently reaching the server and only
+   * surfacing as a generic error once the user tries to save.
+   */
+  function handleImageChange(field: "coverImage" | "galleryImages", files: File[]) {
+    formik.setFieldValue(field, files);
+    formik.setFieldTouched(field, true, false);
+  }
+
+  const IMAGE_ACCEPT = "image/jpeg,image/png,image/webp";
 
   return (
     <>
@@ -116,20 +145,63 @@ function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
 
           <div className="row">
             <div className="col-sm-6">
+              {currentCoverImageUrl && formik.values.coverImage.length === 0 && (
+                <div className="mb-2">
+                  <div className="text-muted fs-13 mb-1">
+                    {t("clubs.form.fields.currentImage")}
+                  </div>
+                  <img
+                    src={currentCoverImageUrl}
+                    alt=""
+                    className="rounded border"
+                    style={{ width: 80, height: 80, objectFit: "cover" }}
+                  />
+                </div>
+              )}
               <ImageUpload
                 label={t("events.form.fields.coverImage.label")}
+                compact
+                accept={IMAGE_ACCEPT}
                 value={formik.values.coverImage}
-                onChange={(files) => formik.setFieldValue("coverImage", files)}
+                onChange={(files) => handleImageChange("coverImage", files)}
+                error={
+                  formik.touched.coverImage
+                    ? String(formik.errors.coverImage ?? "")
+                    : undefined
+                }
               />
             </div>
 
             <div className="col-sm-6">
+              {currentGalleryImages.length > 0 && (
+                <div className="mb-2">
+                  <div className="text-muted fs-13 mb-1">
+                    {t("team.form.fields.certificates.currentLabel")}
+                  </div>
+                  <div className="d-flex flex-wrap gap-2">
+                    {currentGalleryImages.map((image) => (
+                      <img
+                        key={image.id}
+                        src={image.image}
+                        alt=""
+                        className="rounded border"
+                        style={{ width: 56, height: 56, objectFit: "cover" }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               <ImageUpload
                 label={t("events.form.fields.galleryImages.label")}
                 multiple
+                compact
+                accept={IMAGE_ACCEPT}
                 value={formik.values.galleryImages}
-                onChange={(files) =>
-                  formik.setFieldValue("galleryImages", files)
+                onChange={(files) => handleImageChange("galleryImages", files)}
+                error={
+                  formik.touched.galleryImages
+                    ? String(formik.errors.galleryImages ?? "")
+                    : undefined
                 }
               />
             </div>
@@ -241,7 +313,7 @@ function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
                 <option value="">
                   {t("events.form.fields.guide.placeholder")}
                 </option>
-                {EVENT_GUIDES.map((guide) => (
+                {guideOptions.map((guide) => (
                   <option key={guide.id} value={guide.id}>
                     {guide.name}
                   </option>
@@ -267,7 +339,7 @@ function EventFormFields({ formik, activeStep }: EventFormFieldsProps) {
                 <option value="">
                   {t("events.form.fields.sweepGuide.placeholder")}
                 </option>
-                {EVENT_GUIDES.map((guide) => (
+                {guideOptions.map((guide) => (
                   <option key={guide.id} value={guide.id}>
                     {guide.name}
                   </option>

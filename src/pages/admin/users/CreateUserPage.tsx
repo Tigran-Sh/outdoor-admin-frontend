@@ -15,6 +15,7 @@ import { listCapabilities } from "@/services/adminRoles.api";
 import { createUser } from "@/services/adminUsers.api";
 import { ApiError } from "@/types/apiError";
 import { ROLES, type Capability, type Role } from "@/types/auth";
+import { generatePassword } from "@/utils/generatePassword";
 
 import {
   getCreateUserSchema,
@@ -139,6 +140,23 @@ function CreateUserPage() {
 
             <Input
               label={t("admin.users.fields.password.label")}
+              labelAddon={
+                <Button
+                  type="button"
+                  appearance="ghost"
+                  variant="secondary"
+                  size="sm"
+                  iconOnly
+                  aria-label={t("common.generatePassword")}
+                  title={t("common.generatePassword")}
+                  onClick={() => {
+                    formik.setFieldValue("password", generatePassword());
+                    formik.setFieldTouched("password", true, false);
+                  }}
+                >
+                  <i className="ri-refresh-line" aria-hidden="true" />
+                </Button>
+              }
               name="password"
               type="password"
               placeholder={t("admin.users.fields.password.placeholder")}

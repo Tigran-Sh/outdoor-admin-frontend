@@ -1,20 +1,26 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Card, { CardBody } from "@/components/ui/Card/Card";
+import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
+import Radio from "@/components/ui/Radio/Radio";
+import Textarea from "@/components/ui/Textarea/Textarea";
 
-import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { useObjectUrls } from "@/hooks/useObjectUrls";
-
+import { useAuth } from "@/app/providers/useAuth";
+import { cancelEvent, deleteEvent, getEvent, publishEvent } from "@/services/events.api";
+import { ApiError } from "@/types/apiError";
 import {
+  CANCEL_REASON_OTHER_MAX_LENGTH,
   EVENT_CANCELLATION_REASONS,
   EVENT_CATEGORIES,
-  EVENT_GUIDES,
-  formatEventDate,
-  getEventById,
-} from "./EventsPage.data";
+  EVENT_STATUS_BADGE_VARIANT,
+  cancellationReasonToApi,
+  type EventCancellationReason,
+} from "@/types/event";
 
 interface DetailFieldProps {
   label: string;
@@ -32,15 +38,75 @@ function DetailField({ label, value }: DetailFieldProps) {
   );
 }
 
+type ConfirmActionType = "publish" | "cancel" | "delete";
+
 function EventViewPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const event = id ? getEventById(id) : undefined;
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-  const coverImageUrl = useObjectUrl(event?.coverImage[0]);
-  const galleryImageUrls = useObjectUrls(event?.galleryImages ?? []);
+  const [confirmAction, setConfirmAction] = useState<ConfirmActionType | null>(null);
+  const [cancelReason, setCancelReason] = useState<EventCancellationReason | "">("");
+  const [cancelReasonOther, setCancelReasonOther] = useState("");
+  const [actionError, setActionError] = useState<string>();
 
-  if (!event) {
+  const eventQuery = useQuery({
+    queryKey: ["event", id],
+    queryFn: () => getEvent(id as string),
+    enabled: Boolean(id),
+    retry: false,
+  });
+  const event = eventQuery.data;
+
+  const publishMutation = useMutation({ mutationFn: () => publishEvent(id as string) });
+  const cancelMutation = useMutation({
+    mutationFn: () => cancelEvent(id as string, cancellationReasonToApi(cancelReason), cancelReasonOther),
+  });
+  const deleteMutation = useMutation({ mutationFn: () => deleteEvent(id as string) });
+
+  const capabilities = user?.capabilities ?? [];
+  const canPublish = capabilities.includes("publish_event");
+  const canCancel = capabilities.includes("cancel_event");
+  const canEdit = capabilities.includes("edit_event");
+
+  function closeConfirmAction() {
+    setConfirmAction(null);
+    setCancelReason("");
+    setCancelReasonOther("");
+    setActionError(undefined);
+  }
+
+  async function handleConfirmAction() {
+    setActionError(undefined);
+    try {
+      if (confirmAction === "delete") {
+        await deleteMutation.mutateAsync();
+        navigate("/club/events");
+        return;
+      }
+      if (confirmAction === "publish") {
+        await publishMutation.mutateAsync();
+      } else if (confirmAction === "cancel") {
+        await cancelMutation.mutateAsync();
+      }
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      closeConfirmAction();
+    } catch (error) {
+      setActionError(error instanceof ApiError ? error.generalMessage() : t("events.form.saveError"));
+    }
+  }
+
+  if (eventQuery.isLoading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status" />
+      </div>
+    );
+  }
+
+  if (eventQuery.isError || !event) {
     return (
       <>
         <Breadcrumbs
@@ -61,30 +127,87 @@ function EventViewPage() {
   }
 
   const category = EVENT_CATEGORIES.find((item) => item.id === event.category);
-  const guide = EVENT_GUIDES.find((item) => item.id === event.guideId);
-  const sweepGuide = EVENT_GUIDES.find((item) => item.id === event.sweepGuideId);
-  const mapsUrl = event.meetingPointCoordinates
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.meetingPointCoordinates)}`
-    : undefined;
+  const mapsUrl =
+    event.meetingPointLat && event.meetingPointLng
+      ? `https://www.google.com/maps/search/?api=1&query=${event.meetingPointLat},${event.meetingPointLng}`
+      : undefined;
+  const isCancelReasonMissing =
+    confirmAction === "cancel" &&
+    (!cancelReason || (cancelReason === "other" && !cancelReasonOther.trim()));
 
   return (
     <>
       <Breadcrumbs
-        title={event.name}
+        title={event.title}
         items={[{ label: t("sidebar.events"), to: "/club/events" }]}
       />
 
-      <div className="d-flex justify-content-end mb-3">
-        <Link to={`/club/events/${event.id}/edit`} className="btn btn-success">
-          <i className="ri-edit-box-line align-bottom me-1" aria-hidden="true" />
-          {t("events.view.editEvent")}
-        </Link>
+      <div className="d-flex justify-content-end gap-2 mb-3">
+        {event.status === "draft" && canPublish && (
+          <button
+            type="button"
+            className="btn btn-success"
+            disabled={event.missingToPublish.length > 0}
+            title={
+              event.missingToPublish.length > 0
+                ? t("events.view.missingToPublish", {
+                    fields: event.missingToPublish
+                      .map((field) => t(`events.missingFields.${field}`, field))
+                      .join(", "),
+                  })
+                : undefined
+            }
+            onClick={() => setConfirmAction("publish")}
+          >
+            <i className="ri-send-plane-fill align-bottom me-1" aria-hidden="true" />
+            {t("events.publishEvent")}
+          </button>
+        )}
+
+        {event.status === "published" && canCancel && (
+          <button
+            type="button"
+            className="btn btn-warning"
+            onClick={() => setConfirmAction("cancel")}
+          >
+            <i className="ri-close-circle-line align-bottom me-1" aria-hidden="true" />
+            {t("events.cancelEvent")}
+          </button>
+        )}
+
+        {event.status === "draft" && canEdit && (
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={() => setConfirmAction("delete")}
+          >
+            <i className="ri-delete-bin-5-fill align-bottom me-1" aria-hidden="true" />
+            {t("common.delete")}
+          </button>
+        )}
+
+        {canEdit && event.status !== "cancelled" && (
+          <Link to={`/club/events/${event.id}/edit`} className="btn btn-primary">
+            <i className="ri-edit-box-line align-bottom me-1" aria-hidden="true" />
+            {t("events.view.editEvent")}
+          </Link>
+        )}
       </div>
 
-      {coverImageUrl && (
+      {event.status === "draft" && event.missingToPublish.length > 0 && (
+        <div className="alert alert-info">
+          {t("events.view.missingToPublish", {
+            fields: event.missingToPublish
+              .map((field) => t(`events.missingFields.${field}`, field))
+              .join(", "),
+          })}
+        </div>
+      )}
+
+      {event.coverImage && (
         <Card>
           <img
-            src={coverImageUrl}
+            src={event.coverImage}
             alt=""
             className="card-img-top"
             style={{ maxHeight: 320, objectFit: "cover" }}
@@ -95,34 +218,28 @@ function EventViewPage() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center flex-wrap gap-2 mb-3">
-            <h4 className="mb-0">{event.name}</h4>
+            <h4 className="mb-0">{event.title}</h4>
             {category && (
               <Badge variant={category.variant} appearance="subtle">
                 {t(`activityTypes.${event.category}`)}
               </Badge>
             )}
-            {event.status === "cancelled" && (
-              <Badge variant="danger" appearance="subtle">
-                {t("events.status.cancelled")}
-              </Badge>
-            )}
+            <Badge variant={EVENT_STATUS_BADGE_VARIANT[event.status]} appearance="subtle">
+              {t(`events.status.${event.status}`)}
+            </Badge>
           </div>
 
-          {event.status === "cancelled" && event.cancellationReason && (
+          {event.status === "cancelled" && (
             <p className="text-danger fs-13 mb-2">
               <i className="ri-error-warning-line align-middle me-1" aria-hidden="true" />
               {t("events.view.cancellationReason")}:{" "}
-              {(EVENT_CANCELLATION_REASONS as readonly string[]).includes(
-                event.cancellationReason,
-              )
-                ? t(`events.confirmCancel.reasons.${event.cancellationReason}`)
-                : event.cancellationReason}
+              {event.cancellationReason === "other"
+                ? event.cancellationReasonOther
+                : event.cancellationReason
+                  ? t(`events.confirmCancel.reasons.${event.cancellationReason}`)
+                  : t("events.view.notSpecified")}
             </p>
           )}
-
-          <p className="text-muted mb-0">
-            {event.description || t("events.view.notSpecified")}
-          </p>
         </CardBody>
       </Card>
 
@@ -136,7 +253,17 @@ function EventViewPage() {
                 <div className="col-sm-4">
                   <DetailField
                     label={t("events.form.fields.date.label")}
-                    value={formatEventDate(event.date, event.time)}
+                    value={
+                      event.startAt
+                        ? new Date(event.startAt).toLocaleString(undefined, {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : undefined
+                    }
                   />
                 </div>
                 <div className="col-sm-4">
@@ -149,7 +276,7 @@ function EventViewPage() {
                   <div className="col-sm-4">
                     <DetailField
                       label={t("events.form.fields.endDate.label")}
-                      value={event.endDate}
+                      value={event.endAt ? event.endAt.split("T")[0] : undefined}
                     />
                   </div>
                 )}
@@ -160,8 +287,8 @@ function EventViewPage() {
                   {t("events.form.fields.languages.label")}
                 </div>
                 <div className="d-flex flex-wrap gap-1">
-                  {event.languageIds.length > 0 ? (
-                    event.languageIds.map((language) => (
+                  {event.languages.length > 0 ? (
+                    event.languages.map((language) => (
                       <Badge key={language} variant="secondary" appearance="subtle">
                         {t(`events.languages.${language}`)}
                       </Badge>
@@ -183,12 +310,10 @@ function EventViewPage() {
                   {t("events.form.fields.difficulties.label")}
                 </div>
                 <div className="d-flex flex-wrap gap-1">
-                  {event.difficultyIds.length > 0 ? (
-                    event.difficultyIds.map((difficulty) => (
-                      <Badge key={difficulty} variant="warning" appearance="subtle">
-                        {t(`events.difficulties.${difficulty}`)}
-                      </Badge>
-                    ))
+                  {event.difficulty ? (
+                    <Badge variant="warning" appearance="subtle">
+                      {t(`events.difficulties.${event.difficulty}`)}
+                    </Badge>
                   ) : (
                     <span>{t("events.view.notSpecified")}</span>
                   )}
@@ -211,16 +336,16 @@ function EventViewPage() {
                 <div className="col-sm-6">
                   <DetailField
                     label={t("events.form.fields.meetingPointDescription.label")}
-                    value={event.meetingPointDescription}
+                    value={event.meetingPointNote}
                   />
                 </div>
                 <div className="col-sm-6">
                   <div className="text-muted fs-13">
                     {t("events.form.fields.meetingPointCoordinates.label")}
                   </div>
-                  {event.meetingPointCoordinates ? (
+                  {mapsUrl ? (
                     <a href={mapsUrl} target="_blank" rel="noreferrer">
-                      {event.meetingPointCoordinates}
+                      {event.meetingPointLat}, {event.meetingPointLng}
                       <i
                         className="ri-external-link-line fs-13 text-muted ms-1"
                         aria-hidden="true"
@@ -249,7 +374,7 @@ function EventViewPage() {
                 <div className="col-sm-6">
                   <DetailField
                     label={t("events.form.fields.priceType.label")}
-                    value={t(`events.priceTypes.${event.priceType}`)}
+                    value={event.priceType ? t(`events.priceTypes.${event.priceType}`) : undefined}
                   />
                 </div>
                 {event.priceType === "paid" && (
@@ -265,23 +390,23 @@ function EventViewPage() {
               <div className="d-flex flex-column gap-3">
                 <DetailField
                   label={t("events.form.fields.whatIsNecessary.label")}
-                  value={event.whatIsNecessary}
+                  value={event.requiredItems.join(", ")}
                 />
                 <DetailField
                   label={t("events.form.fields.includedItems.label")}
-                  value={event.includedItems}
+                  value={event.included}
                 />
                 <DetailField
                   label={t("events.form.fields.excludedItems.label")}
-                  value={event.excludedItems}
+                  value={event.notIncluded}
                 />
                 <DetailField
                   label={t("events.form.fields.cancellationPolicy.label")}
-                  value={event.cancellationPolicy}
+                  value={event.cancellationTerms}
                 />
                 <DetailField
                   label={t("events.form.fields.additionalInfo.label")}
-                  value={event.additionalInfo}
+                  value={event.otherInfo}
                 />
               </div>
             </CardBody>
@@ -294,11 +419,7 @@ function EventViewPage() {
               <h5 className="card-title mb-3">{t("events.form.fields.guide.label")}</h5>
 
               <div className="d-flex flex-column gap-3">
-                <DetailField label={t("events.form.fields.guide.label")} value={guide?.name} />
-                <DetailField
-                  label={t("events.form.fields.sweepGuide.label")}
-                  value={sweepGuide?.name}
-                />
+                <DetailField label={t("events.form.fields.guide.label")} value={event.guideName} />
                 <DetailField
                   label={t("events.table.region")}
                   value={t(`regions.${event.region}`)}
@@ -307,7 +428,7 @@ function EventViewPage() {
             </CardBody>
           </Card>
 
-          {galleryImageUrls.length > 0 && (
+          {event.galleryImages.length > 0 && (
             <Card>
               <CardBody>
                 <h5 className="card-title mb-3">
@@ -315,10 +436,10 @@ function EventViewPage() {
                 </h5>
 
                 <div className="row g-2">
-                  {galleryImageUrls.map((url) => (
-                    <div key={url} className="col-6">
+                  {event.galleryImages.map((image) => (
+                    <div key={image.id} className="col-6">
                       <img
-                        src={url}
+                        src={image.image}
                         alt=""
                         className="rounded border w-100"
                         style={{ height: 100, objectFit: "cover" }}
@@ -331,6 +452,84 @@ function EventViewPage() {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmAction !== null}
+        onClose={closeConfirmAction}
+        onConfirm={handleConfirmAction}
+        loading={publishMutation.isPending || cancelMutation.isPending || deleteMutation.isPending}
+        confirmDisabled={isCancelReasonMissing}
+        icon={
+          confirmAction === "delete"
+            ? "ri-delete-bin-line"
+            : confirmAction === "publish"
+              ? "ri-send-plane-line"
+              : "ri-error-warning-line"
+        }
+        confirmVariant={
+          confirmAction === "delete" ? "danger" : confirmAction === "publish" ? "success" : "warning"
+        }
+        title={
+          confirmAction === "delete"
+            ? t("events.confirmDelete.title")
+            : confirmAction === "publish"
+              ? t("events.confirmPublish.title")
+              : t("events.confirmCancel.title")
+        }
+        message={
+          confirmAction === "delete"
+            ? t("events.confirmDelete.message")
+            : confirmAction === "publish"
+              ? t("events.confirmPublish.message")
+              : t("events.confirmCancel.message")
+        }
+        confirmLabel={
+          confirmAction === "delete"
+            ? t("events.confirmDelete.confirm")
+            : confirmAction === "publish"
+              ? t("events.confirmPublish.confirm")
+              : t("events.confirmCancel.confirm")
+        }
+        cancelLabel={t("common.cancel")}
+      >
+        {confirmAction === "cancel" && (
+          <div>
+            <span className="form-label d-block">
+              {t("events.confirmCancel.reasonLabel")}
+            </span>
+
+            <div className="d-flex flex-column gap-2 mb-3">
+              {EVENT_CANCELLATION_REASONS.map((reason) => (
+                <Radio
+                  key={reason}
+                  name="cancellation-reason"
+                  label={t(`events.confirmCancel.reasons.${reason}`)}
+                  checked={cancelReason === reason}
+                  onChange={() => setCancelReason(reason)}
+                />
+              ))}
+            </div>
+
+            {cancelReason === "other" && (
+              <Textarea
+                label={t("events.confirmCancel.reasonOtherLabel")}
+                placeholder={t("events.confirmCancel.reasonOtherPlaceholder")}
+                value={cancelReasonOther}
+                onChange={(event) =>
+                  setCancelReasonOther(
+                    event.target.value.slice(0, CANCEL_REASON_OTHER_MAX_LENGTH),
+                  )
+                }
+                maxLength={CANCEL_REASON_OTHER_MAX_LENGTH}
+                helperText={`${cancelReasonOther.length}/${CANCEL_REASON_OTHER_MAX_LENGTH}`}
+                containerClassName="mb-0"
+              />
+            )}
+          </div>
+        )}
+
+        {actionError && <div className="text-danger fs-13 mt-2">{actionError}</div>}
+      </ConfirmDialog>
     </>
   );
 }

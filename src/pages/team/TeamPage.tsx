@@ -10,6 +10,7 @@ import Card, { CardBody, CardHeader } from "@/components/ui/Card/Card";
 import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import Input from "@/components/ui/Input/Input";
 import Pagination from "@/components/ui/Pagination/Pagination";
+import RowActionsMenu from "@/components/ui/RowActionsMenu/RowActionsMenu";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
 
@@ -127,34 +128,26 @@ function TeamPage() {
       headerClassName: "text-end",
       className: "text-end",
       render: (row) => (
-        <div className="d-flex justify-content-end gap-2">
-          <Button
-            appearance="soft"
-            variant="primary"
-            size="sm"
-            iconOnly
-            aria-label={t("common.edit")}
-            onClick={() => navigate(`/club/team/${row.id}/edit`)}
-          >
-            <i className="ri-pencil-fill" aria-hidden="true" />
-          </Button>
-
-          <Button
-            appearance="soft"
-            variant={row.accountIsActive ? "warning" : "success"}
-            size="sm"
-            iconOnly
-            aria-label={
-              row.accountIsActive ? t("team.deactivateMember") : t("team.activateMember")
-            }
-            onClick={() => setMemberToToggle(row)}
-          >
-            <i
-              className={row.accountIsActive ? "ri-close-circle-line" : "ri-checkbox-circle-line"}
-              aria-hidden="true"
-            />
-          </Button>
-        </div>
+        <RowActionsMenu
+          ariaLabel={t("team.table.actions")}
+          actions={[
+            {
+              key: "edit",
+              label: t("common.edit"),
+              icon: "ri-pencil-fill",
+              onClick: () => navigate(`/club/team/${row.id}/edit`),
+            },
+            {
+              key: "toggleActive",
+              label: row.accountIsActive
+                ? t("team.deactivateMember")
+                : t("team.activateMember"),
+              icon: row.accountIsActive ? "ri-close-circle-line" : "ri-checkbox-circle-line",
+              variant: row.accountIsActive ? "danger" : "default",
+              onClick: () => setMemberToToggle(row),
+            },
+          ]}
+        />
       ),
     },
   ];

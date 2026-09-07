@@ -21,7 +21,8 @@ export function useFormWizard<Values extends object>(
     setActiveStep(Math.min(Math.max(index, 0), steps.length - 1));
   }
 
-  async function goNext() {
+  /** Returns whether the step was actually valid (and thus advanced), so callers can skip side effects (e.g. persisting) when it wasn't. */
+  async function goNext(): Promise<boolean> {
     const currentFields = steps[activeStep].fields;
 
     const touched: FormikTouched<Values> = { ...formik.touched };
@@ -40,6 +41,8 @@ export function useFormWizard<Values extends object>(
       setActiveStep(nextStep);
       setFurthestStep((step) => Math.max(step, nextStep));
     }
+
+    return !hasStepError;
   }
 
   function goBack() {

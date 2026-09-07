@@ -91,15 +91,17 @@ export function getClubFormSchema(
       .max(new Date().getFullYear(), t("clubs.form.validation.yearFoundedInvalid")),
     email: Yup.string().email(t("clubs.form.validation.emailInvalid")),
     phone: Yup.string(),
-    instagram: Yup.string().test(
-      "at-least-one-social",
-      t("clubs.form.validation.socialRequired"),
-      function atLeastOneSocial(value) {
-        return Boolean(value || this.parent.facebook || this.parent.telegram);
-      },
-    ),
-    facebook: Yup.string(),
-    telegram: Yup.string(),
+    instagram: Yup.string()
+      .url(t("clubs.form.validation.websiteInvalid"))
+      .test(
+        "at-least-one-social",
+        t("clubs.form.validation.socialRequired"),
+        function atLeastOneSocial(value) {
+          return Boolean(value || this.parent.facebook || this.parent.telegram);
+        },
+      ),
+    facebook: Yup.string().url(t("clubs.form.validation.websiteInvalid")),
+    telegram: Yup.string().url(t("clubs.form.validation.websiteInvalid")),
     website: Yup.string().url(t("clubs.form.validation.websiteInvalid")),
     entityType: Yup.string(),
     taxId: Yup.string().when("entityType", {

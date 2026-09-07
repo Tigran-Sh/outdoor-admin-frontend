@@ -6,6 +6,7 @@
     "language": "Language",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
+    "generatePassword": "Generate password",
     "toggleMenu": "Toggle menu",
     "switchToLightMode": "Switch to light mode",
     "switchToDarkMode": "Switch to dark mode",
@@ -158,13 +159,42 @@
       "actions": "Actions"
     },
     "status": {
-      "cancelled": "Cancelled"
+      "draft": "Draft",
+      "published": "Published",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
     },
+    "publishEvent": "Publish",
     "cancelEvent": "Cancel event",
+    "myEventsNotice": "This is a read-only view of the events assigned to you.",
+    "filters": {
+      "searchPlaceholder": "Search by title",
+      "allStatuses": "All statuses",
+      "allCategories": "All categories",
+      "allRegions": "All regions",
+      "allDifficulties": "All difficulties"
+    },
+    "missingFields": {
+      "title": "Title",
+      "category": "Category",
+      "cover_image": "Cover image",
+      "start_at": "Date & time",
+      "region": "Region",
+      "difficulty": "Difficulty",
+      "guide": "Assigned guide",
+      "languages": "Languages",
+      "end_at": "End date",
+      "price": "Price"
+    },
     "confirmDelete": {
       "title": "Delete this event?",
       "message": "This action cannot be undone.",
       "confirm": "Yes, delete it"
+    },
+    "confirmPublish": {
+      "title": "Publish this event?",
+      "message": "It will become visible and bookable by participants.",
+      "confirm": "Yes, publish"
     },
     "confirmCancel": {
       "title": "Cancel this event?",
@@ -207,7 +237,9 @@
       "backToEvents": "Back to Events",
       "openInMaps": "Open in Google Maps",
       "notSpecified": "Not specified",
-      "cancellationReason": "Cancellation reason"
+      "cancellationReason": "Cancellation reason",
+      "cancelledReadOnly": "This event is cancelled and is now read-only.",
+      "missingToPublish": "Still needed before publishing: {{fields}}"
     },
     "form": {
       "title": "Create Event",
@@ -215,6 +247,7 @@
       "cancel": "Cancel",
       "submit": "Create Event",
       "saveChanges": "Save Changes",
+      "saveError": "Couldn't save your changes. Please try again.",
       "steps": {
         "general": "General",
         "schedule": "Schedule",
@@ -342,12 +375,16 @@
         "maxParticipantsInvalid": "Enter a valid number of participants",
         "priceTypeRequired": "Please select a pricing option",
         "priceRequired": "Please enter a price",
-        "priceInvalid": "Enter a valid price"
+        "priceInvalid": "Enter a valid price",
+        "fileTooLarge": "File must be smaller than 5 MB",
+        "imageTypeInvalid": "Please upload a JPEG, PNG, or WebP image"
       }
     }
   },
   "clubs": {
     "createClub": "Create Club",
+    "deactivateClub": "Deactivate",
+    "activateClub": "Activate",
     "empty": "No clubs yet.",
     "filters": {
       "all": "All",
@@ -394,7 +431,25 @@
     "confirmDelete": {
       "title": "Delete this club?",
       "message": "This action cannot be undone.",
-      "confirm": "Yes, delete it"
+      "confirm": "Yes, delete it",
+      "error": "Couldn't delete this club. Please try again."
+    },
+    "confirmDeactivate": {
+      "title": "Deactivate this club?",
+      "message": "The club will be suspended and won't be able to create or publish events.",
+      "confirm": "Yes, deactivate"
+    },
+    "confirmActivate": {
+      "title": "Activate this club?",
+      "message": "The club will be approved and regain full access immediately.",
+      "confirm": "Yes, activate"
+    },
+    "workflowStatus": {
+      "draft": "Draft",
+      "pendingApproval": "Pending Approval",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "suspended": "Suspended"
     },
     "confirmVerify": {
       "title": "Verify this club's identity?",
@@ -434,6 +489,9 @@
       "cancel": "Cancel",
       "submit": "Create Club",
       "saveChanges": "Save Changes",
+      "administration": {
+        "title": "Administration"
+      },
       "steps": {
         "general": "General",
         "media": "Media",
@@ -442,6 +500,15 @@
         "legal": "Legal"
       },
       "fields": {
+        "status": {
+          "label": "Status"
+        },
+        "identityVerified": {
+          "label": "Identity Verified"
+        },
+        "paymentVerified": {
+          "label": "Payment Verified"
+        },
         "name": {
           "label": "Club Name",
           "placeholder": "Enter club name"
@@ -666,6 +733,12 @@
         "title": "Activate this user?",
         "message": "They will regain access immediately.",
         "confirm": "Yes, activate"
+      },
+      "confirmDelete": {
+        "title": "Delete this user?",
+        "message": "This permanently removes their account and cannot be undone.",
+        "confirm": "Yes, delete",
+        "error": "Couldn't delete this user. Please try again."
       },
       "create": {
         "title": "Create user",

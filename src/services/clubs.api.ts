@@ -3,15 +3,19 @@ import httpClient from "./httpClient";
 import type { PaginatedResponse } from "@/types/adminUser";
 import {
   buildAdminClubCreateFormData,
+  buildAdminClubUpdateFormData,
   buildClubFormData,
+  clubStatusToApi,
   mapAvailableOwnerFromApi,
   mapClubFromApi,
   type AdminClubListParams,
+  type AdminClubUpdateExtra,
   type AvailableOwner,
   type AvailableOwnerApi,
   type Club,
   type ClubApi,
   type ClubFormValues,
+  type ClubStatus,
 } from "@/types/club";
 
 const MY_CLUB_URL = "/api/v1/club/";
@@ -44,6 +48,26 @@ export async function createAdminClub(values: ClubFormValues, ownerId: string): 
     ADMIN_CLUBS_URL,
     buildAdminClubCreateFormData(values, ownerId),
   );
+  return mapClubFromApi(data);
+}
+
+export async function updateAdminClub(
+  id: string,
+  values: ClubFormValues,
+  extra: AdminClubUpdateExtra,
+): Promise<Club> {
+  const { data } = await httpClient.patch<ClubApi>(
+    `${ADMIN_CLUBS_URL}${id}/`,
+    buildAdminClubUpdateFormData(values, extra),
+  );
+  return mapClubFromApi(data);
+}
+
+/** Lightweight partial update used by the Deactivate/Activate row action. */
+export async function setClubStatus(id: string, status: ClubStatus): Promise<Club> {
+  const { data } = await httpClient.patch<ClubApi>(`${ADMIN_CLUBS_URL}${id}/`, {
+    status: clubStatusToApi(status),
+  });
   return mapClubFromApi(data);
 }
 
