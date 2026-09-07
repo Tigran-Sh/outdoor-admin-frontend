@@ -10,6 +10,7 @@
     "switchToLightMode": "Switch to light mode",
     "switchToDarkMode": "Switch to dark mode",
     "close": "Close",
+    "loading": "Loading...",
     "view": "View",
     "edit": "Edit",
     "delete": "Delete",
@@ -31,6 +32,7 @@
     },
     "imageUpload": {
       "dropInstructions": "Drop files here or click to upload.",
+      "uploadImage": "Upload image",
       "removeImage": "Remove image"
     },
     "stepper": {
@@ -94,6 +96,7 @@
       "emailInvalid": "Enter a valid email",
       "passwordRequired": "Please enter your password",
       "invalidCredentials": "Unable to log in with provided credentials.",
+      "adminAccessRequired": "This account doesn't have access to the admin panel.",
       "genericError": "Something went wrong. Please try again."
     },
     "forgotPassword": {
@@ -127,7 +130,8 @@
     "canyoneering": "Canyoneering",
     "wakeboarding": "Wakeboarding",
     "skiing": "Skiing",
-    "snowboarding": "Snowboarding"
+    "snowboarding": "Snowboarding",
+    "other": "Other"
   },
   "regions": {
     "yerevan": "Yerevan",
@@ -346,7 +350,11 @@
     "createClub": "Create Club",
     "empty": "No clubs yet.",
     "filters": {
-      "all": "All"
+      "all": "All",
+      "searchPlaceholder": "Search by name or owner email",
+      "allEntityTypes": "All entity types",
+      "allRegions": "All regions",
+      "allVerification": "All verification statuses"
     },
     "table": {
       "name": "Club Name",
@@ -374,7 +382,14 @@
       "notUploaded": "Not uploaded",
       "notFound": "Club not found",
       "notFoundMessage": "The club you're looking for doesn't exist or has been removed.",
-      "backToClubs": "Back to Clubs"
+      "backToClubs": "Back to Clubs",
+      "noClubMessage": "You don't have a club yet. Contact the platform admin to get one set up.",
+      "incompleteProfile": {
+        "title": "Your profile is incomplete"
+      },
+      "downloadIdDocument": "Download ID document",
+      "idDocumentError": "Couldn't download the document. Please try again.",
+      "uploaded": "Uploaded"
     },
     "confirmDelete": {
       "title": "Delete this club?",
@@ -385,6 +400,27 @@
       "title": "Verify this club's identity?",
       "message": "The club will be able to create and publish events.",
       "confirm": "Yes, verify"
+    },
+    "create": {
+      "unavailableTitle": "Not available yet",
+      "unavailableMessage": "Clubs are created by a Platform Admin, who assigns the owner. There is no self-service creation screen yet."
+    },
+    "edit": {
+      "unavailableTitle": "Not available yet",
+      "unavailableMessage": "Only the club's own owner can edit its profile. Platform staff can view it here, but not edit it."
+    },
+    "missingFields": {
+      "name": "Club name",
+      "logo": "Logo",
+      "about": "About",
+      "activity_types": "Activity types",
+      "base_region": "Base region",
+      "email": "Public email",
+      "phone": "Public phone",
+      "entity_type": "Entity type",
+      "tax_id": "Tax ID",
+      "owner_id_document": "Owner ID document",
+      "social_links": "Social links"
     },
     "entityTypes": {
       "individual": "Individual Guide",
@@ -410,12 +446,18 @@
           "label": "Club Name",
           "placeholder": "Enter club name"
         },
+        "owner": {
+          "label": "Owner",
+          "placeholder": "Select an owner",
+          "helperText": "Pick the existing platform user who will own this club."
+        },
         "logo": {
           "label": "Logo"
         },
         "coverImage": {
           "label": "Cover Image"
         },
+        "currentImage": "Current image",
         "about": {
           "label": "About / Description",
           "placeholder": "Tell participants what your club does...",
@@ -460,11 +502,13 @@
           "placeholder": "Enter tax ID"
         },
         "ownerIdDocument": {
-          "label": "Owner ID Document"
+          "label": "Owner ID Document",
+          "alreadyUploaded": "A document is already on file. Uploading a new one will replace it."
         }
       },
       "validation": {
         "nameRequired": "Please enter a club name",
+        "ownerRequired": "Please select an owner",
         "logoRequired": "Please upload a logo",
         "aboutRequired": "Please enter a description",
         "aboutTooShort": "Please enter at least {{min}} characters",
@@ -478,8 +522,12 @@
         "websiteInvalid": "Enter a valid URL",
         "entityTypeRequired": "Please select an entity type",
         "taxIdRequired": "Please enter a tax ID",
-        "ownerIdDocumentRequired": "Please upload an owner ID document"
-      }
+        "ownerIdDocumentRequired": "Please upload an owner ID document",
+        "fileTooLarge": "File must be smaller than 5 MB",
+        "imageTypeInvalid": "Please upload a JPEG, PNG, or WebP image",
+        "documentTypeInvalid": "Please upload a JPEG, PNG, WebP, or PDF file"
+      },
+      "saveError": "Couldn't save your changes. Please try again."
     }
   },
   "team": {
@@ -487,6 +535,10 @@
     "empty": "No team members yet.",
     "deactivateMember": "Deactivate",
     "activateMember": "Activate",
+    "noClubMessage": "You don't have a club yet. Contact the platform admin to get one set up.",
+    "filters": {
+      "searchPlaceholder": "Search by name or email"
+    },
     "table": {
       "name": "Name",
       "role": "Role",
@@ -499,33 +551,14 @@
       "active": "Active",
       "inactive": "Inactive"
     },
-    "roles": {
-      "leadGuide": "Lead Guide",
-      "sweepGuide": "Sweep Guide",
-      "manager": "Manager",
-      "adminAssistant": "Admin Assistant"
-    },
-    "permissions": {
-      "qrCheckIn": "QR check-in for participants",
-      "participantsView": "View participant list (phone, emergency contact)",
-      "gpsTracking": "GPS tracking / event start-end",
-      "emergencyButton": "Emergency response button (rescue service contact)",
-      "eventManage": "Create / edit events",
-      "financeView": "View finances & reports"
-    },
-    "confirmDelete": {
-      "title": "Remove this team member?",
-      "message": "This action cannot be undone.",
-      "confirm": "Yes, remove"
-    },
     "confirmDeactivate": {
       "title": "Deactivate this team member?",
-      "message": "They will lose access to the tools below until reactivated.",
+      "message": "This disables their login too, not just their role here. They'll lose access to the tools below until reactivated.",
       "confirm": "Yes, deactivate"
     },
     "confirmActivate": {
       "title": "Activate this team member?",
-      "message": "They will regain access immediately.",
+      "message": "This restores their login and access immediately.",
       "confirm": "Yes, activate"
     },
     "view": {
@@ -536,9 +569,7 @@
       "notSpecified": "Not specified",
       "joinedOn": "Joined on",
       "noCertificates": "No certificates uploaded",
-      "noEvents": "No events assigned",
-      "permissions": "Permissions",
-      "assignedEvents": "Assigned Events"
+      "permissions": "Permissions"
     },
     "form": {
       "title": "Add Team Member",
@@ -546,50 +577,56 @@
       "cancel": "Cancel",
       "submit": "Add Team Member",
       "saveChanges": "Save Changes",
+      "saveError": "Couldn't save your changes. Please try again.",
       "steps": {
         "basic": "Basic Information",
         "roleAndPermissions": "Role & Permissions",
-        "specialization": "Specialization",
-        "events": "Assigned Events",
-        "status": "Status"
+        "specialization": "Specialization"
       },
       "fields": {
-        "firstName": { "label": "First Name", "placeholder": "Enter first name" },
-        "lastName": { "label": "Last Name", "placeholder": "Enter last name" },
-        "photo": { "label": "Profile Photo" },
+        "fullName": { "label": "Full Name", "placeholder": "Enter full name" },
+        "photo": { "label": "Profile Photo", "helperText": "JPG or PNG" },
         "phone": {
           "label": "Phone Number",
-          "placeholder": "Enter phone number",
-          "helperText": "Confirmed via an SMS code."
+          "placeholder": "Enter phone number"
         },
         "email": {
           "label": "Email",
-          "placeholder": "Enter email",
-          "helperText": "Used to invite this person to their own login, if needed."
+          "placeholder": "Enter email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter a login password",
+          "helperText": "Their initial login password. They can change it later."
         },
         "birthDate": { "label": "Date of Birth" },
-        "role": { "label": "Role / Position", "placeholder": "Select a role" },
-        "permissions": { "label": "Access & Permissions" },
+        "platformRole": {
+          "label": "Account Type",
+          "helperText": "Guide accounts use fixed default permissions. Internal Admin accounts get the custom permissions you choose below."
+        },
+        "permissions": {
+          "label": "Access & Permissions",
+          "guideHint": "Guides use a fixed set of permissions for their role and can't be given custom ones."
+        },
         "activityTypes": { "label": "Specializations" },
         "languages": { "label": "Languages" },
         "experienceYears": { "label": "Experience (years)" },
         "bio": { "label": "Short Bio", "placeholder": "Describe their experience..." },
-        "certificates": { "label": "Certificates / Qualifications" },
-        "assignedEvents": {
-          "label": "Assigned Events",
-          "placeholder": "Select events"
+        "certificates": {
+          "label": "Certificates / Qualifications",
+          "currentLabel": "Already uploaded"
         },
+        "accountStatus": { "label": "Account Status" },
         "isActive": { "label": "Active" },
         "joinedDate": { "label": "Joined On" }
       },
       "validation": {
-        "firstNameRequired": "Please enter a first name",
-        "lastNameRequired": "Please enter a last name",
-        "phoneRequired": "Please enter a phone number",
+        "fullNameRequired": "Please enter a full name",
+        "emailRequired": "Please enter an email",
         "emailInvalid": "Enter a valid email",
-        "roleRequired": "Please select a role",
-        "activityTypesRequired": "Please select at least one specialization",
-        "languagesRequired": "Please select at least one language",
+        "passwordRequired": "Please enter a password",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "permissionsRequired": "Please select at least one permission",
         "experienceYearsInvalid": "Enter a valid number of years"
       }
     }
@@ -698,6 +735,9 @@
       "confirm_completion": "Confirm completion",
       "view_finances": "View finances",
       "manage_team_members": "Manage team members",
+      "view_team_members": "View team members",
+      "gps_tracking": "GPS tracking",
+      "emergency_button": "Emergency button",
       "cancel_event": "Cancel event",
       "request_refund": "Request refund",
       "verify_club": "Verify club",

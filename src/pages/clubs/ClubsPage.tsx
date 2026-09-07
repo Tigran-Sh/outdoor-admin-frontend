@@ -1,128 +1,108 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import Avatar from "@/components/ui/Avatar/Avatar";
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card/Card";
-import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
-import RowActionsMenu from "@/components/ui/RowActionsMenu/RowActionsMenu";
+import Input from "@/components/ui/Input/Input";
+import Pagination from "@/components/ui/Pagination/Pagination";
+import Select from "@/components/ui/Select/Select";
 import Table from "@/components/ui/Table/Table";
 import type { TableColumn } from "@/components/ui/Table/Table.types";
 
+import { ACTIVITY_TYPES } from "@/constants/activityTypes";
+import { REGIONS } from "@/constants/regions";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { listAdminClubs } from "@/services/clubs.api";
 import {
-  ACTIVITY_TYPES,
-  CLUB_STATUS_BADGE_VARIANT,
+  CLUB_VERIFICATION_BADGE_VARIANT,
+  ENTITY_TYPES,
+  entityTypeToApi,
   getClubVerificationStatus,
-  mockClubs,
-  toClubListItem,
-  type ClubListItem,
-  type ClubVerificationStatus,
-} from "./ClubsPage.data";
-import type { ClubFormValues } from "./ClubProfile.schema";
+  regionToApi,
+  type Club,
+  type ClubOrderingField,
+} from "@/types/club";
 
-type ConfirmActionType = "verify" | "delete";
+const PAGE_SIZE = 20;
 
-interface ConfirmActionState {
-  type: ConfirmActionType;
-  club: ClubListItem;
-}
-
-interface ClubsPageLocationState {
-  createdClub?: ClubFormValues;
-  updatedClub?: ClubFormValues;
-  clubId?: string;
-}
+type VerifiedFilter = "" | "true" | "false";
 
 function ClubsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [clubs, setClubs] = useState<ClubListItem[]>(() => {
-    const state = location.state as ClubsPageLocationState | null;
 
-    if (state?.createdClub) {
-      return [
-        ...mockClubs,
-        {
-          id: crypto.randomUUID(),
-          ...toClubListItem(state.createdClub),
-          identityVerified: false,
-          paymentVerified: false,
-        },
-      ];
-    }
+  const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState("");
+  const [entityTypeFilter, setEntityTypeFilter] = useState("");
+  const [regionFilter, setRegionFilter] = useState("");
+  const [identityVerifiedFilter, setIdentityVerifiedFilter] = useState<VerifiedFilter>("");
+  const [ordering, setOrdering] = useState("-created_at");
 
-    if (state?.updatedClub && state.clubId) {
-      const updatedClub = state.updatedClub;
-      const clubId = state.clubId;
-      return mockClubs.map((club) =>
-        club.id === clubId ? { ...club, ...toClubListItem(updatedClub) } : club,
-      );
-    }
+  const search = useDebouncedValue(searchInput, 400);
 
-    return mockClubs;
-  });
-  const [confirmAction, setConfirmAction] = useState<ConfirmActionState | null>(
-    null,
-  );
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | ClubVerificationStatus
-  >("all");
-
-  const statusCounts = useMemo(() => {
-    const counts: Record<ClubVerificationStatus, number> = {
-      pending: 0,
-      identityVerified: 0,
-      fullyVerified: 0,
-    };
-    for (const club of clubs) counts[getClubVerificationStatus(club)] += 1;
-    return counts;
-  }, [clubs]);
-
-  const filteredClubs = useMemo(
-    () =>
-      statusFilter === "all"
-        ? clubs
-        : clubs.filter(
-            (club) => getClubVerificationStatus(club) === statusFilter,
-          ),
-    [clubs, statusFilter],
-  );
-
-  function handleConfirmAction() {
-    if (!confirmAction) return;
-
-    if (confirmAction.type === "delete") {
-      setClubs((prev) =>
-        prev.filter((club) => club.id !== confirmAction.club.id),
-      );
-    } else {
-      setClubs((prev) =>
-        prev.map((club) =>
-          club.id === confirmAction.club.id
-            ? { ...club, identityVerified: true }
-            : club,
-        ),
-      );
-    }
-
-    setConfirmAction(null);
+  const filterKey = `${search}|${entityTypeFilter}|${regionFilter}|${identityVerifiedFilter}|${ordering}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
+    setPage(1);
   }
 
-  const columns: TableColumn<ClubListItem>[] = [
+  const clubsQuery = useQuery({
+    queryKey: [
+      "admin-clubs",
+      { page, search, entityTypeFilter, regionFilter, identityVerifiedFilter, ordering },
+    ],
+    queryFn: () =>
+      listAdminClubs({
+        page,
+        page_size: PAGE_SIZE,
+        search: search || undefined,
+        entity_type: entityTypeFilter ? entityTypeToApi(entityTypeFilter) : undefined,
+        base_region: regionFilter ? regionToApi(regionFilter) : undefined,
+        identity_verified:
+          identityVerifiedFilter === "" ? undefined : identityVerifiedFilter === "true",
+        ordering,
+      }),
+  });
+
+  function toggleOrdering(field: ClubOrderingField) {
+    setOrdering((prev) => (prev === field ? `-${field}` : field));
+  }
+
+  function sortIcon(field: ClubOrderingField) {
+    if (ordering === field) return "ri-arrow-up-line";
+    if (ordering === `-${field}`) return "ri-arrow-down-line";
+    return "ri-expand-up-down-line text-muted";
+  }
+
+  function sortableHeader(field: ClubOrderingField, label: string) {
+    return (
+      <button
+        type="button"
+        className="btn btn-link p-0 text-reset text-decoration-none d-inline-flex align-items-center gap-1"
+        onClick={() => toggleOrdering(field)}
+      >
+        {label}
+        <i className={sortIcon(field)} aria-hidden="true" />
+      </button>
+    );
+  }
+
+  const columns: TableColumn<Club>[] = [
     {
       key: "name",
-      header: t("clubs.table.name"),
-      sortable: true,
+      header: sortableHeader("name", t("clubs.table.name")),
       render: (row) => (
         <Link
           to={`/admin/clubs/${row.id}`}
           className="d-flex align-items-center gap-2"
         >
-          <Avatar name={row.name} size="xs" />
+          <Avatar src={row.logo ?? undefined} name={row.name} size="xs" />
           <span className="fw-medium">{row.name}</span>
         </Link>
       ),
@@ -159,21 +139,17 @@ function ClubsPage() {
     {
       key: "baseRegion",
       header: t("clubs.table.baseRegion"),
-      sortable: true,
-      accessor: (row) => t(`regions.${row.baseRegion}`),
-      render: (row) => t(`regions.${row.baseRegion}`),
+      render: (row) => (row.baseRegion ? t(`regions.${row.baseRegion}`) : "–"),
     },
-    { key: "email", header: t("clubs.table.email") },
+    { key: "email", header: t("clubs.table.email"), render: (row) => row.email || "–" },
     {
       key: "status",
       header: t("clubs.table.status"),
-      sortable: true,
-      accessor: (row) => getClubVerificationStatus(row),
       render: (row) => {
         const status = getClubVerificationStatus(row);
         return (
           <Badge
-            variant={CLUB_STATUS_BADGE_VARIANT[status]}
+            variant={CLUB_VERIFICATION_BADGE_VARIANT[status]}
             appearance="subtle"
             pill
           >
@@ -182,40 +158,10 @@ function ClubsPage() {
         );
       },
     },
-    {
-      key: "actions",
-      header: t("clubs.table.actions"),
-      headerClassName: "text-end",
-      className: "text-end",
-      render: (row) => (
-        <RowActionsMenu
-          ariaLabel={t("clubs.table.actions")}
-          actions={[
-            {
-              key: "edit",
-              label: t("common.edit"),
-              icon: "ri-pencil-fill",
-              onClick: () => navigate(`/admin/clubs/${row.id}/edit`),
-            },
-            {
-              key: "verify",
-              label: t("clubs.verifyIdentity"),
-              icon: "ri-checkbox-circle-line",
-              hidden: row.identityVerified,
-              onClick: () => setConfirmAction({ type: "verify", club: row }),
-            },
-            {
-              key: "delete",
-              label: t("common.delete"),
-              icon: "ri-delete-bin-5-fill",
-              variant: "danger",
-              onClick: () => setConfirmAction({ type: "delete", club: row }),
-            },
-          ]}
-        />
-      ),
-    },
   ];
+
+  const clubs = clubsQuery.data?.results ?? [];
+  const totalCount = clubsQuery.data?.count ?? 0;
 
   return (
     <>
@@ -234,87 +180,98 @@ function ClubsPage() {
             </Button>
           }
         />
+
         <CardBody>
-          <div className="d-flex flex-wrap gap-2 mb-3">
-            {(
-              [
-                {
-                  key: "all",
-                  label: t("clubs.filters.all"),
-                  count: clubs.length,
-                },
-                {
-                  key: "fullyVerified",
-                  label: t("clubs.status.fullyVerified"),
-                  count: statusCounts.fullyVerified,
-                },
-                {
-                  key: "identityVerified",
-                  label: t("clubs.status.identityVerified"),
-                  count: statusCounts.identityVerified,
-                },
-                {
-                  key: "pending",
-                  label: t("clubs.status.pending"),
-                  count: statusCounts.pending,
-                },
-              ] as const
-            ).map((tab) => (
-              <Button
-                key={tab.key}
-                type="button"
-                size="sm"
-                variant={tab.key === "all" ? "primary" : "secondary"}
-                appearance={statusFilter === tab.key ? "soft" : "ghost"}
-                className="rounded-pill"
-                onClick={() => setStatusFilter(tab.key)}
-              >
-                {tab.label}
-                <span className="ms-1">{tab.count}</span>
-              </Button>
-            ))}
+          <div className="d-flex flex-wrap align-items-start gap-2 mb-4">
+            <div className="search-box" style={{ maxWidth: 260 }}>
+              <Input
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder={t("clubs.filters.searchPlaceholder")}
+                aria-label={t("clubs.filters.searchPlaceholder")}
+                containerClassName="mb-0"
+              />
+              <i className="ri-search-line search-icon" aria-hidden="true" />
+            </div>
+
+            <Select
+              value={entityTypeFilter}
+              onChange={(event) => setEntityTypeFilter(event.target.value)}
+              containerClassName="mb-0"
+              style={{ maxWidth: 200 }}
+              aria-label={t("clubs.filters.allEntityTypes")}
+            >
+              <option value="">{t("clubs.filters.allEntityTypes")}</option>
+              {ENTITY_TYPES.map((entityType) => (
+                <option key={entityType} value={entityType}>
+                  {t(`clubs.entityTypes.${entityType}`)}
+                </option>
+              ))}
+            </Select>
+
+            <Select
+              value={regionFilter}
+              onChange={(event) => setRegionFilter(event.target.value)}
+              containerClassName="mb-0"
+              style={{ maxWidth: 200 }}
+              aria-label={t("clubs.filters.allRegions")}
+            >
+              <option value="">{t("clubs.filters.allRegions")}</option>
+              {REGIONS.map((region) => (
+                <option key={region} value={region}>
+                  {t(`regions.${region}`)}
+                </option>
+              ))}
+            </Select>
+
+            <Select
+              value={identityVerifiedFilter}
+              onChange={(event) =>
+                setIdentityVerifiedFilter(event.target.value as VerifiedFilter)
+              }
+              containerClassName="mb-0"
+              style={{ maxWidth: 200 }}
+              aria-label={t("clubs.filters.allVerification")}
+            >
+              <option value="">{t("clubs.filters.allVerification")}</option>
+              <option value="true">{t("clubs.status.identityVerified")}</option>
+              <option value="false">{t("clubs.status.pending")}</option>
+            </Select>
           </div>
 
-          <Table
-            columns={columns}
-            data={filteredClubs}
-            getRowKey={(row) => row.id}
-            emptyMessage={t("clubs.empty")}
-            searchable
-            pageSize={5}
-            card
-            className="bg-light"
-          />
+          {clubsQuery.isError ? (
+            <div className="alert alert-danger d-flex align-items-center justify-content-between">
+              <span>{t("common.loadError")}</span>
+              <Button
+                variant="danger"
+                appearance="outline"
+                size="sm"
+                onClick={() => clubsQuery.refetch()}
+              >
+                {t("common.retry")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Table
+                columns={columns}
+                data={clubs}
+                getRowKey={(row) => row.id}
+                emptyMessage={t("clubs.empty")}
+                card
+                className="bg-light"
+              />
+
+              <Pagination
+                page={page}
+                pageSize={PAGE_SIZE}
+                totalCount={totalCount}
+                onPageChange={setPage}
+              />
+            </>
+          )}
         </CardBody>
       </Card>
-
-      <ConfirmDialog
-        isOpen={confirmAction !== null}
-        onClose={() => setConfirmAction(null)}
-        onConfirm={handleConfirmAction}
-        icon={
-          confirmAction?.type === "delete"
-            ? "ri-delete-bin-line"
-            : "ri-checkbox-circle-line"
-        }
-        confirmVariant={confirmAction?.type === "delete" ? "danger" : "success"}
-        title={
-          confirmAction?.type === "delete"
-            ? t("clubs.confirmDelete.title")
-            : t("clubs.confirmVerify.title")
-        }
-        message={
-          confirmAction?.type === "delete"
-            ? t("clubs.confirmDelete.message")
-            : t("clubs.confirmVerify.message")
-        }
-        confirmLabel={
-          confirmAction?.type === "delete"
-            ? t("clubs.confirmDelete.confirm")
-            : t("clubs.confirmVerify.confirm")
-        }
-        cancelLabel={t("common.cancel")}
-      />
     </>
   );
 }

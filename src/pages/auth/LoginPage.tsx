@@ -36,10 +36,14 @@ function LoginPage() {
         const from = (location.state as { from?: Location } | null)?.from;
         navigate(from?.pathname ?? getHomePathForRole(user.role), { replace: true });
       } catch (error) {
-        const message =
-          error instanceof ApiError && error.fieldError("non_field_errors")
-            ? t("auth.login.invalidCredentials")
-            : t("auth.login.genericError");
+        let message = t("auth.login.genericError");
+        if (error instanceof ApiError) {
+          if (error.status === 403) {
+            message = t("auth.login.adminAccessRequired");
+          } else if (error.fieldError("non_field_errors")) {
+            message = t("auth.login.invalidCredentials");
+          }
+        }
         setStatus(message);
       } finally {
         setSubmitting(false);

@@ -10,6 +10,7 @@
     "switchToLightMode": "Անցնել լուսավոր ռեժիմի",
     "switchToDarkMode": "Անցնել մուգ ռեժիմի",
     "close": "Փակել",
+    "loading": "Բեռնում...",
     "view": "Դիտել",
     "edit": "Խմբագրել",
     "delete": "Ջնջել",
@@ -31,6 +32,7 @@
     },
     "imageUpload": {
       "dropInstructions": "Կցեք ֆայլերը այստեղ կամ սեղմեք՝ վերբեռնելու համար։",
+      "uploadImage": "Վերբեռնել նկար",
       "removeImage": "Հեռացնել նկարը"
     },
     "stepper": {
@@ -94,6 +96,7 @@
       "emailInvalid": "Մուտքագրեք վավեր էլ. փոստ",
       "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառը",
       "invalidCredentials": "Չհաջողվեց մուտք գործել տրված տվյալներով։",
+      "adminAccessRequired": "Այս հաշիվը հասանելիություն չունի ադմին վահանակին։",
       "genericError": "Ինչ-որ բան այն չէ։ Խնդրում ենք փորձել կրկին։"
     },
     "forgotPassword": {
@@ -127,7 +130,8 @@
     "canyoneering": "Կանյոնի հաղթահարում",
     "wakeboarding": "Վեյքբորդինգ",
     "skiing": "Դահուկ",
-    "snowboarding": "Սնուուբորդ"
+    "snowboarding": "Սնուուբորդ",
+    "other": "Այլ"
   },
   "regions": {
     "yerevan": "Երևան",
@@ -346,7 +350,11 @@
     "createClub": "Ստեղծել ակումբ",
     "empty": "Դեռ ակումբներ չկան։",
     "filters": {
-      "all": "Բոլորը"
+      "all": "Բոլորը",
+      "searchPlaceholder": "Փնտրել ըստ անվան կամ սեփականատիրոջ էլ. փոստի",
+      "allEntityTypes": "Բոլոր տեսակները",
+      "allRegions": "Բոլոր մարզերը",
+      "allVerification": "Բոլոր հաստատման կարգավիճակները"
     },
     "table": {
       "name": "Ակումբի անվանում",
@@ -374,7 +382,14 @@
       "notUploaded": "Վերբեռնված չէ",
       "notFound": "Ակումբը չի գտնվել",
       "notFoundMessage": "Փնտրվող ակումբը գոյություն չունի կամ հեռացվել է։",
-      "backToClubs": "Վերադառնալ ակումբներին"
+      "backToClubs": "Վերադառնալ ակումբներին",
+      "noClubMessage": "Դուք դեռ ակումբ չունեք։ Կապվեք platform admin-ի հետ՝ այն ստեղծելու համար։",
+      "incompleteProfile": {
+        "title": "Ձեր պրոֆիլը լրիվ չէ"
+      },
+      "downloadIdDocument": "Ներբեռնել անձնագիրը",
+      "idDocumentError": "Չհաջողվեց ներբեռնել փաստաթուղթը։ Փորձեք կրկին։",
+      "uploaded": "Վերբեռնված է"
     },
     "confirmDelete": {
       "title": "Ջնջել այս ակումբը՞",
@@ -385,6 +400,27 @@
       "title": "Հաստատել ակումբի ինքնությունը՞",
       "message": "Ակումբը կկարողանա ստեղծել և հրապարակել միջոցառումներ։",
       "confirm": "Այո, հաստատել"
+    },
+    "create": {
+      "unavailableTitle": "Առայժմ հասանելի չէ",
+      "unavailableMessage": "Ակումբները ստեղծվում են Platform Admin-ի կողմից, ով նշանակում է սեփականատիրոջը։ Ինքնագրանցման էկրան դեռ չկա։"
+    },
+    "edit": {
+      "unavailableTitle": "Առայժմ հասանելի չէ",
+      "unavailableMessage": "Ակումբի պրոֆիլը կարող է խմբագրել միայն դրա սեփականատերը։ Անձնակազմը կարող է դիտել այն այստեղ, բայց ոչ խմբագրել։"
+    },
+    "missingFields": {
+      "name": "Ակումբի անվանում",
+      "logo": "Լոգո",
+      "about": "Մասին",
+      "activity_types": "Ակտիվության տեսակներ",
+      "base_region": "Մարզ",
+      "email": "Հանրային էլ. փոստ",
+      "phone": "Հանրային հեռախոս",
+      "entity_type": "Իրավաբանական տեսակ",
+      "tax_id": "ՀՎՀՀ",
+      "owner_id_document": "Սեփականատիրոջ անձնագիր",
+      "social_links": "Սոց ցանցեր"
     },
     "entityTypes": {
       "individual": "Անհատ ուղեկցորդ",
@@ -410,12 +446,18 @@
           "label": "Ակումբի անվանում",
           "placeholder": "Մուտքագրեք ակումբի անվանումը"
         },
+        "owner": {
+          "label": "Սեփականատեր",
+          "placeholder": "Ընտրեք սեփականատեր",
+          "helperText": "Ընտրեք հարթահարումի գոյություն ունեցողին, որը կդառնա այս ակումբը։"
+        },
         "logo": {
           "label": "Լոգո"
         },
         "coverImage": {
           "label": "Կազմի նկար"
         },
+        "currentImage": "Ընթացիկ նկար",
         "about": {
           "label": "Մասին / Նկարագրություն",
           "placeholder": "Պատմեք մասնակիցներին, թե ինչով է զբաղվում ձեր ակումբը...",
@@ -460,11 +502,13 @@
           "placeholder": "Մուտքագրեք ՀՎՀՀ-ն"
         },
         "ownerIdDocument": {
-          "label": "Սեփականատիրոջ անձնագիր"
+          "label": "Սեփականատիրոջ անձնագիր",
+          "alreadyUploaded": "Փաստաթուղթն արդեն վերբեռնված է։ Նորը վերբեռնելը կփոխարինի այն։"
         }
       },
       "validation": {
         "nameRequired": "Խնդրում ենք մուտքագրել ակումբի անվանումը",
+        "ownerRequired": "Խնդրում ենք ընտրել սեփականատեր",
         "logoRequired": "Խնդրում ենք վերբեռնել լոգո",
         "aboutRequired": "Խնդրում ենք մուտքագրել նկարագրություն",
         "aboutTooShort": "Խնդրում ենք մուտքագրել առնվազն {{min}} նիշ",
@@ -478,8 +522,12 @@
         "websiteInvalid": "Մուտքագրեք վավեր հղում",
         "entityTypeRequired": "Խնդրում ենք ընտրել իրավաբանական տեսակը",
         "taxIdRequired": "Խնդրում ենք մուտքագրել ՀՎՀՀ-ն",
-        "ownerIdDocumentRequired": "Խնդրում ենք վերբեռնել սեփականատիրոջ անձնագիրը"
-      }
+        "ownerIdDocumentRequired": "Խնդրում ենք վերբեռնել սեփականատիրոջ անձնագիրը",
+        "fileTooLarge": "Ֆայլը պետք է լինի 5 ՄԲ-ից փոքր",
+        "imageTypeInvalid": "Խնդրում ենք վերբեռնել JPEG, PNG կամ WebP նկար",
+        "documentTypeInvalid": "Խնդրում ենք վերբեռնել JPEG, PNG, WebP կամ PDF ֆայլ"
+      },
+      "saveError": "Չհաջողվեց պահպանել փոփոխությունները։ Փորձեք կրկին։"
     }
   },
   "team": {
@@ -487,6 +535,10 @@
     "empty": "Թիմի անդամներ դեռ չկան։",
     "deactivateMember": "Ապաակտիվացնել",
     "activateMember": "Ակտիվացնել",
+    "noClubMessage": "Դուք դեռ ակումբ չունեք։ Կապվեք platform admin-ի հետ, որ մեկը ստեղծվի ձեզ համար։",
+    "filters": {
+      "searchPlaceholder": "Փնտրել ըստ անվան կամ email-ի"
+    },
     "table": {
       "name": "Անուն",
       "role": "Դեր",
@@ -499,33 +551,14 @@
       "active": "Ակտիվ",
       "inactive": "Ոչ ակտիվ"
     },
-    "roles": {
-      "leadGuide": "Գլխավոր Գիդ",
-      "sweepGuide": "Հետնապահ",
-      "manager": "Մենեջեր",
-      "adminAssistant": "Ադմին-օգնական"
-    },
-    "permissions": {
-      "qrCheckIn": "QR Check-in մասնակիցների",
-      "participantsView": "Մասնակիցների ցանկի դիտում (հեռախոսահամար, emergency contact)",
-      "gpsTracking": "GPS tracking / միջոցառման մեկնարկ-ավարտ",
-      "emergencyButton": "Արագ արձագանքման կոճակ (ԱԻՆ կապ)",
-      "eventManage": "Միջոցառում ստեղծելու/խմբագրելու իրավունք",
-      "financeView": "Ֆինանսների/ռեփորթի դիտում"
-    },
-    "confirmDelete": {
-      "title": "Հեռացնե՞լ այս թիմի անդամին",
-      "message": "Այս գործողությունը հնարավոր չէ հետարկել։",
-      "confirm": "Այո, հեռացնել"
-    },
     "confirmDeactivate": {
       "title": "Ապաակտիվացնե՞լ այս թիմի անդամին",
-      "message": "Նա կկորցնի հասանելիությունը գործիքներին, մինչև կրկին ակտիվացվի։",
+      "message": "Սա միաժամանակ անջատում է նաև նրա login հասանելիությունը, ոչ միայն դերը այստեղ։ Նա կկորցնի հասանելիությունը գործիքներին, մինչև կրկին ակտիվացվի։",
       "confirm": "Այո, ապաակտիվացնել"
     },
     "confirmActivate": {
       "title": "Ակտիվացնե՞լ այս թիմի անդամին",
-      "message": "Նա անմիջապես կրկին կունենա հասանելիություն։",
+      "message": "Սա անմիջապես վերականգնում է նրա login հասանելիությունը։",
       "confirm": "Այո, ակտիվացնել"
     },
     "view": {
@@ -536,9 +569,7 @@
       "notSpecified": "Նշված չէ",
       "joinedOn": "Միացել է՝",
       "noCertificates": "Սերտիֆիկատներ վերբեռնված չեն",
-      "noEvents": "Կցված միջոցառումներ չկան",
-      "permissions": "Հասանելիություններ",
-      "assignedEvents": "Կցվող Միջոցառումներ"
+      "permissions": "Հասանելիություններ"
     },
     "form": {
       "title": "Ավելացնել Թիմի Անդամ",
@@ -546,50 +577,56 @@
       "cancel": "Չեղարկել",
       "submit": "Ավելացնել Թիմի Անդամ",
       "saveChanges": "Պահպանել Փոփոխությունները",
+      "saveError": "Չհաջողվեց պահպանել փոփոխությունները։ Փորձեք կրկին։",
       "steps": {
         "basic": "Հիմնական Տվյալներ",
         "roleAndPermissions": "Դեր և Իրավունքներ",
-        "specialization": "Մասնագիտացում",
-        "events": "Կցվող Միջոցառումներ",
-        "status": "Կարգավիճակ"
+        "specialization": "Մասնագիտացում"
       },
       "fields": {
-        "firstName": { "label": "Անուն", "placeholder": "Մուտքագրեք անունը" },
-        "lastName": { "label": "Ազգանուն", "placeholder": "Մուտքագրեք ազգանունը" },
-        "photo": { "label": "Նկար (Profile photo)" },
+        "fullName": { "label": "Անուն Ազգանուն", "placeholder": "Մուտքագրեք անուն ազգանունը" },
+        "photo": { "label": "Նկար (Profile photo)", "helperText": "JPG կամ PNG" },
         "phone": {
           "label": "Հեռախոսահամար",
-          "placeholder": "Մուտքագրեք հեռախոսահամարը",
-          "helperText": "Հաստատվում է SMS կոդով։"
+          "placeholder": "Մուտքագրեք հեռախոսահամարը"
         },
         "email": {
           "label": "Email",
-          "placeholder": "Մուտքագրեք email-ը",
-          "helperText": "Օգտագործվում է անհրաժեշտության դեպքում սեփական login հրավիրելու համար։"
+          "placeholder": "Մուտքագրեք email-ը"
+        },
+        "password": {
+          "label": "Գաղտնաբառ",
+          "placeholder": "Մուտքագրեք login գաղտնաբառը",
+          "helperText": "Նրա սկզբնական login գաղտնաբառը։ Հետագայում կարող է փոխել այն։"
         },
         "birthDate": { "label": "Ծննդյան Ամսաթիվ" },
-        "role": { "label": "Դեր/Պաշտոն", "placeholder": "Ընտրեք դերը" },
-        "permissions": { "label": "Հասանելիություններ" },
+        "platformRole": {
+          "label": "Հաշվի Տեսակ",
+          "helperText": "Guide հաշիվներն օգտագործում են ֆիքսված իրավունքներ։ Internal Admin հաշիվները ստանում են ստորև ընտրված հատուկ իրավունքները։"
+        },
+        "permissions": {
+          "label": "Հասանելիություններ",
+          "guideHint": "Գիդերն օգտագործում են իրենց դերին համապատասխան ֆիքսված իրավունքներ և չեն կարող ստանալ հատուկ իրավունքներ։"
+        },
         "activityTypes": { "label": "Ուղղություններ" },
         "languages": { "label": "Լեզուներ" },
         "experienceYears": { "label": "Փորձառություն (տարիներ)" },
         "bio": { "label": "Կարճ Bio", "placeholder": "Նկարագրեք փորձառությունը..." },
-        "certificates": { "label": "Սերտիֆիկատներ/Որակավորումներ" },
-        "assignedEvents": {
-          "label": "Կցվող Միջոցառումներ",
-          "placeholder": "Ընտրեք միջոցառումներ"
+        "certificates": {
+          "label": "Սերտիֆիկատներ/Որակավորումներ",
+          "currentLabel": "Արդեն վերբեռնված"
         },
+        "accountStatus": { "label": "Հաշվի Կարգավիճակ" },
         "isActive": { "label": "Ակտիվ" },
         "joinedDate": { "label": "Միացման Ամսաթիվ" }
       },
       "validation": {
-        "firstNameRequired": "Խնդրում ենք մուտքագրել անունը",
-        "lastNameRequired": "Խնդրում ենք մուտքագրել ազգանունը",
-        "phoneRequired": "Խնդրում ենք մուտքագրել հեռախոսահամարը",
+        "fullNameRequired": "Խնդրում ենք մուտքագրել անուն ազգանունը",
+        "emailRequired": "Խնդրում ենք մուտքագրել email",
         "emailInvalid": "Մուտքագրեք վավեր email",
-        "roleRequired": "Խնդրում ենք ընտրել դեր",
-        "activityTypesRequired": "Խնդրում ենք ընտրել առնվազն մեկ ուղղություն",
-        "languagesRequired": "Խնդրում ենք ընտրել առնվազն մեկ լեզու",
+        "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառ",
+        "passwordTooShort": "Գաղտնաբառը պետք է լինի առնվազն 8 նիշ",
+        "permissionsRequired": "Խնդրում ենք ընտրել առնվազն մեկ իրավունք",
         "experienceYearsInvalid": "Մուտքագրեք վավեր տարիների քանակ"
       }
     }
@@ -698,6 +735,9 @@
       "confirm_completion": "Հաստատել ավարտը",
       "view_finances": "Դիտել ֆինանսները",
       "manage_team_members": "Կառավարել թիմի անդամներին",
+      "view_team_members": "Դիտել թիմի անդամներին",
+      "gps_tracking": "GPS հետևում",
+      "emergency_button": "Արտակարգ իրավիճակի կոճակ",
       "cancel_event": "Չեղարկել միջոցառումը",
       "request_refund": "Հայցել վերադարձ",
       "verify_club": "Հաստատել ակումբը",

@@ -1,26 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import Avatar from "@/components/ui/Avatar/Avatar";
 import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Card, { CardBody } from "@/components/ui/Card/Card";
 
-import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { useObjectUrls } from "@/hooks/useObjectUrls";
-
-import { formatEventDate } from "../events/EventsPage.data";
-import {
-  ACTIVITY_TYPES,
-  TEAM_EVENTS,
-  TEAM_ROLES,
-  getTeamMemberById,
-  getTeamMemberFullName,
-} from "./TeamPage.data";
+import { ACTIVITY_TYPES } from "@/constants/activityTypes";
+import { getTeamMember } from "@/services/teamMembers.api";
 
 interface DetailFieldProps {
   label: string;
-  value?: string;
+  value?: string | null;
 }
 
 function DetailField({ label, value }: DetailFieldProps) {
@@ -37,12 +29,25 @@ function DetailField({ label, value }: DetailFieldProps) {
 function TeamMemberViewPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const member = id ? getTeamMemberById(id) : undefined;
 
-  const photoUrl = useObjectUrl(member?.photo[0]);
-  const certificateUrls = useObjectUrls(member?.certificates ?? []);
+  const memberQuery = useQuery({
+    queryKey: ["team-member", id],
+    queryFn: () => getTeamMember(id as string),
+    enabled: Boolean(id),
+    retry: false,
+  });
 
-  if (!member) {
+  if (memberQuery.isLoading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status" />
+      </div>
+    );
+  }
+
+  const member = memberQuery.data;
+
+  if (memberQuery.isError || !member) {
     return (
       <>
         <Breadcrumbs
@@ -62,13 +67,12 @@ function TeamMemberViewPage() {
     );
   }
 
-  const fullName = getTeamMemberFullName(member);
-  const role = TEAM_ROLES.find((item) => item.id === member.role);
-  const assignedEvents = TEAM_EVENTS.filter((event) => member.assignedEventIds.includes(event.id));
-
   return (
     <>
-      <Breadcrumbs title={fullName} items={[{ label: t("sidebar.team"), to: "/club/team" }]} />
+      <Breadcrumbs
+        title={member.fullName}
+        items={[{ label: t("sidebar.team"), to: "/club/team" }]}
+      />
 
       <div className="d-flex justify-content-end mb-3">
         <Link to={`/club/team/${member.id}/edit`} className="btn btn-success">
@@ -80,32 +84,35 @@ function TeamMemberViewPage() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center gap-3 flex-wrap">
-            <Avatar src={photoUrl} name={fullName} size="lg" className="img-thumbnail" />
+            <Avatar
+              src={member.photo ?? undefined}
+              name={member.fullName}
+              size="lg"
+              className="img-thumbnail"
+            />
 
             <div className="flex-grow-1">
               <div className="d-flex align-items-center flex-wrap gap-2 mb-1">
-                <h4 className="mb-0">{fullName}</h4>
-                {role && (
-                  <Badge variant={role.variant} appearance="subtle">
-                    {t(`team.roles.${member.role}`)}
-                  </Badge>
-                )}
-                <Badge variant={member.isActive ? "success" : "secondary"} appearance="subtle">
-                  {member.isActive ? t("team.status.active") : t("team.status.inactive")}
+                <h4 className="mb-0">{member.fullName}</h4>
+                <Badge variant="info" appearance="subtle">
+                  {t(`admin.roleNames.${member.platformRole}`)}
+                </Badge>
+                <Badge variant={member.accountIsActive ? "success" : "secondary"} appearance="subtle">
+                  {member.accountIsActive ? t("team.status.active") : t("team.status.inactive")}
                 </Badge>
               </div>
 
               <div className="hstack text-muted gap-3 flex-wrap">
-                <div>
-                  <i className="ri-phone-line me-1 align-middle" aria-hidden="true" />
-                  {member.phone}
-                </div>
-                {member.email && (
+                {member.phone && (
                   <div>
-                    <i className="ri-mail-line me-1 align-middle" aria-hidden="true" />
-                    {member.email}
+                    <i className="ri-phone-line me-1 align-middle" aria-hidden="true" />
+                    {member.phone}
                   </div>
                 )}
+                <div>
+                  <i className="ri-mail-line me-1 align-middle" aria-hidden="true" />
+                  {member.email}
+                </div>
                 <div>
                   <i className="ri-calendar-line me-1 align-middle" aria-hidden="true" />
                   {t("team.view.joinedOn")} {member.joinedDate}
@@ -171,7 +178,7 @@ function TeamMemberViewPage() {
                 <div className="col-sm-6">
                   <DetailField
                     label={t("team.form.fields.experienceYears.label")}
-                    value={member.experienceYears}
+                    value={member.experienceYears != null ? String(member.experienceYears) : ""}
                   />
                 </div>
                 <div className="col-sm-6">
@@ -186,48 +193,25 @@ function TeamMemberViewPage() {
             </CardBody>
           </Card>
 
-          <Card>
-            <CardBody>
-              <h5 className="card-title mb-3">{t("team.view.permissions")}</h5>
+          {member.platformRole === "internal_admin" && (
+            <Card>
+              <CardBody>
+                <h5 className="card-title mb-3">{t("team.view.permissions")}</h5>
 
-              <div className="d-flex flex-wrap gap-1">
-                {member.permissionIds.length > 0 ? (
-                  member.permissionIds.map((permission) => (
-                    <Badge key={permission} variant="info" appearance="subtle">
-                      {t(`team.permissions.${permission}`)}
-                    </Badge>
-                  ))
-                ) : (
-                  <span className="text-muted">{t("team.view.notSpecified")}</span>
-                )}
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardBody>
-              <h5 className="card-title mb-3">{t("team.view.assignedEvents")}</h5>
-
-              {assignedEvents.length > 0 ? (
-                <div className="d-flex flex-column gap-2">
-                  {assignedEvents.map((event) => (
-                    <Link
-                      key={event.id}
-                      to={`/club/events/${event.id}`}
-                      className="d-flex align-items-center justify-content-between text-body"
-                    >
-                      <span>{event.name}</span>
-                      <span className="text-muted fs-13">
-                        {formatEventDate(event.date, event.time)}
-                      </span>
-                    </Link>
-                  ))}
+                <div className="d-flex flex-wrap gap-1">
+                  {member.permissions.length > 0 ? (
+                    member.permissions.map((permission) => (
+                      <Badge key={permission} variant="info" appearance="subtle">
+                        {t(`admin.capabilityNames.${permission}`)}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-muted">{t("team.view.notSpecified")}</span>
+                  )}
                 </div>
-              ) : (
-                <span className="text-muted">{t("team.view.noEvents")}</span>
-              )}
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          )}
         </div>
 
         <div className="col-xxl-4">
@@ -235,16 +219,18 @@ function TeamMemberViewPage() {
             <CardBody>
               <h5 className="card-title mb-3">{t("team.form.fields.certificates.label")}</h5>
 
-              {certificateUrls.length > 0 ? (
+              {member.certificates.length > 0 ? (
                 <div className="row g-2">
-                  {certificateUrls.map((url) => (
-                    <div key={url} className="col-6">
-                      <img
-                        src={url}
-                        alt=""
-                        className="rounded border w-100"
-                        style={{ height: 100, objectFit: "cover" }}
-                      />
+                  {member.certificates.map((certificate) => (
+                    <div key={certificate.id} className="col-6">
+                      <a href={certificate.fileUrl} target="_blank" rel="noreferrer">
+                        <img
+                          src={certificate.fileUrl}
+                          alt=""
+                          className="rounded border w-100"
+                          style={{ height: 100, objectFit: "cover" }}
+                        />
+                      </a>
                     </div>
                   ))}
                 </div>

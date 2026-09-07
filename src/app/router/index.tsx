@@ -125,28 +125,28 @@ const router = createBrowserRouter([
           },
 
           {
-            path: "/admin/clubs",
-            element: <ClubsPage />,
-          },
-
-          {
-            path: "/admin/clubs/create",
-            element: <CreateClubPage />,
-          },
-
-          {
-            path: "/admin/clubs/:id/edit",
-            element: <EditClubPage />,
-          },
-
-          {
-            path: "/admin/clubs/:id",
-            element: <AdminClubViewPage />,
-          },
-
-          {
             element: <RequireRole allow={["platform_admin"]} />,
             children: [
+              {
+                path: "/admin/clubs",
+                element: <ClubsPage />,
+              },
+
+              {
+                path: "/admin/clubs/create",
+                element: <CreateClubPage />,
+              },
+
+              {
+                path: "/admin/clubs/:id/edit",
+                element: <EditClubPage />,
+              },
+
+              {
+                path: "/admin/clubs/:id",
+                element: <AdminClubViewPage />,
+              },
+
               {
                 path: "/admin/users",
                 element: <UsersPage />,

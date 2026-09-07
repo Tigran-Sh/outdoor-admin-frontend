@@ -5,15 +5,16 @@ import { Link } from "react-router-dom";
 import defaultCoverImage from "@/assets/images/auth-one-bg.jpg";
 import Avatar from "@/components/ui/Avatar/Avatar";
 import Badge from "@/components/ui/Badge/Badge";
+import Button from "@/components/ui/Button/Button";
 import Card, { CardBody } from "@/components/ui/Card/Card";
-import { useObjectUrl } from "@/hooks/useObjectUrl";
 
+import { fetchClubIdDocument } from "@/services/clubs.api";
+import { ACTIVITY_TYPES } from "@/constants/activityTypes";
 import {
-  ACTIVITY_TYPES,
-  CLUB_STATUS_BADGE_VARIANT,
+  CLUB_VERIFICATION_BADGE_VARIANT,
   getClubVerificationStatus,
-} from "../ClubsPage.data";
-import type { ClubListItem } from "../ClubsPage.data";
+  type Club,
+} from "@/types/club";
 
 type ProfileTab = "overview" | "legal";
 
@@ -43,32 +44,77 @@ function SocialLink({ href, icon, label }: SocialLinkProps) {
   );
 }
 
-interface ClubProfileViewProps {
-  club: ClubListItem;
-  editHref: string;
-  editLabel: string;
+interface OwnerIdDocumentDownloadProps {
+  clubId: string;
 }
 
-function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
+function OwnerIdDocumentDownload({ clubId }: OwnerIdDocumentDownloadProps) {
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  async function handleDownload() {
+    setIsLoading(true);
+    setHasError(false);
+    try {
+      const blob = await fetchClubIdDocument(clubId);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      <Button
+        type="button"
+        appearance="outline"
+        variant="secondary"
+        size="sm"
+        loading={isLoading}
+        leftIcon={<i className="ri-download-2-line align-bottom" />}
+        onClick={handleDownload}
+      >
+        {t("clubs.view.downloadIdDocument")}
+      </Button>
+      {hasError && (
+        <div className="text-danger fs-13 mt-1">{t("clubs.view.idDocumentError")}</div>
+      )}
+    </div>
+  );
+}
+
+interface ClubProfileViewProps {
+  club: Club;
+  editHref?: string;
+  editLabel?: string;
+  /** Whether the current viewer may download the private owner ID document. */
+  canViewIdDocument?: boolean;
+}
+
+function ClubProfileView({ club, editHref, editLabel, canViewIdDocument }: ClubProfileViewProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<ProfileTab>("overview");
 
-  const logoUrl = useObjectUrl(club.logo[0]);
-  const coverImageUrl = useObjectUrl(club.coverImage[0]);
-  const ownerIdDocumentUrl = useObjectUrl(club.ownerIdDocument[0]);
-
   const status = getClubVerificationStatus(club);
-  const requiresTaxId =
-    club.entityType === "soleTrader" || club.entityType === "llc";
-  const requiresOwnerId =
-    club.entityType === "individual" || club.entityType === "informal";
+  const requiresTaxId = club.entityType === "soleTrader" || club.entityType === "llc";
+  const requiresOwnerId = club.entityType === "individual" || club.entityType === "informal";
 
   return (
     <>
       <Card className="overflow-hidden">
         <div className="position-relative" style={{ height: 220 }}>
           <img
-            src={coverImageUrl ?? defaultCoverImage}
+            src={club.coverImage ?? defaultCoverImage}
             alt=""
             className="w-100 h-100"
             style={{ objectFit: "cover" }}
@@ -83,7 +129,7 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
 
           <div className="position-absolute top-0 start-0 p-3">
             <Badge
-              variant={CLUB_STATUS_BADGE_VARIANT[status]}
+              variant={CLUB_VERIFICATION_BADGE_VARIANT[status]}
               pill
               className="shadow-sm"
             >
@@ -91,21 +137,23 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
             </Badge>
           </div>
 
-          <div className="position-absolute top-0 end-0 p-3">
-            <Link to={editHref} className="btn btn-light shadow-sm">
-              <i
-                className="ri-edit-box-line align-bottom me-1"
-                aria-hidden="true"
-              />
-              {editLabel}
-            </Link>
-          </div>
+          {editHref && (
+            <div className="position-absolute top-0 end-0 p-3">
+              <Link to={editHref} className="btn btn-light shadow-sm">
+                <i
+                  className="ri-edit-box-line align-bottom me-1"
+                  aria-hidden="true"
+                />
+                {editLabel}
+              </Link>
+            </div>
+          )}
         </div>
 
         <CardBody>
           <div className="d-flex align-items-end gap-3 mt-n5 mb-3 flex-wrap position-relative">
             <Avatar
-              src={logoUrl}
+              src={club.logo ?? undefined}
               name={club.name}
               size="xl"
               className="img-thumbnail bg-body flex-shrink-0"
@@ -122,19 +170,37 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                 )}
               </h3>
               <p className="text-muted mb-0">
-                {t(`clubs.entityTypes.${club.entityType}`)}
+                {club.entityType ? t(`clubs.entityTypes.${club.entityType}`) : club.ownerEmail}
               </p>
             </div>
           </div>
 
-          <div className="hstack text-muted gap-3 flex-wrap mb-4">
-            <div>
-              <i
-                className="ri-map-pin-line me-1 align-middle"
-                aria-hidden="true"
-              />
-              {t(`regions.${club.baseRegion}`)}
+          {club.missingProfileFields.length > 0 && (
+            <div className="alert alert-warning d-flex align-items-start gap-2">
+              <i className="ri-error-warning-line mt-1" aria-hidden="true" />
+              <div>
+                <div className="fw-medium mb-1">{t("clubs.view.incompleteProfile.title")}</div>
+                <div className="d-flex flex-wrap gap-1">
+                  {club.missingProfileFields.map((field) => (
+                    <Badge key={field} variant="warning" appearance="subtle" pill>
+                      {t(`clubs.missingFields.${field}`)}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
+          )}
+
+          <div className="hstack text-muted gap-3 flex-wrap mb-4">
+            {club.baseRegion && (
+              <div>
+                <i
+                  className="ri-map-pin-line me-1 align-middle"
+                  aria-hidden="true"
+                />
+                {t(`regions.${club.baseRegion}`)}
+              </div>
+            )}
             {club.yearFounded && (
               <div>
                 <i
@@ -181,7 +247,9 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                 <h5 className="card-title mb-3">
                   {t("clubs.form.fields.about.label")}
                 </h5>
-                <p className="text-muted mb-0">{club.about}</p>
+                <p className="text-muted mb-0">
+                  {club.about || t("clubs.view.notProvided")}
+                </p>
               </CardBody>
             </Card>
 
@@ -220,7 +288,7 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                 <div className="d-flex flex-column gap-3">
                   <div className="d-flex align-items-center gap-2">
                     <i className="ri-mail-line text-muted" aria-hidden="true" />
-                    <span>{club.email}</span>
+                    <span>{club.email || t("clubs.view.notProvided")}</span>
                   </div>
 
                   <div className="d-flex align-items-center gap-2">
@@ -228,7 +296,7 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                       className="ri-phone-line text-muted"
                       aria-hidden="true"
                     />
-                    <span>{club.phone}</span>
+                    <span>{club.phone || t("clubs.view.notProvided")}</span>
                   </div>
 
                   <SocialLink
@@ -283,7 +351,11 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                     <div className="text-muted fs-13">
                       {t("clubs.form.fields.entityType.label")}
                     </div>
-                    <div>{t(`clubs.entityTypes.${club.entityType}`)}</div>
+                    <div>
+                      {club.entityType
+                        ? t(`clubs.entityTypes.${club.entityType}`)
+                        : t("clubs.view.notProvided")}
+                    </div>
                   </div>
 
                   {requiresTaxId && (
@@ -300,17 +372,14 @@ function ClubProfileView({ club, editHref, editLabel }: ClubProfileViewProps) {
                       <div className="text-muted fs-13 mb-2">
                         {t("clubs.form.fields.ownerIdDocument.label")}
                       </div>
-                      {ownerIdDocumentUrl ? (
-                        <img
-                          src={ownerIdDocumentUrl}
-                          alt=""
-                          className="rounded border"
-                          style={{
-                            width: 160,
-                            height: 100,
-                            objectFit: "cover",
-                          }}
-                        />
+                      {club.hasOwnerIdDocument ? (
+                        canViewIdDocument ? (
+                          <OwnerIdDocumentDownload clubId={club.id} />
+                        ) : (
+                          <Badge variant="success" appearance="subtle" pill>
+                            {t("clubs.view.uploaded")}
+                          </Badge>
+                        )
                       ) : (
                         <span className="text-muted">
                           {t("clubs.view.notUploaded")}

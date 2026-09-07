@@ -2,44 +2,10 @@ import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
 import type { FormWizardStep } from "@/hooks/useFormWizard";
+import type { ClubFormValues } from "@/types/club";
 
-export interface ClubFormValues {
-  name: string;
-  logo: File[];
-  coverImage: File[];
-  about: string;
-  activityTypeIds: string[];
-  baseRegion: string;
-  yearFounded: string;
-  email: string;
-  phone: string;
-  instagram: string;
-  facebook: string;
-  telegram: string;
-  website: string;
-  entityType: string;
-  taxId: string;
-  ownerIdDocument: File[];
-}
-
-export const initialClubFormValues: ClubFormValues = {
-  name: "",
-  logo: [],
-  coverImage: [],
-  about: "",
-  activityTypeIds: [],
-  baseRegion: "",
-  yearFounded: "",
-  email: "",
-  phone: "",
-  instagram: "",
-  facebook: "",
-  telegram: "",
-  website: "",
-  entityType: "",
-  taxId: "",
-  ownerIdDocument: [],
-};
+export type { ClubFormValues };
+export { initialClubFormValues, clubToFormValues, buildClubFormData } from "@/types/club";
 
 export function getClubFormSteps(t: TFunction): FormWizardStep<ClubFormValues>[] {
   return [
@@ -72,29 +38,59 @@ export function getClubFormSteps(t: TFunction): FormWizardStep<ClubFormValues>[]
 }
 
 const ABOUT_MIN_LENGTH = 50;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const DOCUMENT_TYPES = [...IMAGE_TYPES, "application/pdf"];
 
-export function getClubFormSchema(t: TFunction) {
+function fileSizeTest(t: TFunction) {
+  return Yup.array()
+    .of(Yup.mixed<File>())
+    .test(
+      "file-size",
+      t("clubs.form.validation.fileTooLarge"),
+      (files) => !files?.[0] || files[0].size <= MAX_IMAGE_SIZE,
+    );
+}
+
+/**
+ * The backend validates the *resulting* club record across many partial
+ * saves (see docs/club-fields.md), so this schema mirrors that: only
+ * `name` is unconditionally required, and the rest only apply their rule
+ * once the relevant value is actually set/touched.
+ */
+export function getClubFormSchema(
+  t: TFunction,
+  options: { hasOwnerIdDocument?: boolean } = {},
+) {
   return Yup.object({
     name: Yup.string().required(t("clubs.form.validation.nameRequired")),
-    logo: Yup.array().min(1, t("clubs.form.validation.logoRequired")),
-    coverImage: Yup.array(),
-    about: Yup.string()
-      .min(ABOUT_MIN_LENGTH, t("clubs.form.validation.aboutTooShort", { min: ABOUT_MIN_LENGTH }))
-      .required(t("clubs.form.validation.aboutRequired")),
+    logo: fileSizeTest(t).test(
+      "file-type",
+      t("clubs.form.validation.imageTypeInvalid"),
+      (files) => !files?.[0] || IMAGE_TYPES.includes(files[0].type),
+    ),
+    coverImage: fileSizeTest(t).test(
+      "file-type",
+      t("clubs.form.validation.imageTypeInvalid"),
+      (files) => !files?.[0] || IMAGE_TYPES.includes(files[0].type),
+    ),
+    about: Yup.string().test(
+      "about-min-length",
+      t("clubs.form.validation.aboutTooShort", { min: ABOUT_MIN_LENGTH }),
+      (value) => !value || value.trim().length >= ABOUT_MIN_LENGTH,
+    ),
     activityTypeIds: Yup.array()
       .of(Yup.string().required())
       .min(1, t("clubs.form.validation.activityTypesRequired")),
-    baseRegion: Yup.string().required(t("clubs.form.validation.baseRegionRequired")),
+    baseRegion: Yup.string(),
     yearFounded: Yup.number()
       .transform((value, originalValue) => (originalValue === "" ? undefined : value))
       .typeError(t("clubs.form.validation.yearFoundedInvalid"))
       .integer(t("clubs.form.validation.yearFoundedInvalid"))
       .min(1900, t("clubs.form.validation.yearFoundedInvalid"))
       .max(new Date().getFullYear(), t("clubs.form.validation.yearFoundedInvalid")),
-    email: Yup.string()
-      .email(t("clubs.form.validation.emailInvalid"))
-      .required(t("clubs.form.validation.emailRequired")),
-    phone: Yup.string().required(t("clubs.form.validation.phoneRequired")),
+    email: Yup.string().email(t("clubs.form.validation.emailInvalid")),
+    phone: Yup.string(),
     instagram: Yup.string().test(
       "at-least-one-social",
       t("clubs.form.validation.socialRequired"),
@@ -105,14 +101,31 @@ export function getClubFormSchema(t: TFunction) {
     facebook: Yup.string(),
     telegram: Yup.string(),
     website: Yup.string().url(t("clubs.form.validation.websiteInvalid")),
-    entityType: Yup.string().required(t("clubs.form.validation.entityTypeRequired")),
+    entityType: Yup.string(),
     taxId: Yup.string().when("entityType", {
       is: (entityType: string) => entityType === "soleTrader" || entityType === "llc",
       then: (schema) => schema.required(t("clubs.form.validation.taxIdRequired")),
     }),
-    ownerIdDocument: Yup.array().when("entityType", {
-      is: (entityType: string) => entityType === "individual" || entityType === "informal",
-      then: (schema) => schema.min(1, t("clubs.form.validation.ownerIdDocumentRequired")),
-    }),
+    ownerIdDocument: Yup.array()
+      .of(Yup.mixed<File>())
+      .test(
+        "file-size",
+        t("clubs.form.validation.fileTooLarge"),
+        (files) => !files?.[0] || files[0].size <= MAX_IMAGE_SIZE,
+      )
+      .test(
+        "file-type",
+        t("clubs.form.validation.documentTypeInvalid"),
+        (files) => !files?.[0] || DOCUMENT_TYPES.includes(files[0].type),
+      )
+      .when("entityType", {
+        is: (entityType: string) => entityType === "individual" || entityType === "informal",
+        then: (schema) =>
+          schema.test(
+            "owner-id-required",
+            t("clubs.form.validation.ownerIdDocumentRequired"),
+            (files) => Boolean(files?.[0]) || Boolean(options.hasOwnerIdDocument),
+          ),
+      }),
   });
 }

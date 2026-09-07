@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Button from "@/components/ui/Button/Button";
@@ -9,51 +11,62 @@ import Stepper from "@/components/ui/Stepper/Stepper";
 
 import { useFormWizard } from "@/hooks/useFormWizard";
 import { useRevalidateOnLanguageChange } from "@/hooks/useRevalidateOnLanguageChange";
+import { getTeamMember, updateTeamMember } from "@/services/teamMembers.api";
+import { ApiError } from "@/types/apiError";
+import {
+  initialTeamMemberFormValues,
+  teamMemberToFormValues,
+  type TeamMemberFormValues,
+} from "@/types/teamMember";
 
 import TeamMemberFormFields from "./components/TeamMemberFormFields";
-import { getTeamMemberById, getTeamMemberFullName, toTeamMemberFormValues } from "./TeamPage.data";
-import {
-  getTeamMemberFormSchema,
-  getTeamMemberFormSteps,
-  type TeamMemberFormValues,
-} from "./TeamMember.schema";
+import { getTeamMemberFormSchema, getTeamMemberFormSteps } from "./TeamMember.schema";
 
 function EditTeamMemberPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
-  const member = id ? getTeamMemberById(id) : undefined;
+
+  const memberQuery = useQuery({
+    queryKey: ["team-member", id],
+    queryFn: () => getTeamMember(id as string),
+    enabled: Boolean(id),
+    retry: false,
+  });
+  const member = memberQuery.data;
+
+  const updateMutation = useMutation({
+    mutationFn: (values: TeamMemberFormValues) => updateTeamMember(id as string, values),
+  });
+
+  const initialValues = useMemo(
+    () => (member ? teamMemberToFormValues(member) : initialTeamMemberFormValues),
+    [member],
+  );
 
   const formik = useFormik<TeamMemberFormValues>({
-    initialValues: member
-      ? toTeamMemberFormValues(member)
-      : {
-          firstName: "",
-          lastName: "",
-          photo: [],
-          phone: "",
-          email: "",
-          birthDate: "",
-          role: "",
-          permissionIds: [],
-          activityTypeIds: [],
-          languageIds: [],
-          experienceYears: "",
-          bio: "",
-          certificates: [],
-          assignedEventIds: [],
-          isActive: true,
-        },
-    validationSchema: getTeamMemberFormSchema(t),
-    onSubmit: (values, { setSubmitting }) => {
-      setSubmitting(false);
-      navigate("/club/team", { state: { updatedMember: values, memberId: id } });
+    enableReinitialize: true,
+    initialValues,
+    validationSchema: getTeamMemberFormSchema(t, "edit"),
+    onSubmit: async (values, { setSubmitting, setStatus }) => {
+      setStatus(undefined);
+      try {
+        const updated = await updateMutation.mutateAsync(values);
+        queryClient.setQueryData(["team-member", id], updated);
+        queryClient.invalidateQueries({ queryKey: ["team-members"] });
+        navigate("/club/team");
+      } catch (error) {
+        setStatus(error instanceof ApiError ? error.message : t("team.form.saveError"));
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
   useRevalidateOnLanguageChange(formik.validateForm);
 
-  const steps = getTeamMemberFormSteps(t);
+  const steps = getTeamMemberFormSteps(t, "edit");
   const { activeStep, isFirstStep, isLastStep, goNext, goBack, handleStepClick } = useFormWizard(
     formik,
     steps,
@@ -63,7 +76,15 @@ function EditTeamMemberPage() {
     navigate(member ? `/club/team/${member.id}` : "/club/team");
   }
 
-  if (!member) {
+  if (memberQuery.isLoading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status" />
+      </div>
+    );
+  }
+
+  if (memberQuery.isError || !member) {
     return (
       <>
         <Breadcrumbs
@@ -83,8 +104,7 @@ function EditTeamMemberPage() {
     );
   }
 
-  const pageTitle =
-    `${formik.values.firstName} ${formik.values.lastName}`.trim() || t("team.form.editTitle");
+  const pageTitle = formik.values.fullName.trim() || t("team.form.editTitle");
 
   return (
     <>
@@ -92,7 +112,7 @@ function EditTeamMemberPage() {
         title={pageTitle}
         items={[
           { label: t("sidebar.team"), to: "/club/team" },
-          { label: getTeamMemberFullName(member), to: `/club/team/${member.id}` },
+          { label: member.fullName, to: `/club/team/${member.id}` },
         ]}
       />
 
@@ -108,8 +128,16 @@ function EditTeamMemberPage() {
           />
 
           <form noValidate onSubmit={formik.handleSubmit}>
-            <TeamMemberFormFields formik={formik} activeStep={activeStep} />
+            <TeamMemberFormFields
+              formik={formik}
+              activeStep={activeStep}
+              mode="edit"
+              currentPhotoUrl={member.photo}
+              currentCertificates={member.certificates}
+            />
           </form>
+
+          {formik.status && <div className="text-danger fs-13 mt-2">{formik.status}</div>}
         </CardBody>
 
         <CardFooter className="d-flex justify-content-end gap-2">

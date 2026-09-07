@@ -10,7 +10,7 @@ import type {
 } from "@/types/auth";
 
 export async function login(payload: LoginRequest): Promise<LoginResponse> {
-  const { data } = await httpClient.post<LoginResponse>("/api/v1/auth/login/", payload);
+  const { data } = await httpClient.post<LoginResponse>("/api/v1/auth/admin/login/", payload);
   return data;
 }
 

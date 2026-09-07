@@ -1,18 +1,34 @@
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Card, { CardBody } from "@/components/ui/Card/Card";
 
+import { getAdminClub } from "@/services/clubs.api";
+
 import ClubProfileView from "./components/ClubProfileView";
-import { getClubById } from "./ClubsPage.data";
 
 function AdminClubViewPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const club = id ? getClubById(id) : undefined;
 
-  if (!club) {
+  const clubQuery = useQuery({
+    queryKey: ["admin-club", id],
+    queryFn: () => getAdminClub(id as string),
+    enabled: Boolean(id),
+    retry: false,
+  });
+
+  if (clubQuery.isLoading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status" />
+      </div>
+    );
+  }
+
+  if (clubQuery.isError || !clubQuery.data) {
     return (
       <>
         <Breadcrumbs
@@ -32,6 +48,8 @@ function AdminClubViewPage() {
     );
   }
 
+  const club = clubQuery.data;
+
   return (
     <>
       <Breadcrumbs
@@ -39,11 +57,7 @@ function AdminClubViewPage() {
         items={[{ label: t("sidebar.clubs"), to: "/admin/clubs" }]}
       />
 
-      <ClubProfileView
-        club={club}
-        editHref={`/admin/clubs/${club.id}/edit`}
-        editLabel={t("clubs.view.editClub")}
-      />
+      <ClubProfileView club={club} canViewIdDocument />
     </>
   );
 }

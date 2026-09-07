@@ -25,6 +25,7 @@ export const ACTIVITY_TYPES: ActivityTypeOption[] = [
   { id: "wakeboarding", variant: "secondary", icon: "ri-water-flash-line" },
   { id: "skiing", variant: "success", icon: "ri-snowy-line" },
   { id: "snowboarding", variant: "info", icon: "ri-snowy-line" },
+  { id: "other", variant: "secondary", icon: "ri-more-2-line" },
 ];
 
 export type ActivityTypeId = (typeof ACTIVITY_TYPES)[number]["id"];

@@ -2,96 +2,88 @@ import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
 import type { FormWizardStep } from "@/hooks/useFormWizard";
+import type { TeamMemberFormMode, TeamMemberFormValues } from "@/types/teamMember";
 
-export interface TeamMemberFormValues {
-  firstName: string;
-  lastName: string;
-  photo: File[];
-  phone: string;
-  email: string;
-  birthDate: string;
-  role: string;
-  permissionIds: string[];
-  activityTypeIds: string[];
-  languageIds: string[];
-  experienceYears: string;
-  bio: string;
-  certificates: File[];
-  assignedEventIds: string[];
-  isActive: boolean;
-}
+export type { TeamMemberFormValues, TeamMemberFormMode };
+export {
+  initialTeamMemberFormValues,
+  teamMemberToFormValues,
+  buildTeamMemberFormData,
+} from "@/types/teamMember";
 
-export const initialTeamMemberFormValues: TeamMemberFormValues = {
-  firstName: "",
-  lastName: "",
-  photo: [],
-  phone: "",
-  email: "",
-  birthDate: "",
-  role: "",
-  permissionIds: [],
-  activityTypeIds: [],
-  languageIds: [],
-  experienceYears: "",
-  bio: "",
-  certificates: [],
-  assignedEventIds: [],
-  isActive: true,
-};
-
-export function getTeamMemberFormSteps(t: TFunction): FormWizardStep<TeamMemberFormValues>[] {
+export function getTeamMemberFormSteps(
+  t: TFunction,
+  mode: TeamMemberFormMode,
+): FormWizardStep<TeamMemberFormValues>[] {
   return [
     {
       id: "basic",
       label: t("team.form.steps.basic"),
-      fields: ["firstName", "lastName", "photo", "phone", "email", "birthDate"],
-    },
-    {
-      id: "roleAndPermissions",
-      label: t("team.form.steps.roleAndPermissions"),
-      fields: ["role", "permissionIds"],
+      fields:
+        mode === "create"
+          ? [
+              "fullName",
+              "email",
+              "password",
+              "photo",
+              "phone",
+              "birthDate",
+              "platformRole",
+              "permissions",
+            ]
+          : ["fullName", "email", "photo", "phone", "birthDate", "permissions"],
     },
     {
       id: "specialization",
       label: t("team.form.steps.specialization"),
-      fields: ["activityTypeIds", "languageIds", "experienceYears", "bio", "certificates"],
-    },
-    {
-      id: "events",
-      label: t("team.form.steps.events"),
-      fields: ["assignedEventIds"],
-    },
-    {
-      id: "status",
-      label: t("team.form.steps.status"),
-      fields: ["isActive"],
+      fields: [
+        "activityTypeIds",
+        "languageIds",
+        "experienceYears",
+        "bio",
+        "certificates",
+        "isActive",
+      ],
     },
   ];
 }
 
-export function getTeamMemberFormSchema(t: TFunction) {
+/**
+ * `platformRole` is only ever chosen at creation (the backend does not allow
+ * changing it afterwards), and `permissions` only applies to the
+ * `internal_admin` platform role -- a `guide` uses its fixed role defaults
+ * and the backend rejects any custom permissions submitted for it.
+ */
+export function getTeamMemberFormSchema(t: TFunction, mode: TeamMemberFormMode) {
   return Yup.object({
-    firstName: Yup.string().required(t("team.form.validation.firstNameRequired")),
-    lastName: Yup.string().required(t("team.form.validation.lastNameRequired")),
-    photo: Yup.array(),
-    phone: Yup.string().required(t("team.form.validation.phoneRequired")),
-    email: Yup.string().email(t("team.form.validation.emailInvalid")),
+    fullName: Yup.string().required(t("team.form.validation.fullNameRequired")),
+    email: Yup.string()
+      .email(t("team.form.validation.emailInvalid"))
+      .required(t("team.form.validation.emailRequired")),
+    password:
+      mode === "create"
+        ? Yup.string()
+            .min(8, t("team.form.validation.passwordTooShort"))
+            .required(t("team.form.validation.passwordRequired"))
+        : Yup.string(),
+    platformRole: Yup.string(),
+    permissions: Yup.array()
+      .of(Yup.string().required())
+      .when("platformRole", {
+        is: "internal_admin",
+        then: (schema) => schema.min(1, t("team.form.validation.permissionsRequired")),
+      }),
+    activityTypeIds: Yup.array().of(Yup.string().required()),
+    languageIds: Yup.array().of(Yup.string().required()),
+    phone: Yup.string(),
     birthDate: Yup.string(),
-    role: Yup.string().required(t("team.form.validation.roleRequired")),
-    permissionIds: Yup.array().of(Yup.string().required()),
-    activityTypeIds: Yup.array()
-      .of(Yup.string().required())
-      .min(1, t("team.form.validation.activityTypesRequired")),
-    languageIds: Yup.array()
-      .of(Yup.string().required())
-      .min(1, t("team.form.validation.languagesRequired")),
     experienceYears: Yup.number()
       .transform((value, originalValue) => (originalValue === "" ? undefined : value))
       .typeError(t("team.form.validation.experienceYearsInvalid"))
       .min(0, t("team.form.validation.experienceYearsInvalid")),
     bio: Yup.string(),
+    photo: Yup.array(),
     certificates: Yup.array(),
-    assignedEventIds: Yup.array().of(Yup.string().required()),
     isActive: Yup.boolean().required(),
   });
 }

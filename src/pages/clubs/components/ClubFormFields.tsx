@@ -7,16 +7,29 @@ import Input from "@/components/ui/Input/Input";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 
-import { ACTIVITY_TYPES, CLUB_REGIONS, ENTITY_TYPES } from "../ClubsPage.data";
-import type { ClubFormValues } from "../ClubProfile.schema";
+import { ACTIVITY_TYPES } from "@/constants/activityTypes";
+import { REGIONS } from "@/constants/regions";
+import { ENTITY_TYPES, type ClubFormValues } from "@/types/club";
 
 interface ClubFormFieldsProps {
   formik: FormikProps<ClubFormValues>;
   /** Omit to render every section at once (e.g. a single-page profile form). */
   activeStep?: number;
+  /** Current uploaded logo URL, shown until a new file replaces it. */
+  currentLogoUrl?: string | null;
+  /** Current uploaded cover image URL, shown until a new file replaces it. */
+  currentCoverImageUrl?: string | null;
+  /** Whether an owner ID document is already on file. */
+  hasOwnerIdDocument?: boolean;
 }
 
-function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
+function ClubFormFields({
+  formik,
+  activeStep,
+  currentLogoUrl,
+  currentCoverImageUrl,
+  hasOwnerIdDocument,
+}: ClubFormFieldsProps) {
   const showStep = (step: number) => activeStep === undefined || activeStep === step;
   const { t } = useTranslation();
 
@@ -36,10 +49,6 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
     <>
       {showStep(0) && (
       <div className="mb-4">
-        <h5 className="fs-14 text-uppercase text-muted mb-3">
-          {t("clubs.form.steps.general")}
-        </h5>
-
         <Input
           label={t("clubs.form.fields.name.label")}
           name="name"
@@ -70,6 +79,17 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
 
         <div className="row">
           <div className="col-sm-6">
+            {currentLogoUrl && formik.values.logo.length === 0 && (
+              <div className="mb-2">
+                <div className="text-muted fs-13 mb-1">{t("clubs.form.fields.currentImage")}</div>
+                <img
+                  src={currentLogoUrl}
+                  alt=""
+                  className="rounded border"
+                  style={{ width: 80, height: 80, objectFit: "cover" }}
+                />
+              </div>
+            )}
             <ImageUpload
               label={t("clubs.form.fields.logo.label")}
               value={formik.values.logo}
@@ -79,10 +99,24 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
           </div>
 
           <div className="col-sm-6">
+            {currentCoverImageUrl && formik.values.coverImage.length === 0 && (
+              <div className="mb-2">
+                <div className="text-muted fs-13 mb-1">{t("clubs.form.fields.currentImage")}</div>
+                <img
+                  src={currentCoverImageUrl}
+                  alt=""
+                  className="rounded border"
+                  style={{ width: 80, height: 80, objectFit: "cover" }}
+                />
+              </div>
+            )}
             <ImageUpload
               label={t("clubs.form.fields.coverImage.label")}
               value={formik.values.coverImage}
               onChange={(files) => formik.setFieldValue("coverImage", files)}
+              error={
+                formik.touched.coverImage ? String(formik.errors.coverImage ?? "") : undefined
+              }
             />
           </div>
         </div>
@@ -130,7 +164,7 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
               error={formik.touched.baseRegion ? formik.errors.baseRegion : undefined}
             >
               <option value="">{t("clubs.form.fields.baseRegion.placeholder")}</option>
-              {CLUB_REGIONS.map((region) => (
+              {REGIONS.map((region) => (
                 <option key={region} value={region}>
                   {t(`regions.${region}`)}
                 </option>
@@ -280,16 +314,25 @@ function ClubFormFields({ formik, activeStep }: ClubFormFieldsProps) {
         )}
 
         {requiresOwnerId && (
-          <ImageUpload
-            label={t("clubs.form.fields.ownerIdDocument.label")}
-            value={formik.values.ownerIdDocument}
-            onChange={(files) => formik.setFieldValue("ownerIdDocument", files)}
-            error={
-              formik.touched.ownerIdDocument
-                ? String(formik.errors.ownerIdDocument ?? "")
-                : undefined
-            }
-          />
+          <>
+            {hasOwnerIdDocument && formik.values.ownerIdDocument.length === 0 && (
+              <div className="alert alert-info d-flex align-items-center gap-2">
+                <i className="ri-checkbox-circle-line" aria-hidden="true" />
+                {t("clubs.form.fields.ownerIdDocument.alreadyUploaded")}
+              </div>
+            )}
+            <ImageUpload
+              label={t("clubs.form.fields.ownerIdDocument.label")}
+              accept="image/*,application/pdf"
+              value={formik.values.ownerIdDocument}
+              onChange={(files) => formik.setFieldValue("ownerIdDocument", files)}
+              error={
+                formik.touched.ownerIdDocument
+                  ? String(formik.errors.ownerIdDocument ?? "")
+                  : undefined
+              }
+            />
+          </>
         )}
       </div>
       )}
