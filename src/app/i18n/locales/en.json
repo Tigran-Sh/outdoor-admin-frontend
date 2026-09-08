@@ -301,12 +301,16 @@
         },
         "meetingPointDescription": {
           "label": "Meeting Point",
-          "placeholder": "e.g. Main entrance, visitor center"
+          "placeholder": "Search for a place, or enter it manually"
         },
         "meetingPointCoordinates": {
           "label": "Meeting Point Coordinates",
           "placeholder": "e.g. 40.7397, 44.8639",
-          "helperText": "Used to automatically generate a navigation link for participants."
+          "helperText": "Used to automatically generate a navigation link for participants. Filled in automatically when you search above or drag the map pin."
+        },
+        "meetingPointMap": {
+          "loading": "Loading map...",
+          "error": "The map could not be loaded. You can still enter the meeting point and coordinates manually."
         },
         "maxParticipants": {
           "label": "Maximum Participants",
@@ -359,8 +363,10 @@
         "nameRequired": "Please enter an event name",
         "categoryRequired": "Please select a category",
         "dateRequired": "Please select a date",
+        "datePast": "Event date can't be in the past",
         "timeRequired": "Please select a time",
         "endDateRequired": "Please select an end date",
+        "endDateBeforeStart": "End date can't be before the start date",
         "guideRequired": "Please select a guide",
         "languagesRequired": "Please select at least one language",
         "regionRequired": "Please select a region",
@@ -694,6 +700,8 @@
         "passwordRequired": "Please enter a password",
         "passwordTooShort": "Password must be at least 8 characters",
         "permissionsRequired": "Please select at least one permission",
+        "birthDateFuture": "Date of birth can't be in the future",
+        "birthDateTooYoung": "Must be at least {{minAge}} years old",
         "experienceYearsInvalid": "Enter a valid number of years"
       }
     }

@@ -7,6 +7,7 @@ import Badge from "@/components/ui/Badge/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import Card, { CardBody } from "@/components/ui/Card/Card";
 import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
+import LocationMapPreview from "@/components/ui/LocationMapPreview/LocationMapPreview";
 import Radio from "@/components/ui/Radio/Radio";
 import Textarea from "@/components/ui/Textarea/Textarea";
 
@@ -127,10 +128,16 @@ function EventViewPage() {
   }
 
   const category = EVENT_CATEGORIES.find((item) => item.id === event.category);
-  const mapsUrl =
-    event.meetingPointLat && event.meetingPointLng
-      ? `https://www.google.com/maps/search/?api=1&query=${event.meetingPointLat},${event.meetingPointLng}`
-      : undefined;
+  const meetingPointLat = Number(event.meetingPointLat);
+  const meetingPointLng = Number(event.meetingPointLng);
+  const hasMeetingPoint =
+    event.meetingPointLat !== "" &&
+    event.meetingPointLng !== "" &&
+    !Number.isNaN(meetingPointLat) &&
+    !Number.isNaN(meetingPointLng);
+  const mapsUrl = hasMeetingPoint
+    ? `https://www.google.com/maps/search/?api=1&query=${meetingPointLat},${meetingPointLng}`
+    : undefined;
   const isCancelReasonMissing =
     confirmAction === "cancel" &&
     (!cancelReason || (cancelReason === "other" && !cancelReasonOther.trim()));
@@ -356,6 +363,12 @@ function EventViewPage() {
                     <div>{t("events.view.notSpecified")}</div>
                   )}
                 </div>
+
+                {hasMeetingPoint && (
+                  <div className="col-12">
+                    <LocationMapPreview lat={meetingPointLat} lng={meetingPointLng} />
+                  </div>
+                )}
               </div>
             </CardBody>
           </Card>

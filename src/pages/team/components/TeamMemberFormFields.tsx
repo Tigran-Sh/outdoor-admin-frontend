@@ -15,7 +15,9 @@ import {
   type TeamMemberFormMode,
   type TeamMemberFormValues,
 } from "@/types/teamMember";
+import { getDateStringYearsAgo } from "@/utils/date";
 import { generatePassword } from "@/utils/generatePassword";
+import { MIN_TEAM_MEMBER_AGE } from "../TeamMember.schema";
 
 interface ExistingCertificate {
   id: string;
@@ -151,6 +153,7 @@ function TeamMemberFormFields({
                 label={t("team.form.fields.birthDate.label")}
                 name="birthDate"
                 type="date"
+                max={getDateStringYearsAgo(MIN_TEAM_MEMBER_AGE)}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.birthDate}

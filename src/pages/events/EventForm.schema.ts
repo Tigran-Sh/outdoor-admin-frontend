@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
 import type { FormWizardStep } from "@/hooks/useFormWizard";
+import { getTodayDateString } from "@/utils/date";
 
 export interface EventFormValues {
   name: string;
@@ -138,13 +139,28 @@ export function getEventFormSchema(t: TFunction) {
     category: Yup.string().required(t("events.form.validation.categoryRequired")),
     region: Yup.string().required(t("events.form.validation.regionRequired")),
     description: Yup.string(),
-    date: Yup.string().required(t("events.form.validation.dateRequired")),
+    date: Yup.string()
+      .required(t("events.form.validation.dateRequired"))
+      .test(
+        "not-past",
+        t("events.form.validation.datePast"),
+        (value) => !value || value >= getTodayDateString(),
+      ),
     time: Yup.string().required(t("events.form.validation.timeRequired")),
     durationType: Yup.string().required(),
-    endDate: Yup.string().when("durationType", {
-      is: "multi",
-      then: (schema) => schema.required(t("events.form.validation.endDateRequired")),
-    }),
+    endDate: Yup.string()
+      .when("durationType", {
+        is: "multi",
+        then: (schema) => schema.required(t("events.form.validation.endDateRequired")),
+      })
+      .test(
+        "not-before-start",
+        t("events.form.validation.endDateBeforeStart"),
+        function (value) {
+          if (!value || !this.parent.date) return true;
+          return value >= this.parent.date;
+        },
+      ),
     guideId: Yup.string().required(t("events.form.validation.guideRequired")),
     sweepGuideId: Yup.string(),
     languageIds: Yup.array()

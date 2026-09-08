@@ -3,6 +3,10 @@ import type { TFunction } from "i18next";
 
 import type { FormWizardStep } from "@/hooks/useFormWizard";
 import type { TeamMemberFormMode, TeamMemberFormValues } from "@/types/teamMember";
+import { getDateStringYearsAgo, getTodayDateString } from "@/utils/date";
+
+/** Team members (guides/admins) must be at least this old. */
+export const MIN_TEAM_MEMBER_AGE = 18;
 
 export type { TeamMemberFormValues, TeamMemberFormMode };
 export {
@@ -76,7 +80,17 @@ export function getTeamMemberFormSchema(t: TFunction, mode: TeamMemberFormMode) 
     activityTypeIds: Yup.array().of(Yup.string().required()),
     languageIds: Yup.array().of(Yup.string().required()),
     phone: Yup.string(),
-    birthDate: Yup.string(),
+    birthDate: Yup.string()
+      .test(
+        "not-future",
+        t("team.form.validation.birthDateFuture"),
+        (value) => !value || value <= getTodayDateString(),
+      )
+      .test(
+        "min-age",
+        t("team.form.validation.birthDateTooYoung", { minAge: MIN_TEAM_MEMBER_AGE }),
+        (value) => !value || value <= getDateStringYearsAgo(MIN_TEAM_MEMBER_AGE),
+      ),
     experienceYears: Yup.number()
       .transform((value, originalValue) => (originalValue === "" ? undefined : value))
       .typeError(t("team.form.validation.experienceYearsInvalid"))

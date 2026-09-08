@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
+import LocationPicker from "@/components/ui/LocationPicker/LocationPicker";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 
@@ -16,6 +17,7 @@ import {
   EVENT_REGIONS,
   type EventGuideOption,
 } from "@/types/event";
+import { getTodayDateString } from "@/utils/date";
 import type { EventFormValues } from "../EventForm.schema";
 
 interface EventGalleryImagePreview {
@@ -221,6 +223,7 @@ function EventFormFields({
                 label={t("events.form.fields.date.label")}
                 name="date"
                 type="date"
+                min={getTodayDateString()}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.date}
@@ -267,6 +270,7 @@ function EventFormFields({
               label={t("events.form.fields.endDate.label")}
               name="endDate"
               type="date"
+              min={formik.values.date || getTodayDateString()}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.endDate}
@@ -418,47 +422,45 @@ function EventFormFields({
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-sm-6">
-              <Input
-                label={t("events.form.fields.meetingPointDescription.label")}
-                name="meetingPointDescription"
-                placeholder={t(
-                  "events.form.fields.meetingPointDescription.placeholder",
-                )}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.meetingPointDescription}
-                error={
-                  formik.touched.meetingPointDescription
-                    ? formik.errors.meetingPointDescription
-                    : undefined
-                }
-              />
-            </div>
-
-            <div className="col-sm-6">
-              <Input
-                label={t("events.form.fields.meetingPointCoordinates.label")}
-                name="meetingPointCoordinates"
-                placeholder={t(
-                  "events.form.fields.meetingPointCoordinates.placeholder",
-                )}
-                helperText={t(
-                  "events.form.fields.meetingPointCoordinates.helperText",
-                )}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.meetingPointCoordinates}
-                error={
-                  formik.touched.meetingPointCoordinates
-                    ? formik.errors.meetingPointCoordinates
-                    : undefined
-                }
-                containerClassName="mb-0"
-              />
-            </div>
-          </div>
+          <LocationPicker
+            addressLabel={t("events.form.fields.meetingPointDescription.label")}
+            addressName="meetingPointDescription"
+            addressPlaceholder={t(
+              "events.form.fields.meetingPointDescription.placeholder",
+            )}
+            addressValue={formik.values.meetingPointDescription}
+            addressError={
+              formik.touched.meetingPointDescription
+                ? formik.errors.meetingPointDescription
+                : undefined
+            }
+            onAddressChange={(value) =>
+              formik.setFieldValue("meetingPointDescription", value)
+            }
+            onAddressBlur={() =>
+              formik.setFieldTouched("meetingPointDescription", true)
+            }
+            coordinatesLabel={t("events.form.fields.meetingPointCoordinates.label")}
+            coordinatesName="meetingPointCoordinates"
+            coordinatesPlaceholder={t(
+              "events.form.fields.meetingPointCoordinates.placeholder",
+            )}
+            coordinatesHelperText={t(
+              "events.form.fields.meetingPointCoordinates.helperText",
+            )}
+            coordinatesValue={formik.values.meetingPointCoordinates}
+            coordinatesError={
+              formik.touched.meetingPointCoordinates
+                ? formik.errors.meetingPointCoordinates
+                : undefined
+            }
+            onCoordinatesChange={(value) =>
+              formik.setFieldValue("meetingPointCoordinates", value)
+            }
+            onCoordinatesBlur={() =>
+              formik.setFieldTouched("meetingPointCoordinates", true)
+            }
+          />
         </div>
       )}
 
