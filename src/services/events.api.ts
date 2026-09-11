@@ -2,6 +2,12 @@ import httpClient from "./httpClient";
 
 import type { PaginatedResponse } from "@/types/adminUser";
 import { buildEventFormData, mapEventFromApi, type Event, type EventApi, type EventListParams } from "@/types/event";
+import {
+  mapGuideAvailabilityFromApi,
+  type GuideAvailability,
+  type GuideAvailabilityApi,
+  type GuideAvailabilityParams,
+} from "@/types/guideAvailability";
 
 import type { EventFormValues } from "@/pages/events/EventForm.schema";
 
@@ -49,4 +55,14 @@ export async function cancelEvent(
     reason_other: reasonOther,
   });
   return mapEventFromApi(data);
+}
+
+export async function getGuideAvailability(
+  params: GuideAvailabilityParams = {},
+): Promise<GuideAvailability[]> {
+  const { data } = await httpClient.get<GuideAvailabilityApi[]>(
+    `${BASE_URL}guide-availability/`,
+    { params },
+  );
+  return data.map(mapGuideAvailabilityFromApi);
 }

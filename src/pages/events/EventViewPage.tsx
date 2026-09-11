@@ -71,6 +71,7 @@ function EventViewPage() {
   const canPublish = capabilities.includes("publish_event");
   const canCancel = capabilities.includes("cancel_event");
   const canEdit = capabilities.includes("edit_event");
+  const canViewTeam = capabilities.includes("view_team_members");
 
   function closeConfirmAction() {
     setConfirmAction(null);
@@ -432,7 +433,14 @@ function EventViewPage() {
               <h5 className="card-title mb-3">{t("events.form.fields.guide.label")}</h5>
 
               <div className="d-flex flex-column gap-3">
-                <DetailField label={t("events.form.fields.guide.label")} value={event.guideName} />
+                <div>
+                  <div className="text-muted fs-13">{t("events.form.fields.guide.label")}</div>
+                  {event.guide && event.guideName && canViewTeam ? (
+                    <Link to={`/club/team/${event.guide}`}>{event.guideName}</Link>
+                  ) : (
+                    <div>{event.guideName || t("events.view.notSpecified")}</div>
+                  )}
+                </div>
                 <DetailField
                   label={t("events.table.region")}
                   value={t(`regions.${event.region}`)}

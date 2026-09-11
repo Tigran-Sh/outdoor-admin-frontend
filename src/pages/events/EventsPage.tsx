@@ -79,6 +79,7 @@ function EventsPage() {
   const canEdit = capabilities.includes("edit_event");
   const canPublish = capabilities.includes("publish_event");
   const canCancel = capabilities.includes("cancel_event");
+  const canViewTeam = capabilities.includes("view_team_members");
 
   const eventsQuery = useQuery({
     queryKey: [
@@ -207,7 +208,12 @@ function EventsPage() {
     {
       key: "guide",
       header: t("events.table.guide"),
-      render: (row) => row.guideName || "–",
+      render: (row) =>
+        row.guide && row.guideName && canViewTeam ? (
+          <Link to={`/club/team/${row.guide}`}>{row.guideName}</Link>
+        ) : (
+          row.guideName || "–"
+        ),
     },
   ];
 

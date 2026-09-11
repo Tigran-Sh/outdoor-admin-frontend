@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +32,16 @@ function CreateEventPage() {
   const [saveError, setSaveError] = useState<string>();
   const [isSaving, setIsSaving] = useState(false);
 
+  /**
+   * The wizard autosaves after every step (see `handleNext`), but
+   * `gallery_images` is an additive field on the backend -- each request
+   * appends whatever files it's sent, rather than replacing the gallery.
+   * Resending the same `File` objects on every subsequent autosave would
+   * re-append (and duplicate) them, so we only ever send gallery files that
+   * haven't already been synced to the server.
+   */
+  const syncedGalleryFilesRef = useRef<File[]>([]);
+
   const guidesQuery = useQuery({
     queryKey: ["team-members-all"],
     queryFn: () => listTeamMembers({ page_size: 200 }),
@@ -45,7 +55,12 @@ function CreateEventPage() {
     setIsSaving(true);
     setSaveError(undefined);
     try {
-      const event = eventId ? await updateEvent(eventId, values) : await createEvent(values);
+      const newGalleryImages = values.galleryImages.filter(
+        (file) => !syncedGalleryFilesRef.current.includes(file),
+      );
+      const payload = { ...values, galleryImages: newGalleryImages };
+      const event = eventId ? await updateEvent(eventId, payload) : await createEvent(payload);
+      syncedGalleryFilesRef.current = [...syncedGalleryFilesRef.current, ...newGalleryImages];
       setEventId(event.id);
       return event;
     } catch (error) {

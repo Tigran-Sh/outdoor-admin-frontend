@@ -58,6 +58,7 @@
     "announcements": "Объявления",
     "rolesSettings": "Роли и настройки",
     "events": "Мероприятия",
+    "calendar": "Календарь",
     "participants": "Участники",
     "checkIn": "Регистрация",
     "team": "Команда",
@@ -68,6 +69,17 @@
     "myEvents": "Мои мероприятия",
     "confirmCompletion": "Подтвердить завершение",
     "myProfile": "Мой профиль"
+  },
+  "calendar": {
+    "title": "Командный календарь",
+    "guides": "Гиды",
+    "available": "Свободен",
+    "busy": "Занят",
+    "noGuides": "В вашей команде пока нет гидов.",
+    "loadError": "Не удалось загрузить календарь. Пожалуйста, попробуйте снова.",
+    "today": "Сегодня",
+    "month": "Месяц",
+    "list": "Список"
   },
   "dashboard": {
     "events": {
@@ -156,6 +168,10 @@
       "region": "Регион",
       "date": "Дата",
       "guide": "Назначенный гид",
+      "club": "Клуб",
+      "status": "Статус",
+      "difficulty": "Сложность",
+      "price": "Цена",
       "actions": "Действия"
     },
     "status": {
@@ -384,6 +400,18 @@
         "priceInvalid": "Введите корректную цену",
         "fileTooLarge": "Файл должен быть меньше 5 МБ",
         "imageTypeInvalid": "Загрузите изображение JPEG, PNG или WebP"
+      }
+    },
+    "admin": {
+      "empty": "Пока нет мероприятий.",
+      "emptyFiltered": "Ни одно мероприятие не соответствует этим фильтрам.",
+      "clearFilters": "Сбросить фильтры",
+      "filters": {
+        "clubNamePlaceholder": "Поиск по названию клуба",
+        "searchPlaceholder": "Поиск по названию, описанию или клубу"
+      },
+      "view": {
+        "cancelledAt": "Отменено:"
       }
     }
   },

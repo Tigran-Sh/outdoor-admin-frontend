@@ -58,6 +58,7 @@
     "announcements": "Announcements",
     "rolesSettings": "Roles & Settings",
     "events": "Events",
+    "calendar": "Calendar",
     "participants": "Participants",
     "checkIn": "Check-in",
     "team": "Team",
@@ -68,6 +69,17 @@
     "myEvents": "My Events",
     "confirmCompletion": "Confirm Completion",
     "myProfile": "My Profile"
+  },
+  "calendar": {
+    "title": "Team Calendar",
+    "guides": "Guides",
+    "available": "Available",
+    "busy": "Busy",
+    "noGuides": "No guides on your team yet.",
+    "loadError": "Failed to load the calendar. Please try again.",
+    "today": "Today",
+    "month": "Month",
+    "list": "List"
   },
   "dashboard": {
     "events": {
@@ -156,6 +168,10 @@
       "region": "Region",
       "date": "Date",
       "guide": "Assigned Guide",
+      "club": "Club",
+      "status": "Status",
+      "difficulty": "Difficulty",
+      "price": "Price",
       "actions": "Actions"
     },
     "status": {
@@ -384,6 +400,18 @@
         "priceInvalid": "Enter a valid price",
         "fileTooLarge": "File must be smaller than 5 MB",
         "imageTypeInvalid": "Please upload a JPEG, PNG, or WebP image"
+      }
+    },
+    "admin": {
+      "empty": "No events yet.",
+      "emptyFiltered": "No events match these filters.",
+      "clearFilters": "Clear filters",
+      "filters": {
+        "clubNamePlaceholder": "Search by club name",
+        "searchPlaceholder": "Search by title, description or club"
+      },
+      "view": {
+        "cancelledAt": "Cancelled on"
       }
     }
   },

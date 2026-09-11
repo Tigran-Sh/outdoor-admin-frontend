@@ -213,6 +213,10 @@ export function mapEventFromApi(raw: EventApi): Event {
 export const EVENT_ORDERING_FIELDS = ["start_at", "created_at", "title"] as const;
 export type EventOrderingField = (typeof EVENT_ORDERING_FIELDS)[number];
 
+/** Platform Admin only -- the club-scoped events list has no "club" column to sort by. */
+export const ADMIN_EVENT_ORDERING_FIELDS = [...EVENT_ORDERING_FIELDS, "club__name"] as const;
+export type AdminEventOrderingField = (typeof ADMIN_EVENT_ORDERING_FIELDS)[number];
+
 export interface EventListParams {
   page?: number;
   page_size?: number;
@@ -220,8 +224,10 @@ export interface EventListParams {
   category?: string;
   region?: string;
   difficulty?: string;
-  /** Platform Admin only. */
+  /** Platform Admin only -- a specific club's UUID, e.g. from a club picker. */
   club?: string;
+  /** Platform Admin only -- partial, case-insensitive club name filter. */
+  club_name?: string;
   search?: string;
   ordering?: string;
 }

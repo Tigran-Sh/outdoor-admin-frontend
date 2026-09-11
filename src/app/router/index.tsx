@@ -12,6 +12,7 @@ import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 
 import AdminDashboardPage from "@/pages/admin/DashboardPage";
 import ClubDashboardPage from "@/pages/club/DashboardPage";
+import CalendarPage from "@/pages/club/CalendarPage";
 import EventsPage from "@/pages/events/EventsPage";
 import CreateEventPage from "@/pages/events/CreateEventPage";
 import EditEventPage from "@/pages/events/EditEventPage";
@@ -20,6 +21,8 @@ import ClubsPage from "@/pages/clubs/ClubsPage";
 import CreateClubPage from "@/pages/clubs/CreateClubPage";
 import EditClubPage from "@/pages/clubs/EditClubPage";
 import AdminClubViewPage from "@/pages/clubs/AdminClubViewPage";
+import AdminEventsPage from "@/pages/admin/events/AdminEventsPage";
+import AdminEventViewPage from "@/pages/admin/events/AdminEventViewPage";
 import ClubProfilePage from "@/pages/clubs/ClubProfilePage";
 import ClubViewPage from "@/pages/clubs/ClubViewPage";
 import TeamPage from "@/pages/team/TeamPage";
@@ -72,6 +75,11 @@ const router = createBrowserRouter([
           {
             path: "/profile",
             element: <ProfilePage />,
+          },
+
+          {
+            path: "/club/calendar",
+            element: <CalendarPage />,
           },
 
           {
@@ -145,6 +153,16 @@ const router = createBrowserRouter([
               {
                 path: "/admin/clubs/:id",
                 element: <AdminClubViewPage />,
+              },
+
+              {
+                path: "/admin/events",
+                element: <AdminEventsPage />,
+              },
+
+              {
+                path: "/admin/events/:id",
+                element: <AdminEventViewPage />,
               },
 
               {

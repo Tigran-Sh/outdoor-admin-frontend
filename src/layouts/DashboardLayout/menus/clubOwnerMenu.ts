@@ -19,6 +19,12 @@ export const clubOwnerMenu: SidebarNavSection[] = [
         icon: "ri-calendar-check-line",
       },
       {
+        key: "calendar",
+        labelKey: "sidebar.calendar",
+        path: "/club/calendar",
+        icon: "ri-calendar-2-line",
+      },
+      {
         key: "participants",
         labelKey: "sidebar.participants",
         icon: "ri-group-line",

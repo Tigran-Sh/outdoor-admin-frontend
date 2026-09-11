@@ -25,6 +25,7 @@ export const platformAdminMenu: SidebarNavSection[] = [
       {
         key: "events-moderation",
         labelKey: "sidebar.eventsModeration",
+        path: "/admin/events",
         icon: "ri-calendar-check-line",
       },
       {
