@@ -104,7 +104,7 @@ function LoginPage() {
           />
 
           <div className="mt-4">
-            <Button type="submit" variant="success" className="w-100" loading={formik.isSubmitting}>
+            <Button type="submit" variant="primary" className="w-100" loading={formik.isSubmitting}>
               {t("auth.login.signIn")}
             </Button>
           </div>

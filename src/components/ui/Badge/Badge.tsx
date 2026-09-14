@@ -13,6 +13,10 @@ function getBadgeClassName({
 
   classes.push(appearance === "subtle" ? `bg-${variant}-subtle text-${variant}` : `bg-${variant}`);
 
+  // Matches the template's Default Badges example, which pairs the light variant with
+  // `text-dark` (white badge text is unreadable on the near-white `bg-light`).
+  if (appearance === "solid" && variant === "light") classes.push("text-dark");
+
   if (pill) classes.push("rounded-pill");
   if (className) classes.push(className);
 

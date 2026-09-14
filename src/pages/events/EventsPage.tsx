@@ -277,7 +277,6 @@ function EventsPage() {
             canCreate && (
               <Button
                 variant="primary"
-                leftIcon={<i className="ri-add-line align-bottom" />}
                 onClick={() => navigate("/club/events/create")}
               >
                 {t("events.createEvent")}
@@ -288,7 +287,7 @@ function EventsPage() {
         <CardBody>
           {isGuide && <p className="text-muted mb-3">{t("events.myEventsNotice")}</p>}
 
-          <div className="d-flex flex-wrap align-items-start gap-2 mb-4">
+          <div className="d-flex flex-wrap align-items-start gap-3 mb-4">
             <div className="search-box" style={{ maxWidth: 240 }}>
               <Input
                 value={searchInput}
@@ -381,7 +380,6 @@ function EventsPage() {
                 getRowKey={(row) => row.id}
                 emptyMessage={t("events.empty")}
                 card
-                className="bg-light"
               />
 
               <Pagination

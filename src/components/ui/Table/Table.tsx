@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -37,8 +37,16 @@ function Table<T>({
   className,
 }: TableProps<T>) {
   const { t } = useTranslation();
+  const [searchInput, setSearchInput] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  // Debounce the search box the same way the template's TableContainerReactTable does
+  // (DebouncedInput, 500ms) so filtering large datasets doesn't re-run on every keystroke.
+  useEffect(() => {
+    const timeout = setTimeout(() => setGlobalSearch(searchInput), 500);
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
 
   const filteredData = useMemo(() => {
     if (!searchable || !globalSearch.trim()) return data;
@@ -90,7 +98,7 @@ function Table<T>({
         className,
       )}
     >
-      <thead className="bg-secondary-subtle text-secondary">
+      <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
@@ -177,7 +185,7 @@ function Table<T>({
           <input
             type="search"
             className="form-control"
-            value={globalSearch}
+            value={searchInput}
             placeholder={
               searchPlaceholder ?? t("common.table.searchPlaceholder")
             }
@@ -185,7 +193,7 @@ function Table<T>({
               searchPlaceholder ?? t("common.table.searchPlaceholder")
             }
             onChange={(event) => {
-              setGlobalSearch(event.target.value);
+              setSearchInput(event.target.value);
               table.setPageIndex(0);
             }}
           />
@@ -213,7 +221,7 @@ function Table<T>({
             })}
           </div>
 
-          <ul className="pagination pagination-separated mb-0">
+          <ul className="pagination pagination-separated pagination-md mb-0">
             <li
               className={joinClassNames(
                 "page-item",

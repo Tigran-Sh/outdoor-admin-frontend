@@ -27,7 +27,7 @@ function Pagination({ page, pageSize, totalCount, onPageChange, className }: Pag
         {t("common.table.showing", { from: fromRow, to: toRow, total: totalCount })}
       </div>
 
-      <ul className="pagination pagination-separated mb-0">
+      <ul className="pagination pagination-separated pagination-md mb-0">
         <li className={joinClassNames("page-item", page <= 1 && "disabled")}>
           <button
             type="button"

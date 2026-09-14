@@ -52,42 +52,40 @@ function Stepper({
 }: StepperProps) {
   if (variant === "arrow") {
     return (
-      <ul
-        className={joinClassNames("nav nav-pills nav-justified step-arrow-nav", className)}
-        aria-label={ariaLabel}
-      >
-        {steps.map((step, index) => (
-          <StepButton
-            key={step.id}
-            index={index}
-            activeStep={activeStep}
-            onStepChange={onStepChange}
-          >
-            {step.label}
-          </StepButton>
-        ))}
-      </ul>
+      <div className={joinClassNames("step-arrow-nav", className)}>
+        <ul className="nav nav-pills nav-justified" aria-label={ariaLabel}>
+          {steps.map((step, index) => (
+            <StepButton
+              key={step.id}
+              index={index}
+              activeStep={activeStep}
+              onStepChange={onStepChange}
+            >
+              {step.label}
+            </StepButton>
+          ))}
+        </ul>
+      </div>
     );
   }
 
   if (variant === "vertical") {
     return (
-      <ul
-        className={joinClassNames("nav flex-column vertical-navs-step", className)}
-        aria-label={ariaLabel}
-      >
-        {steps.map((step, index) => (
-          <StepButton
-            key={step.id}
-            index={index}
-            activeStep={activeStep}
-            onStepChange={onStepChange}
-          >
-            <i className="ri-close-circle-fill step-icon me-2" aria-hidden="true" />
-            <span className="step-title">{step.label}</span>
-          </StepButton>
-        ))}
-      </ul>
+      <div className={joinClassNames("vertical-navs-step", className)}>
+        <ul className="nav flex-column" aria-label={ariaLabel}>
+          {steps.map((step, index) => (
+            <StepButton
+              key={step.id}
+              index={index}
+              activeStep={activeStep}
+              onStepChange={onStepChange}
+            >
+              <i className="ri-close-circle-fill step-icon me-2" aria-hidden="true" />
+              <span className="step-title">{step.label}</span>
+            </StepButton>
+          ))}
+        </ul>
+      </div>
     );
   }
 

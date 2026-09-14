@@ -49,9 +49,6 @@
 
     th,
     td {
-        padding-top: 0.9rem;
-        padding-bottom: 0.9rem;
-
         &:first-child{
             padding-left: 16px;
         }
@@ -59,12 +56,6 @@
         &:last-child{
             padding-right: 16px;
         }
-    }
-
-    thead th {
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-        font-weight: $font-weight-medium;
     }
 
     .table > :not(:first-child) {

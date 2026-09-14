@@ -2,7 +2,8 @@ import { Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher/LanguageSwitcher";
-import ThemeSwitcher from "@/components/ui/ThemeSwitcher/ThemeSwitcher";
+// Dark mode is disabled on the auth pages for now -- keep the light theme only.
+// import ThemeSwitcher from "@/components/ui/ThemeSwitcher/ThemeSwitcher";
 
 function AuthLayout() {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ function AuthLayout() {
         className="position-fixed top-0 end-0 m-3 d-flex align-items-center gap-2"
         style={{ zIndex: 1000 }}
       >
-        <ThemeSwitcher className="text-white" />
+        {/* <ThemeSwitcher className="text-white" /> */}
         <LanguageSwitcher />
       </div>
 

@@ -43,17 +43,18 @@ $sidebar-gradient-dark-mode: false;
 // scss-docs-start gray-color-variables
 // Odex Neutral primitive ramp — warm neutral, deliberately not grey. Aliased 1:1 onto
 // Bootstrap's grey slots so every component that reads $gray-* inherits the Odex palette.
-$white: #ffffff; // Neutral/000
-$gray-100: #f7f1e9; // Neutral/100
-$gray-200: #edeae3; // Neutral/150
-$gray-300: #e8daca; // Neutral/200
-$gray-400: #d5c3ae; // Neutral/300
-$gray-500: #a8a198; // Neutral/350
-$gray-600: #8c857c; // Neutral/450
-$gray-700: #786e62; // Neutral/500
-$gray-800: #6e645a; // Neutral/600
-$gray-900: #1c1b18; // Neutral/900 (also text/primary)
-$black: #1a1917; // Neutral/950 — warm near-black, never pure black
+// Ported verbatim from the Velzon Minimal template's default palette.
+$white: #fff;
+$gray-100: #f3f6f9;
+$gray-200: #eff2f7;
+$gray-300: #e9ebec;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #878a99;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
 
 // fusv-disable
 // scss-docs-start gray-colors-map
@@ -72,18 +73,16 @@ $grays: (
 // fusv-enable
 
 // scss-docs-start color-variables
-// Odex hues aliased from the primitive ramps: $orange/$green/$yellow/$red/$blue drive the
-// theme colors below (Apricot/Forest/Success/Warning/Danger/Info primitives, 500 stop).
-// $indigo/$purple/$pink/$teal/$cyan are undefined by Odex and kept as Bootstrap stock utility
-// hues (.bg-purple etc.) -- not used by any themed component.
-$blue: #2c6e9b; // Info/500
+// Ported verbatim from the template. $cyan/$gray-600/$green/$blue/$yellow/$red below become
+// $primary/$secondary/$success/$info/$warning/$danger.
+$blue: #32ccff;
 $indigo: #516196;
 $purple: #8772f9;
 $pink: #f672a7;
-$red: #c62828; // Danger/500
-$orange: #e86a25; // Apricot/500 (brand/primary)
-$yellow: #b8860b; // Warning/500
-$green: #2e7d4f; // Success/500
+$red: #f06548;
+$orange: #f1963b;
+$yellow: #FFBC0A;
+$green: #00bd9d;
 $teal: #02a8b5;
 $cyan: #25a0e2;
 // scss-docs-end color-variables
@@ -108,14 +107,12 @@ $colors: (
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-// Odex fix: the template default of 1.30 makes Bootstrap pick white text on Apricot/500
-// (measured contrast 3.22), which fails WCAG AA. 4.5 forces the correct dark on-primary text.
-$min-contrast-ratio: 4.5;
+// Matches the template's own value exactly (Bootstrap's own default is 4.5, which flips several
+// theme-color buttons/badges to dark-on-color text instead of the template's white-on-color look).
+$min-contrast-ratio: 1.3;
 
 // Customize the light and dark text colors for use in our color contrast function.
-// $color-contrast-dark is Odex brand/on-primary (Apricot/950) -- text on an apricot (or any
-// other light/mid-tone theme colour) fill is this warm brown, never pure black or white.
-$color-contrast-dark: #2a0e04;
+$color-contrast-dark: $gray-900;
 $color-contrast-light: $white;
 
 // fusv-disable
@@ -340,15 +337,15 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-// Odex semantic/Light aliases
-$primary: #e86a25; // brand/primary -- Apricot/500
-$secondary: #2e6b5e; // brand/secondary -- Forest/600
-$success: #2e7d4f; // state/success -- Success/500
-$info: #2c6e9b; // state/info -- Info/500
-$warning: #b8860b; // state/warning -- Warning/500
-$danger: #c62828; // state/danger -- Danger/500
-$light: #fdfaf6; // surface/1 -- Neutral/050
-$dark: #1c1b18; // text/primary -- Neutral/900
+// Ported from the Velzon Minimal template's theme colors.
+$primary: $cyan;
+$secondary: $gray-600;
+$success: $green;
+$info: $blue;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-800;
 
 // scss-docs-end theme-color-variables
 
@@ -366,27 +363,28 @@ $theme-colors: (
 // scss-docs-end theme-colors-map
 
 // scss-docs-start theme-text-variables
-// Odex state/on-*-tint and brand pressed tones (the colour used for text sitting on the
-// matching -bg-subtle tint below).
-$primary-text-emphasis: #a44112; // brand/primary-pressed -- Apricot/700
-$secondary-text-emphasis: #10302a; // brand-secondary pressed -- Forest/800
-$success-text-emphasis: #1c5433; // state/on-success-tint
-$info-text-emphasis: #1e4e6f; // state/on-info-tint
-$warning-text-emphasis: #8a6206; // state/on-warning-tint
-$danger-text-emphasis: #8e1b1b; // state/on-danger-tint
-$light-text-emphasis: #6e645a; // text/secondary -- Neutral/600
-$dark-text-emphasis: #1c1b18; // text/primary -- Neutral/900
+// Bootstrap's own default formulas, computed against the template's theme colors above (kept
+// explicit rather than left to Bootstrap's internal !default so they survive the double import
+// of bootstrap/scss/variables in main.scss).
+$primary-text-emphasis: shade-color($primary, 60%);
+$secondary-text-emphasis: shade-color($secondary, 60%);
+$success-text-emphasis: shade-color($success, 60%);
+$info-text-emphasis: shade-color($info, 60%);
+$warning-text-emphasis: shade-color($warning, 60%);
+$danger-text-emphasis: shade-color($danger, 60%);
+$light-text-emphasis: $gray-700;
+$dark-text-emphasis: $gray-700;
 // scss-docs-end theme-text-variables
 
 // scss-docs-start theme-bg-subtle-variables
-$primary-bg-subtle: #fadcc2; // brand/primary-subtle -- Apricot/100
-$secondary-bg-subtle: #dce9e2; // brand/secondary-subtle -- Forest/100
-$success-bg-subtle: #e3f1e8; // state/success-tint
-$info-bg-subtle: #e2eff7; // state/info-tint
-$warning-bg-subtle: #fdf3d6; // state/warning-tint
-$danger-bg-subtle: #fbe4e4; // state/danger-tint
-$light-bg-subtle: #fdfaf6; // surface/1 -- Neutral/050
-$dark-bg-subtle: #d5c3ae; // Neutral/300
+$primary-bg-subtle: tint-color($primary, 80%);
+$secondary-bg-subtle: tint-color($secondary, 80%);
+$success-bg-subtle: tint-color($success, 80%);
+$info-bg-subtle: tint-color($info, 80%);
+$warning-bg-subtle: tint-color($warning, 80%);
+$danger-bg-subtle: tint-color($danger, 80%);
+$light-bg-subtle: mix($gray-100, $white);
+$dark-bg-subtle: $gray-400;
 // scss-docs-end theme-bg-subtle-variables
 
 // scss-docs-start theme-border-subtle-variables
@@ -396,8 +394,8 @@ $success-border-subtle: tint-color($success, 60%);
 $info-border-subtle: tint-color($info, 60%);
 $warning-border-subtle: tint-color($warning, 60%);
 $danger-border-subtle: tint-color($danger, 60%);
-$light-border-subtle: #e8daca; // border/default -- Neutral/200
-$dark-border-subtle: #a8a198; // Neutral/350
+$light-border-subtle: $gray-200;
+$dark-border-subtle: $gray-500;
 // scss-docs-end theme-border-subtle-variables
 
 // Characters which are escaped by the escape-svg function
@@ -505,8 +503,8 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #fdf0e4; // surface/0 -- Apricot/050, page ground on every screen
-$body-color: $gray-900; // text/primary -- Neutral/900
+$body-bg: #ffffff;
+$body-color: $gray-900;
 $body-text-align: null;
 
 $body-secondary-color: $gray-600;
@@ -746,7 +744,7 @@ $headings-font-family: $font-family-primary;
 $headings-font-style: null;
 $headings-font-weight: 500; // Medium, every level of the Odex scale
 $headings-line-height: 1.3; // per-level overrides (125%/130%/140%) in components/_type.scss
-$headings-color: null; // inherit text/primary ($body-color), not a muted grey
+$headings-color: $gray-700;
 // scss-docs-end headings-variables
 
 // scss-docs-start display-headings
@@ -847,7 +845,9 @@ $table-color: var(--#{$prefix}body-color);
 $table-bg: transparent;
 $table-accent-bg: transparent;
 
-$table-th-font-weight: $font-weight-semibold;
+// Deliberately normal (not the template's semibold) so every header cell reads the same
+// weight, regardless of column.
+$table-th-font-weight: $font-weight-normal;
 
 $table-striped-color: $table-color;
 $table-striped-bg-factor: .02;

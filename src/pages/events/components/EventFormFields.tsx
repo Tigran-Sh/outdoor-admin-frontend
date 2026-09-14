@@ -2,11 +2,13 @@ import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
+import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
 import LocationPicker from "@/components/ui/LocationPicker/LocationPicker";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
+import TimePicker from "@/components/ui/TimePicker/TimePicker";
 
 import {
   EVENT_CATEGORIES,
@@ -219,10 +221,9 @@ function EventFormFields({
 
           <div className="row">
             <div className="col-sm-4">
-              <Input
+              <DatePicker
                 label={t("events.form.fields.date.label")}
                 name="date"
-                type="date"
                 min={getTodayDateString()}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -232,10 +233,9 @@ function EventFormFields({
             </div>
 
             <div className="col-sm-4">
-              <Input
+              <TimePicker
                 label={t("events.form.fields.time.label")}
                 name="time"
-                type="time"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.time}
@@ -266,10 +266,9 @@ function EventFormFields({
           </div>
 
           {formik.values.durationType === "multi" && (
-            <Input
+            <DatePicker
               label={t("events.form.fields.endDate.label")}
               name="endDate"
-              type="date"
               min={formik.values.date || getTodayDateString()}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

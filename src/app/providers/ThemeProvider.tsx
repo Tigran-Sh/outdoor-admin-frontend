@@ -12,7 +12,9 @@ function getInitialTheme(): ThemeMode {
   const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
 
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  // Always default to light for first-time visitors, regardless of the OS's
+  // prefers-color-scheme -- the user can still switch to dark via the theme toggle.
+  return "light";
 }
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {

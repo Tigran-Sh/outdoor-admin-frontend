@@ -208,7 +208,7 @@ function AdminEventsPage() {
         <CardHeader title={t("sidebar.eventsModeration")} />
 
         <CardBody>
-          <div className="d-flex flex-wrap align-items-start gap-2 mb-4">
+          <div className="d-flex flex-wrap align-items-start gap-3 mb-4">
             <div className="search-box" style={{ maxWidth: 220 }}>
               <Input
                 value={clubNameInput}
@@ -299,7 +299,6 @@ function AdminEventsPage() {
                 getRowKey={(row) => row.id}
                 emptyMessage={t("events.admin.empty")}
                 card
-                className="bg-light"
               />
 
               <Pagination

@@ -2,6 +2,7 @@ import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
 import Checkbox from "@/components/ui/Checkbox/Checkbox";
+import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
 import Select from "@/components/ui/Select/Select";
@@ -149,10 +150,9 @@ function TeamMemberFormFields({
             </div>
 
             <div className="col-sm-6">
-              <Input
+              <DatePicker
                 label={t("team.form.fields.birthDate.label")}
                 name="birthDate"
-                type="date"
                 max={getDateStringYearsAgo(MIN_TEAM_MEMBER_AGE)}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

@@ -252,7 +252,6 @@ function UsersPage() {
           actions={
             <Button
               variant="primary"
-              leftIcon={<i className="ri-add-line align-bottom" />}
               onClick={() => navigate("/admin/users/create")}
             >
               {t("admin.users.createUser")}
@@ -296,7 +295,7 @@ function UsersPage() {
             ))}
           </div>
 
-          <div className="d-flex flex-wrap align-items-start gap-2 mb-5">
+          <div className="d-flex flex-wrap align-items-start gap-3 mb-4">
             <div className="search-box" style={{ maxWidth: 300 }}>
               <Input
                 value={searchInput}
@@ -346,7 +345,6 @@ function UsersPage() {
                 getRowKey={(row) => row.id}
                 emptyMessage={t("admin.users.empty")}
                 card
-                className="bg-light"
               />
 
               <Pagination

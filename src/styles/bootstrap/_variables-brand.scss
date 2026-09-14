@@ -19,31 +19,35 @@
 // PRIMITIVES -- scoped to nothing. Do not use outside this file.
 // ---------------------------------------------------------------------------------------------
 
+// Ramps derived from the template's $primary/$secondary (cyan/gray-600) rather than the old
+// Odex apricot/forest brand hues, so every consumer keyed off these maps (border-focus, dark
+// mode --bs-primary/--bs-secondary, button hover/active shades, difficulty chips) stays
+// consistent with the template palette without having to touch each consumer individually.
 $-apricot: (
-  "050": #fdf0e4,
-  "100": #fadcc2,
-  "200": #f5be93,
-  "300": #f09b62,
-  "400": #ed7f3b,
-  "500": #e86a25,
-  "600": #c9541a,
-  "700": #a44112,
-  "800": #7a2f0c,
-  "900": #4a1b06,
-  "950": #2a0e04,
+  "050": tint-color($primary, 92%),
+  "100": tint-color($primary, 80%),
+  "200": tint-color($primary, 60%),
+  "300": tint-color($primary, 40%),
+  "400": tint-color($primary, 20%),
+  "500": $primary,
+  "600": shade-color($primary, 10%),
+  "700": shade-color($primary, 25%),
+  "800": shade-color($primary, 45%),
+  "900": shade-color($primary, 65%),
+  "950": shade-color($primary, 80%),
 );
 
 $-forest: (
-  "050": #e8f2ee,
-  "100": #dce9e2,
-  "200": #c7e0d6,
-  "300": #8fbcaa,
-  "400": #5e9683,
-  "500": #3f7c6b,
-  "600": #2e6b5e,
-  "700": #1b4a3e,
-  "800": #10302a,
-  "900": #0a1f1b,
+  "050": tint-color($secondary, 92%),
+  "100": tint-color($secondary, 80%),
+  "200": tint-color($secondary, 65%),
+  "300": tint-color($secondary, 45%),
+  "400": tint-color($secondary, 25%),
+  "500": tint-color($secondary, 10%),
+  "600": $secondary,
+  "700": shade-color($secondary, 20%),
+  "800": shade-color($secondary, 40%),
+  "900": shade-color($secondary, 60%),
 );
 
 $-neutral: (
@@ -106,18 +110,18 @@ $brand-accent: map-get($-accent, "500");
 $brand-on-accent: map-get($-accent, "900");
 $brand-accent-subtle: map-get($-accent, "100");
 
-$surface-0: map-get($-apricot, "050"); // = $body-bg
-$surface-1: map-get($-neutral, "050"); // = $light
-$surface-2: map-get($-neutral, "000"); // = $white
+$surface-0: $white; // = $body-bg (template)
+$surface-1: $gray-100; // = $light (template)
+$surface-2: $white;
 
-$border-default: map-get($-neutral, "200"); // = $border-color
-$border-strong: map-get($-neutral, "300"); // = $border-color-translucent
+$border-default: $gray-300; // = $border-color (template)
+$border-strong: $gray-400; // = $border-color-translucent (template)
 $border-focus: map-get($-apricot, "500"); // = $primary
 
-$text-primary: map-get($-neutral, "900"); // = $body-color
-$text-secondary: map-get($-neutral, "600");
-$text-muted: map-get($-neutral, "500");
-$text-on-photo: map-get($-neutral, "000");
+$text-primary: $gray-900; // = $body-color (template)
+$text-secondary: $gray-600;
+$text-muted: $gray-500;
+$text-on-photo: $white;
 
 $state-success-tint: map-get($-success-primitive, "100");
 $state-on-success-tint: map-get($-success-primitive, "700");
@@ -143,9 +147,9 @@ $difficulty-extreme-text: map-get($-forest, "100");
 $brand-secondary-hover: map-get($-forest, "700");
 $brand-secondary-pressed: map-get($-forest, "800");
 $state-danger-hover: map-get($-danger-primitive, "700");
-$surface-hover: map-get($-neutral, "100");
-$surface-pressed: map-get($-neutral, "200");
-$surface-locked: map-get($-neutral, "100");
+$surface-hover: $gray-100;
+$surface-pressed: $gray-200;
+$surface-locked: $gray-100;
 
 // ---------------------------------------------------------------------------------------------
 // SEMANTIC -- Dark
@@ -155,18 +159,20 @@ $brand-accent-dark: map-get($-accent, "500");
 $brand-on-accent-dark: map-get($-accent, "900");
 $brand-accent-subtle-dark: map-get($-accent, "900");
 
-$surface-0-dark: map-get($-neutral, "950");
-$surface-1-dark: map-get($-neutral, "925");
-$surface-2-dark: map-get($-neutral, "875");
+// Template's dark-mode body/border/text colors (ported literally from _variables-dark.scss's
+// $body-bg-dark/$border-color-dark/$body-color-dark so this file doesn't have to import forward).
+$surface-0-dark: #1a1d21;
+$surface-1-dark: #212529;
+$surface-2-dark: tint-color(#1a1d21, 7%);
 
-$border-default-dark: map-get($-neutral, "825");
-$border-strong-dark: map-get($-neutral, "775");
+$border-default-dark: #32383e;
+$border-strong-dark: #32383e;
 $border-focus-dark: map-get($-apricot, "300");
 
-$text-primary-dark: map-get($-neutral, "150");
-$text-secondary-dark: map-get($-neutral, "350");
-$text-muted-dark: map-get($-neutral, "450");
-$text-on-photo-dark: map-get($-neutral, "000");
+$text-primary-dark: #ced4da;
+$text-secondary-dark: #878a99;
+$text-muted-dark: rgba(#ced4da, .75);
+$text-on-photo-dark: $white;
 
 $state-success-tint-dark: map-get($-success-primitive, "700");
 $state-on-success-tint-dark: map-get($-success-primitive, "100");
@@ -189,9 +195,9 @@ $difficulty-extreme-text-dark: $difficulty-extreme-text;
 $brand-secondary-hover-dark: map-get($-forest, "200");
 $brand-secondary-pressed-dark: map-get($-forest, "100");
 $state-danger-hover-dark: map-get($-danger-primitive, "700");
-$surface-hover-dark: map-get($-neutral, "875");
-$surface-pressed-dark: map-get($-neutral, "825");
-$surface-locked-dark: map-get($-neutral, "875");
+$surface-hover-dark: tint-color(#1a1d21, 10%);
+$surface-pressed-dark: tint-color(#1a1d21, 15%);
+$surface-locked-dark: tint-color(#1a1d21, 10%);
 
 // ---------------------------------------------------------------------------------------------
 // Touch targets

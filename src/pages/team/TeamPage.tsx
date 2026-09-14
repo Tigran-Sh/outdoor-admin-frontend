@@ -168,7 +168,6 @@ function TeamPage() {
             !noClub && (
               <Button
                 variant="primary"
-                leftIcon={<i className="ri-add-line align-bottom" />}
                 onClick={() => navigate("/club/team/create")}
               >
                 {t("team.createMember")}
@@ -212,7 +211,6 @@ function TeamPage() {
                     getRowKey={(row) => row.id}
                     emptyMessage={t("team.empty")}
                     card
-                    className="bg-light"
                   />
 
                   <Pagination

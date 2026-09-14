@@ -26,12 +26,9 @@
       (function () {
         try {
           var stored = localStorage.getItem("THEME_MODE");
-          var theme =
-            stored === "light" || stored === "dark"
-              ? stored
-              : window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
+          // Always default to light for first-time visitors, regardless of the OS's
+          // prefers-color-scheme -- the user can still switch to dark via the theme toggle.
+          var theme = stored === "light" || stored === "dark" ? stored : "light";
           document.documentElement.setAttribute("data-bs-theme", theme);
           document.documentElement.setAttribute("data-sidebar", theme);
         } catch {}
