@@ -230,7 +230,33 @@
     "languages": {
       "en": "English",
       "hy": "Armenian",
-      "ru": "Russian"
+      "ru": "Russian",
+      "fr": "French",
+      "de": "German",
+      "es": "Spanish",
+      "it": "Italian",
+      "pt": "Portuguese",
+      "nl": "Dutch",
+      "pl": "Polish",
+      "tr": "Turkish",
+      "ar": "Arabic",
+      "fa": "Persian",
+      "he": "Hebrew",
+      "ka": "Georgian",
+      "el": "Greek",
+      "zh": "Chinese",
+      "ja": "Japanese",
+      "ko": "Korean",
+      "hi": "Hindi",
+      "uk": "Ukrainian",
+      "ro": "Romanian",
+      "bg": "Bulgarian",
+      "cs": "Czech",
+      "sv": "Swedish",
+      "fi": "Finnish",
+      "da": "Danish",
+      "hu": "Hungarian",
+      "az": "Azerbaijani"
     },
     "difficulties": {
       "easy": "Easy",
@@ -285,7 +311,12 @@
           "label": "Date"
         },
         "time": {
-          "label": "Start Time"
+          "label": "Start Time",
+          "placeholder": "Select a time"
+        },
+        "endTime": {
+          "label": "End Time",
+          "placeholder": "Select a time"
         },
         "durationType": {
           "label": "Duration"
@@ -368,7 +399,8 @@
           "placeholder": "List what participants should bring or prepare..."
         },
         "languages": {
-          "label": "Guide Working Languages"
+          "label": "Guide Working Languages",
+          "placeholder": "Select languages"
         },
         "description": {
           "label": "Description",
@@ -381,6 +413,8 @@
         "dateRequired": "Please select a date",
         "datePast": "Event date can't be in the past",
         "timeRequired": "Please select a time",
+        "endTimeRequired": "Please select an end time",
+        "endTimeBeforeStart": "End time can't be before the start time",
         "endDateRequired": "Please select an end date",
         "endDateBeforeStart": "End date can't be before the start date",
         "guideRequired": "Please select a guide",
@@ -710,7 +744,7 @@
           "guideHint": "Guides use a fixed set of permissions for their role and can't be given custom ones."
         },
         "activityTypes": { "label": "Specializations" },
-        "languages": { "label": "Languages" },
+        "languages": { "label": "Languages", "placeholder": "Select languages" },
         "experienceYears": { "label": "Experience (years)" },
         "bio": { "label": "Short Bio", "placeholder": "Describe their experience..." },
         "certificates": {

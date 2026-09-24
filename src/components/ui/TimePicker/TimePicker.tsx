@@ -1,36 +1,33 @@
 import { useId, useMemo } from "react";
 import type { ChangeEvent, FocusEvent } from "react";
-import Flatpickr from "react-flatpickr";
-import type { Options } from "flatpickr/dist/types/options";
+import ReactSelect from "react-select";
+
+import { createReactSelectStyles } from "@/utils/reactSelectStyles";
 
 import type { TimePickerProps } from "./TimePicker.types";
 
-function parseHmLocal(hm: string | undefined): Date | undefined {
-  if (!hm) return undefined;
-  const [hours, minutes] = hm.split(":").map(Number);
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) return undefined;
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-  return date;
+interface TimeOption {
+  value: string;
+  label: string;
 }
 
-function formatHmLocal(date: Date): string {
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+const MINUTES_PER_DAY = 24 * 60;
+
+/** Builds every `HH:mm` time-of-day option, `stepMinutes` apart, for the dropdown's option list. */
+function buildTimeOptions(stepMinutes: number): TimeOption[] {
+  const options: TimeOption[] = [];
+  for (let minutes = 0; minutes < MINUTES_PER_DAY; minutes += stepMinutes) {
+    const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
+    const mins = String(minutes % 60).padStart(2, "0");
+    const value = `${hours}:${mins}`;
+    options.push({ value, label: value });
+  }
+  return options;
 }
 
 function joinClassNames(...classes: Array<string | undefined | false>) {
   return classes.filter(Boolean).join(" ");
 }
-
-const TIME_PICKER_OPTIONS: Options = {
-  enableTime: true,
-  noCalendar: true,
-  dateFormat: "H:i",
-  time_24hr: true,
-  disableMobile: true,
-};
 
 function TimePicker({
   id,
@@ -42,6 +39,7 @@ function TimePicker({
   containerClassName,
   name,
   value,
+  stepMinutes = 30,
   placeholder,
   disabled,
   onChange,
@@ -50,14 +48,17 @@ function TimePicker({
   const generatedId = useId();
   const inputId = id ?? generatedId;
 
-  const selectedTime = useMemo(() => parseHmLocal(value), [value]);
+  const options = useMemo(() => buildTimeOptions(stepMinutes), [stepMinutes]);
+  const selectedOption = useMemo(
+    () => options.find((option) => option.value === value) ?? null,
+    [options, value],
+  );
 
-  const controlClassName = joinClassNames(
-    "form-control",
-    size === "sm" ? "form-control-sm" : undefined,
-    size === "lg" ? "form-control-lg" : undefined,
-    error ? "is-invalid" : undefined,
-    className,
+  // Re-themes automatically when `[data-bs-theme=dark]` flips the underlying `--vz-*` custom
+  // properties -- see `reactSelectStyles.ts` for the full rationale.
+  const styles = useMemo(
+    () => createReactSelectStyles<TimeOption, false>(size, error),
+    [size, error],
   );
 
   return (
@@ -68,29 +69,25 @@ function TimePicker({
         </label>
       )}
 
-      <div className="input-group">
-        <Flatpickr
-          id={inputId}
-          name={name}
-          className={controlClassName}
-          placeholder={placeholder}
-          disabled={disabled}
-          options={TIME_PICKER_OPTIONS}
-          value={selectedTime}
-          onChange={(selectedDates) => {
-            const [date] = selectedDates;
-            onChange?.({
-              target: { name: name ?? "", value: date ? formatHmLocal(date) : "" },
-            } as unknown as ChangeEvent<HTMLInputElement>);
-          }}
-          onClose={() => {
-            onBlur?.({ target: { name: name ?? "" } } as unknown as FocusEvent<HTMLInputElement>);
-          }}
-        />
-        <span className="input-group-text">
-          <i className="ri-time-line" aria-hidden="true" />
-        </span>
-      </div>
+      <ReactSelect<TimeOption, false>
+        inputId={inputId}
+        name={name}
+        className={joinClassNames("react-select-container", className)}
+        classNamePrefix="react-select"
+        styles={styles}
+        options={options}
+        value={selectedOption}
+        placeholder={placeholder}
+        isDisabled={disabled}
+        onChange={(option) => {
+          onChange?.({
+            target: { name: name ?? "", value: option ? option.value : "" },
+          } as unknown as ChangeEvent<HTMLInputElement>);
+        }}
+        onBlur={() => {
+          onBlur?.({ target: { name: name ?? "" } } as unknown as FocusEvent<HTMLInputElement>);
+        }}
+      />
 
       {error && <div className="d-block invalid-feedback">{error}</div>}
       {helperText && !error && <div className="form-text">{helperText}</div>}

@@ -15,7 +15,11 @@ import { ApiError } from "@/types/apiError";
 import { initialTeamMemberFormValues, type TeamMemberFormValues } from "@/types/teamMember";
 
 import TeamMemberFormFields from "./components/TeamMemberFormFields";
-import { getTeamMemberFormSchema, getTeamMemberFormSteps } from "./TeamMember.schema";
+import {
+  getTeamMemberFormSchema,
+  getTeamMemberFormSteps,
+  mapTeamMemberApiFieldErrors,
+} from "./TeamMember.schema";
 
 function CreateTeamMemberPage() {
   const { t } = useTranslation();
@@ -24,17 +28,42 @@ function CreateTeamMemberPage() {
 
   const createMutation = useMutation({ mutationFn: createTeamMember });
 
+  const steps = getTeamMemberFormSteps(t, "create");
+
   const formik = useFormik<TeamMemberFormValues>({
     initialValues: initialTeamMemberFormValues,
     validationSchema: getTeamMemberFormSchema(t, "create"),
-    onSubmit: async (values, { setSubmitting, setStatus }) => {
+    onSubmit: async (values, { setSubmitting, setStatus, setErrors, setTouched }) => {
       setStatus(undefined);
       try {
         await createMutation.mutateAsync(values);
         queryClient.invalidateQueries({ queryKey: ["team-members"] });
         navigate("/club/team");
       } catch (error) {
-        setStatus(error instanceof ApiError ? error.message : t("team.form.saveError"));
+        if (error instanceof ApiError) {
+          if (error.details) {
+            const fieldErrors = mapTeamMemberApiFieldErrors(error);
+            if (Object.keys(fieldErrors).length > 0) {
+              setErrors(fieldErrors);
+              setTouched(
+                Object.fromEntries(Object.keys(fieldErrors).map((field) => [field, true])),
+                false,
+              );
+
+              // The erroring field may live on a step the admin isn't
+              // currently viewing (e.g. a duplicate email caught on final
+              // submit while step 2 is active) -- jump back to it so the
+              // message is actually visible.
+              const erroredStepIndex = steps.findIndex((step) =>
+                step.fields.some((field) => field in fieldErrors),
+              );
+              if (erroredStepIndex !== -1) goToStep(erroredStepIndex);
+            }
+          }
+          setStatus(error.generalMessage());
+        } else {
+          setStatus(t("team.form.saveError"));
+        }
       } finally {
         setSubmitting(false);
       }
@@ -43,11 +72,8 @@ function CreateTeamMemberPage() {
 
   useRevalidateOnLanguageChange(formik.validateForm);
 
-  const steps = getTeamMemberFormSteps(t, "create");
-  const { activeStep, isFirstStep, isLastStep, goNext, goBack, handleStepClick } = useFormWizard(
-    formik,
-    steps,
-  );
+  const { activeStep, isFirstStep, isLastStep, goNext, goBack, goToStep, handleStepClick } =
+    useFormWizard(formik, steps);
 
   function handleCancel() {
     navigate("/club/team");

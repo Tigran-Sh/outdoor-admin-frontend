@@ -1,5 +1,6 @@
 import type { BadgeVariant } from "@/components/ui/Badge/Badge.types";
 import { ACTIVITY_TYPES, type ActivityTypeOption } from "@/constants/activityTypes";
+import { LANGUAGES, type SpokenLanguage } from "@/constants/languages";
 import { REGIONS, type RegionCode } from "@/constants/regions";
 import { activityTypeFromApi, activityTypeToApi, regionFromApi, regionToApi } from "@/types/club";
 
@@ -8,8 +9,8 @@ import type { EventFormValues } from "@/pages/events/EventForm.schema";
 export const EVENT_CATEGORIES: ActivityTypeOption[] = ACTIVITY_TYPES;
 export const EVENT_REGIONS = REGIONS;
 
-export const EVENT_LANGUAGES = ["en", "hy", "ru"] as const;
-export type EventLanguage = (typeof EVENT_LANGUAGES)[number];
+export const EVENT_LANGUAGES: SpokenLanguage[] = [...LANGUAGES];
+export type EventLanguage = SpokenLanguage;
 
 export const EVENT_DIFFICULTIES = ["easy", "medium", "hard", "extreme"] as const;
 export type EventDifficulty = (typeof EVENT_DIFFICULTIES)[number];
@@ -264,8 +265,12 @@ export function buildEventFormData(values: EventFormValues, club?: string): Form
     formData.append("start_at", `${values.date}T${values.time}:00`);
   }
   if (values.durationType) formData.append("duration_type", values.durationType);
-  if (values.durationType === "multi" && values.endDate) {
-    formData.append("end_at", `${values.endDate}T${values.time || "00:00"}:00`);
+
+  // A single-day event ends on the same date it starts; a multi-day one ends on its own
+  // `endDate`. Either way, `endTime` is the actual time of day it wraps up.
+  const endDate = values.durationType === "multi" ? values.endDate : values.date;
+  if (endDate && values.endTime) {
+    formData.append("end_at", `${endDate}T${values.endTime}:00`);
   }
 
   values.languageIds.forEach((id) => formData.append("languages", id));
@@ -321,8 +326,11 @@ export function eventToFormValues(event: Event): EventFormValues {
   }
 
   let endDate = "";
+  let endTime = "";
   if (event.endAt) {
-    endDate = event.endAt.split("T")[0] ?? "";
+    const [endDatePart, endTimePart] = event.endAt.split("T");
+    endDate = endDatePart ?? "";
+    endTime = endTimePart ? endTimePart.slice(0, 5) : "";
   }
 
   return {
@@ -334,6 +342,7 @@ export function eventToFormValues(event: Event): EventFormValues {
     time,
     durationType: event.durationType || "single",
     endDate,
+    endTime,
     guideId: event.guide,
     sweepGuideId: "",
     languageIds: event.languages,

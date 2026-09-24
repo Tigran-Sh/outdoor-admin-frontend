@@ -21,9 +21,15 @@ export interface TimePickerProps {
   placeholder?: string;
   disabled?: boolean;
   /**
+   * Interval, in minutes, between the selectable time-of-day options offered in the dropdown
+   * (e.g. `30` -> 00:00, 00:30, 01:00, ...). Defaults to 30.
+   */
+  stepMinutes?: number;
+  /**
    * Same signature as a native `<input type="time">`'s onChange (`event.target.name`/
    * `event.target.value`) so existing `onChange={formik.handleChange}` call sites keep working
-   * unchanged even though the field is now rendered with react-flatpickr under the hood.
+   * unchanged even though the field is now rendered as a searchable dropdown of time-of-day
+   * options (react-select) under the hood.
    */
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;

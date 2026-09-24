@@ -54,3 +54,10 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const FifteenMinuteSteps: Story = {
+  args: {
+    stepMinutes: 15,
+    helperText: "Finer-grained options for events that need to start on the quarter-hour.",
+  },
+};

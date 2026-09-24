@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import type { TFunction } from "i18next";
 
 import type { FormWizardStep } from "@/hooks/useFormWizard";
+import { ApiError } from "@/types/apiError";
 import type { TeamMemberFormMode, TeamMemberFormValues } from "@/types/teamMember";
 import { getDateStringYearsAgo, getTodayDateString } from "@/utils/date";
 
@@ -100,4 +101,38 @@ export function getTeamMemberFormSchema(t: TFunction, mode: TeamMemberFormMode) 
     certificates: Yup.array(),
     isActive: Yup.boolean().required(),
   });
+}
+
+/**
+ * Maps each form field to the backend serializer field name used in
+ * `ApiError.details` (e.g. `fullName` -> `full_name`), so a validation error
+ * such as "this email is already in use" can be attached back to the right
+ * form field instead of only surfacing as a generic message.
+ */
+const TEAM_MEMBER_API_FIELD_ENTRIES: [keyof TeamMemberFormValues, string][] = [
+  ["fullName", "full_name"],
+  ["email", "email"],
+  ["password", "password"],
+  ["platformRole", "platform_role"],
+  ["permissions", "permissions"],
+  ["activityTypeIds", "activity_types"],
+  ["languageIds", "languages"],
+  ["phone", "phone"],
+  ["birthDate", "birth_date"],
+  ["experienceYears", "experience_years"],
+  ["bio", "bio"],
+  ["photo", "photo"],
+  ["isActive", "is_active"],
+];
+
+/** Extracts per-field messages (e.g. a duplicate email) from an API error. */
+export function mapTeamMemberApiFieldErrors(
+  error: ApiError,
+): Partial<Record<keyof TeamMemberFormValues, string>> {
+  const fieldErrors: Partial<Record<keyof TeamMemberFormValues, string>> = {};
+  for (const [field, apiField] of TEAM_MEMBER_API_FIELD_ENTRIES) {
+    const message = error.fieldError(apiField);
+    if (message) fieldErrors[field] = message;
+  }
+  return fieldErrors;
 }

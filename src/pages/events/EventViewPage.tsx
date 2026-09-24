@@ -288,6 +288,19 @@ function EventViewPage() {
                     />
                   </div>
                 )}
+                <div className="col-sm-4">
+                  <DetailField
+                    label={t("events.form.fields.endTime.label")}
+                    value={
+                      event.endAt
+                        ? new Date(event.endAt).toLocaleTimeString(undefined, {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : undefined
+                    }
+                  />
+                </div>
               </div>
 
               <div className="mt-3">

@@ -6,6 +6,7 @@ import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
 import LocationPicker from "@/components/ui/LocationPicker/LocationPicker";
+import MultiSelect from "@/components/ui/MultiSelect/MultiSelect";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 import TimePicker from "@/components/ui/TimePicker/TimePicker";
@@ -46,7 +47,7 @@ function EventFormFields({
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
 
-  function toggleValue(field: "languageIds" | "difficultyIds", value: string) {
+  function toggleValue(field: "difficultyIds", value: string) {
     const current = formik.values[field];
     const next = current.includes(value)
       ? current.filter((item) => item !== value)
@@ -221,29 +222,6 @@ function EventFormFields({
 
           <div className="row">
             <div className="col-sm-4">
-              <DatePicker
-                label={t("events.form.fields.date.label")}
-                name="date"
-                min={getTodayDateString()}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.date}
-                error={formik.touched.date ? formik.errors.date : undefined}
-              />
-            </div>
-
-            <div className="col-sm-4">
-              <TimePicker
-                label={t("events.form.fields.time.label")}
-                name="time"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.time}
-                error={formik.touched.time ? formik.errors.time : undefined}
-              />
-            </div>
-
-            <div className="col-sm-4">
               <Select
                 label={t("events.form.fields.durationType.label")}
                 name="durationType"
@@ -265,41 +243,74 @@ function EventFormFields({
             </div>
           </div>
 
-          {formik.values.durationType === "multi" && (
-            <DatePicker
-              label={t("events.form.fields.endDate.label")}
-              name="endDate"
-              min={formik.values.date || getTodayDateString()}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.endDate}
-              error={formik.touched.endDate ? formik.errors.endDate : undefined}
-            />
-          )}
-
-          <div className="mb-3">
-            <span className="form-label d-block">
-              {t("events.form.fields.languages.label")}
-            </span>
-
-            <div className="d-flex flex-wrap gap-3">
-              {EVENT_LANGUAGES.map((language) => (
-                <Checkbox
-                  key={language}
-                  id={`event-language-${language}`}
-                  label={t(`events.languages.${language}`)}
-                  checked={formik.values.languageIds.includes(language)}
-                  onChange={() => toggleValue("languageIds", language)}
-                />
-              ))}
+          <div className="row">
+            <div className={formik.values.durationType === "multi" ? "col-sm-6" : "col-sm-4"}>
+              <DatePicker
+                label={t("events.form.fields.date.label")}
+                name="date"
+                min={getTodayDateString()}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.date}
+                error={formik.touched.date ? formik.errors.date : undefined}
+              />
             </div>
 
-            {formik.touched.languageIds && formik.errors.languageIds && (
-              <div className="text-danger fs-13 mt-1">
-                {String(formik.errors.languageIds)}
+            {formik.values.durationType === "multi" && (
+              <div className="col-sm-6">
+                <DatePicker
+                  label={t("events.form.fields.endDate.label")}
+                  name="endDate"
+                  min={formik.values.date || getTodayDateString()}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.endDate}
+                  error={formik.touched.endDate ? formik.errors.endDate : undefined}
+                />
               </div>
             )}
           </div>
+
+          <div className="row">
+            <div className="col-sm-4">
+              <TimePicker
+                label={t("events.form.fields.time.label")}
+                name="time"
+                placeholder={t("events.form.fields.time.placeholder")}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.time}
+                error={formik.touched.time ? formik.errors.time : undefined}
+              />
+            </div>
+
+            <div className="col-sm-4">
+              <TimePicker
+                label={t("events.form.fields.endTime.label")}
+                name="endTime"
+                placeholder={t("events.form.fields.endTime.placeholder")}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.endTime}
+                error={formik.touched.endTime ? formik.errors.endTime : undefined}
+              />
+            </div>
+          </div>
+
+          <MultiSelect
+            label={t("events.form.fields.languages.label")}
+            placeholder={t("events.form.fields.languages.placeholder")}
+            options={EVENT_LANGUAGES.map((language) => ({
+              value: language,
+              label: t(`events.languages.${language}`),
+            }))}
+            value={formik.values.languageIds}
+            onChange={(next) => formik.setFieldValue("languageIds", next)}
+            onBlur={() => formik.setFieldTouched("languageIds", true)}
+            error={
+              formik.touched.languageIds ? String(formik.errors.languageIds ?? "") : undefined
+            }
+          />
 
           <div className="row">
             <div className="col-sm-6">

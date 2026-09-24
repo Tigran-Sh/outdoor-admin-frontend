@@ -1,9 +1,9 @@
-import type { LanguageCode } from "@/app/i18n/languages";
 import type { ActivityTypeId } from "@/constants/activityTypes";
+import { LANGUAGES, type SpokenLanguage } from "@/constants/languages";
 import type { Capability, Role } from "@/types/auth";
 import { activityTypeFromApi, activityTypeToApi } from "@/types/club";
 
-export const TEAM_LANGUAGES: LanguageCode[] = ["en", "hy", "ru"];
+export const TEAM_LANGUAGES: SpokenLanguage[] = [...LANGUAGES];
 
 /** Platform roles a Club Owner may provision for a team member. */
 export const TEAM_MEMBER_PLATFORM_ROLES: Role[] = ["guide", "internal_admin"];
@@ -53,7 +53,7 @@ export interface TeamMember {
   accountIsActive: boolean;
   permissions: Capability[];
   activityTypeIds: ActivityTypeId[];
-  languageIds: LanguageCode[];
+  languageIds: SpokenLanguage[];
   photo: string | null;
   phone: string;
   birthDate: string | null;
@@ -77,7 +77,7 @@ export function mapTeamMemberFromApi(raw: TeamMemberApi): TeamMember {
     accountIsActive: raw.account_is_active,
     permissions: raw.permissions as Capability[],
     activityTypeIds: raw.activity_types.map(activityTypeFromApi),
-    languageIds: raw.languages as LanguageCode[],
+    languageIds: raw.languages as SpokenLanguage[],
     photo: raw.photo,
     phone: raw.phone,
     birthDate: raw.birth_date,

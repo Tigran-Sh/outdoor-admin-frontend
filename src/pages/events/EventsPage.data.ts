@@ -1,4 +1,5 @@
 import { ACTIVITY_TYPES, type ActivityTypeOption } from "@/constants/activityTypes";
+import { LANGUAGES, type SpokenLanguage } from "@/constants/languages";
 import { REGIONS, type RegionCode } from "@/constants/regions";
 
 import type { EventFormValues } from "./EventForm.schema";
@@ -16,8 +17,8 @@ export const EVENT_GUIDES: EventGuideOption[] = [
   { id: "mari", name: "Mari Petrosyan" },
 ];
 
-export const EVENT_LANGUAGES = ["en", "hy", "ru"] as const;
-export type EventLanguage = (typeof EVENT_LANGUAGES)[number];
+export const EVENT_LANGUAGES: SpokenLanguage[] = [...LANGUAGES];
+export type EventLanguage = SpokenLanguage;
 
 export const EVENT_REGIONS = REGIONS;
 export type EventRegion = RegionCode;
@@ -95,6 +96,9 @@ export function toEventFormValues(event: EventListItem): EventFormValues {
     time: event.time,
     durationType: event.durationType,
     endDate: event.endDate,
+    // This legacy mock-data shape (superseded by `@/types/event`'s `Event`/`EventFormValues`
+    // mapping, which the real create/edit event pages use) predates the `endTime` field.
+    endTime: "",
     guideId: event.guideId,
     sweepGuideId: event.sweepGuideId,
     languageIds: event.languageIds,

@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react";
+import { useCallback, useId, useMemo } from "react";
 import type { ChangeEvent, FocusEvent } from "react";
 import Flatpickr from "react-flatpickr";
 import type { Options } from "flatpickr/dist/types/options";
@@ -17,6 +17,31 @@ function formatIsoDateLocal(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+const FLATPICKR_MONTH_ABBREVIATIONS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+/**
+ * Matches this component's `dateFormat: "d M, Y"` option token-for-token. Used as the initial,
+ * *uncontrolled* `defaultValue` of the hand-rendered `<input>` below (see the `render` prop), so
+ * the very first paint already shows the right text instead of an empty field for a split second
+ * before flatpickr's own effect fills it in.
+ */
+function formatFlatpickrDisplay(date: Date): string {
+  return `${date.getDate()} ${FLATPICKR_MONTH_ABBREVIATIONS[date.getMonth()]}, ${date.getFullYear()}`;
 }
 
 function joinClassNames(...classes: Array<string | undefined | false>) {
@@ -44,6 +69,10 @@ function DatePicker({
   const inputId = id ?? generatedId;
 
   const selectedDate = useMemo(() => parseIsoDateLocal(value), [value]);
+  const displayValue = useMemo(
+    () => (selectedDate ? formatFlatpickrDisplay(selectedDate) : undefined),
+    [selectedDate],
+  );
 
   const options = useMemo<Options>(
     () => ({
@@ -54,6 +83,23 @@ function DatePicker({
     }),
     [min, max],
   );
+
+  // Memoized so `<Flatpickr>`'s props object stays referentially stable across unrelated
+  // re-renders of the surrounding form (react-flatpickr otherwise tears down and reinitializes
+  // its flatpickr instance on every render where these are freshly created inline).
+  const handleChange = useCallback(
+    (selectedDates: Date[]) => {
+      const [date] = selectedDates;
+      onChange?.({
+        target: { name: name ?? "", value: date ? formatIsoDateLocal(date) : "" },
+      } as unknown as ChangeEvent<HTMLInputElement>);
+    },
+    [name, onChange],
+  );
+
+  const handleClose = useCallback(() => {
+    onBlur?.({ target: { name: name ?? "" } } as unknown as FocusEvent<HTMLInputElement>);
+  }, [name, onBlur]);
 
   const controlClassName = joinClassNames(
     "form-control",
@@ -80,15 +126,26 @@ function DatePicker({
           disabled={disabled}
           options={options}
           value={selectedDate}
-          onChange={(selectedDates) => {
-            const [date] = selectedDates;
-            onChange?.({
-              target: { name: name ?? "", value: date ? formatIsoDateLocal(date) : "" },
-            } as unknown as ChangeEvent<HTMLInputElement>);
-          }}
-          onClose={() => {
-            onBlur?.({ target: { name: name ?? "" } } as unknown as FocusEvent<HTMLInputElement>);
-          }}
+          onChange={handleChange}
+          onClose={handleClose}
+          // `react-flatpickr`'s default rendering sets the underlying native `<input>`'s
+          // (React-controlled) `value` to `value?.toString()` -- so with a `Date` object it
+          // flashes the `Date`'s default `toString()`, e.g. "Thu Sep 24 2026 00:00:00 GMT+0400
+          // (Armenia Standard Time)", instead of "24 Sep, 2026". Rendering the `<input>` ourselves
+          // with an *uncontrolled* `defaultValue` sidesteps that entirely: flatpickr owns this
+          // node's displayed text directly (imperatively) once mounted, the same way it does for a
+          // plain, non-React `<input>`, so React never gets a chance to overwrite it with that.
+          render={(_renderProps, ref) => (
+            <input
+              ref={ref}
+              id={inputId}
+              name={name}
+              className={controlClassName}
+              placeholder={placeholder}
+              disabled={disabled}
+              defaultValue={displayValue}
+            />
+          )}
         />
         <span className="input-group-text">
           <i className="ri-calendar-2-line" aria-hidden="true" />

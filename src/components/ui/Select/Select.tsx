@@ -1,7 +1,9 @@
 import { Children, forwardRef, isValidElement, useId, useMemo } from "react";
 import type { ChangeEvent, FocusEvent, ReactElement, ReactNode } from "react";
 import ReactSelect from "react-select";
-import type { SelectInstance, StylesConfig } from "react-select";
+import type { SelectInstance } from "react-select";
+
+import { createReactSelectStyles } from "@/utils/reactSelectStyles";
 
 import type { SelectOptionShape, SelectProps } from "./Select.types";
 
@@ -66,97 +68,12 @@ const Select = forwardRef<SelectInstance<SelectOptionShape, false>, SelectProps>
       [options, value],
     );
 
-    // Matches Bootstrap's own $input-height formula exactly (line-height * font-size +
-    // padding-y * 2 + border * 2 = 1.55 * 15px + padding-y * 2 + 2px) so react-select's control
-    // is pixel-identical to a native `.form-control`/`.form-select` of the same size.
-    const controlMinHeight = size === "sm" ? 33.25 : size === "lg" ? 47.65 : 41.25;
-
-    // Matches Bootstrap's $input-padding-x so the selected value/placeholder lines up with a
-    // sibling `.form-control`'s text instead of react-select's tighter default inset.
-    const controlPaddingX = size === "sm" ? 8 : size === "lg" ? 19.2 : 14.4;
-
-    // Same `--vz-border-radius{-sm,-lg}` custom property `.form-control`/`.form-select` use, so
-    // corners match a sibling Input/DatePicker/TimePicker exactly at every size.
-    const controlBorderRadius =
-      size === "sm"
-        ? "var(--vz-border-radius-sm)"
-        : size === "lg"
-          ? "var(--vz-border-radius-lg)"
-          : "var(--vz-border-radius)";
-
-    // All colors below are the same CSS custom properties `.form-control` resolves to (see
-    // Input.tsx / bootstrap/_variables.scss's $input-bg/$input-border-color), referenced by
-    // `var()` rather than a static value so this component (react-select renders its own inline
-    // styles, not a `.form-control`) re-themes itself automatically when `[data-bs-theme=dark]`
-    // flips those custom properties, instead of staying stuck on react-select's white default.
-    const styles = useMemo<StylesConfig<SelectOptionShape, false>>(
-      () => ({
-        control: (base, state) => ({
-          ...base,
-          minHeight: controlMinHeight,
-          backgroundColor: "var(--vz-input-bg-custom)",
-          borderRadius: controlBorderRadius,
-          borderColor: error
-            ? "var(--vz-danger)"
-            : state.isFocused
-              ? "var(--vz-primary)"
-              : "var(--vz-input-border-custom)",
-          boxShadow: "none",
-          "&:hover": {
-            borderColor: error ? "var(--vz-danger)" : "var(--vz-input-border-custom)",
-          },
-        }),
-        valueContainer: (base) => ({
-          ...base,
-          paddingLeft: controlPaddingX,
-        }),
-        indicatorsContainer: (base) => ({
-          ...base,
-          paddingRight: controlPaddingX - 8,
-        }),
-        indicatorSeparator: (base) => ({
-          ...base,
-          backgroundColor: "var(--vz-border-color)",
-        }),
-        dropdownIndicator: (base) => ({
-          ...base,
-          color: "var(--vz-secondary-color)",
-        }),
-        clearIndicator: (base) => ({
-          ...base,
-          color: "var(--vz-secondary-color)",
-        }),
-        singleValue: (base) => ({
-          ...base,
-          color: "var(--vz-body-color)",
-        }),
-        input: (base) => ({
-          ...base,
-          color: "var(--vz-body-color)",
-        }),
-        placeholder: (base) => ({
-          ...base,
-          color: "var(--vz-secondary-color)",
-        }),
-        menu: (base) => ({
-          ...base,
-          backgroundColor: "var(--vz-input-bg-custom)",
-          border: "1px solid var(--vz-border-color)",
-          borderRadius: "var(--vz-border-radius)",
-          boxShadow: "var(--vz-box-shadow)",
-          zIndex: 5,
-        }),
-        option: (base, state) => ({
-          ...base,
-          backgroundColor: state.isSelected
-            ? "var(--vz-primary)"
-            : state.isFocused
-              ? "var(--vz-tertiary-bg)"
-              : "transparent",
-          color: state.isSelected ? "var(--vz-white, #fff)" : "var(--vz-body-color)",
-        }),
-      }),
-      [controlBorderRadius, controlMinHeight, controlPaddingX, error],
+    // Re-themes automatically when `[data-bs-theme=dark]` flips the underlying `--vz-*` custom
+    // properties, instead of staying stuck on react-select's white default -- see
+    // `reactSelectStyles.ts` for the full rationale.
+    const styles = useMemo(
+      () => createReactSelectStyles<SelectOptionShape, false>(size, error),
+      [size, error],
     );
 
     return (

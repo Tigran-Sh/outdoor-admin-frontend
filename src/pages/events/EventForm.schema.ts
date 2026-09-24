@@ -13,6 +13,7 @@ export interface EventFormValues {
   time: string;
   durationType: string;
   endDate: string;
+  endTime: string;
   guideId: string;
   sweepGuideId: string;
   languageIds: string[];
@@ -42,6 +43,7 @@ export const initialEventFormValues: EventFormValues = {
   time: "",
   durationType: "single",
   endDate: "",
+  endTime: "",
   guideId: "",
   sweepGuideId: "",
   languageIds: [],
@@ -78,10 +80,11 @@ export function getEventFormSteps(t: TFunction): FormWizardStep<EventFormValues>
       id: "schedule",
       label: t("events.form.steps.schedule"),
       fields: [
-        "date",
-        "time",
         "durationType",
+        "date",
         "endDate",
+        "time",
+        "endTime",
         "languageIds",
         "guideId",
         "sweepGuideId",
@@ -159,6 +162,19 @@ export function getEventFormSchema(t: TFunction) {
         function (value) {
           if (!value || !this.parent.date) return true;
           return value >= this.parent.date;
+        },
+      ),
+    endTime: Yup.string()
+      .required(t("events.form.validation.endTimeRequired"))
+      .test(
+        "not-before-start-time",
+        t("events.form.validation.endTimeBeforeStart"),
+        function (value) {
+          // Only a same-day (single-duration) event can be compared as plain times -- a
+          // multi-day event's end time is on a different date, so it isn't required to be
+          // "later" in a same-day sense.
+          if (!value || !this.parent.time || this.parent.durationType === "multi") return true;
+          return value >= this.parent.time;
         },
       ),
     guideId: Yup.string().required(t("events.form.validation.guideRequired")),

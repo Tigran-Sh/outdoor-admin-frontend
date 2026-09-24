@@ -20,7 +20,11 @@ import {
 } from "@/types/teamMember";
 
 import TeamMemberFormFields from "./components/TeamMemberFormFields";
-import { getTeamMemberFormSchema, getTeamMemberFormSteps } from "./TeamMember.schema";
+import {
+  getTeamMemberFormSchema,
+  getTeamMemberFormSteps,
+  mapTeamMemberApiFieldErrors,
+} from "./TeamMember.schema";
 
 function EditTeamMemberPage() {
   const { t } = useTranslation();
@@ -55,6 +59,8 @@ function EditTeamMemberPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
 
+  const steps = getTeamMemberFormSteps(t, "edit");
+
   /**
    * Saving from any step intentionally bypasses the wizard's full-schema
    * validation -- otherwise saving partial progress from an early step
@@ -70,7 +76,29 @@ function EditTeamMemberPage() {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
       navigate("/club/team");
     } catch (error) {
-      setSaveError(error instanceof ApiError ? error.message : t("team.form.saveError"));
+      if (error instanceof ApiError) {
+        if (error.details) {
+          const fieldErrors = mapTeamMemberApiFieldErrors(error);
+          if (Object.keys(fieldErrors).length > 0) {
+            formik.setErrors(fieldErrors);
+            formik.setTouched(
+              Object.fromEntries(Object.keys(fieldErrors).map((field) => [field, true])),
+              false,
+            );
+
+            // The erroring field may live on a step the admin isn't
+            // currently viewing -- jump back to it so the message is
+            // actually visible.
+            const erroredStepIndex = steps.findIndex((step) =>
+              step.fields.some((field) => field in fieldErrors),
+            );
+            if (erroredStepIndex !== -1) goToStep(erroredStepIndex);
+          }
+        }
+        setSaveError(error.generalMessage());
+      } else {
+        setSaveError(t("team.form.saveError"));
+      }
     } finally {
       setIsSaving(false);
     }
@@ -78,11 +106,8 @@ function EditTeamMemberPage() {
 
   useRevalidateOnLanguageChange(formik.validateForm);
 
-  const steps = getTeamMemberFormSteps(t, "edit");
-  const { activeStep, isFirstStep, isLastStep, goNext, goBack, handleStepClick } = useFormWizard(
-    formik,
-    steps,
-  );
+  const { activeStep, isFirstStep, isLastStep, goNext, goBack, goToStep, handleStepClick } =
+    useFormWizard(formik, steps);
 
   function handleCancel() {
     navigate(member ? `/club/team/${member.id}` : "/club/team");

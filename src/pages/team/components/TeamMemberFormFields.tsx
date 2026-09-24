@@ -5,6 +5,7 @@ import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
+import MultiSelect from "@/components/ui/MultiSelect/MultiSelect";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 
@@ -45,10 +46,7 @@ function TeamMemberFormFields({
   const { t } = useTranslation();
   const { user } = useAuth();
 
-  function toggleValue(
-    field: "permissions" | "activityTypeIds" | "languageIds",
-    value: string,
-  ) {
+  function toggleValue(field: "permissions" | "activityTypeIds", value: string) {
     const current = formik.values[field];
     const next = current.includes(value)
       ? current.filter((item) => item !== value)
@@ -240,21 +238,20 @@ function TeamMemberFormFields({
 
           <div className="row mb-3">
             <div className="col-sm-6">
-              <span className="form-label d-block">
-                {t("team.form.fields.languages.label")}
-              </span>
-
-              <div className="d-flex flex-wrap gap-3">
-                {TEAM_LANGUAGES.map((language) => (
-                  <Checkbox
-                    key={language}
-                    id={`team-language-${language}`}
-                    label={t(`events.languages.${language}`)}
-                    checked={formik.values.languageIds.includes(language)}
-                    onChange={() => toggleValue("languageIds", language)}
-                  />
-                ))}
-              </div>
+              <MultiSelect
+                label={t("team.form.fields.languages.label")}
+                placeholder={t("team.form.fields.languages.placeholder")}
+                options={TEAM_LANGUAGES.map((language) => ({
+                  value: language,
+                  label: t(`events.languages.${language}`),
+                }))}
+                value={formik.values.languageIds}
+                onChange={(next) =>
+                  formik.setFieldValue("languageIds", next)
+                }
+                onBlur={() => formik.setFieldTouched("languageIds", true)}
+                containerClassName="mb-0"
+              />
             </div>
 
             <div className="col-sm-6">
