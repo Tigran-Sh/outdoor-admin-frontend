@@ -69,12 +69,7 @@ export function getEventFormSteps(t: TFunction): FormWizardStep<EventFormValues>
     {
       id: "general",
       label: t("events.form.steps.general"),
-      fields: ["name", "description", "categoryIds", "region"],
-    },
-    {
-      id: "media",
-      label: t("events.form.steps.media"),
-      fields: ["coverImage", "galleryImages"],
+      fields: ["name", "description", "categoryIds", "region", "coverImage", "galleryImages"],
     },
     {
       id: "schedule",
@@ -179,8 +174,24 @@ export function getEventFormSchema(t: TFunction) {
           return value >= this.parent.time;
         },
       ),
-    guideId: Yup.string().required(t("events.form.validation.guideRequired")),
-    sweepGuideId: Yup.string(),
+    guideId: Yup.string()
+      .required(t("events.form.validation.guideRequired"))
+      .test(
+        "not-same-as-sweep-guide",
+        t("events.form.validation.sameGuideAndSweepGuide"),
+        function (value) {
+          if (!value || !this.parent.sweepGuideId) return true;
+          return value !== this.parent.sweepGuideId;
+        },
+      ),
+    sweepGuideId: Yup.string().test(
+      "not-same-as-guide",
+      t("events.form.validation.sameGuideAndSweepGuide"),
+      function (value) {
+        if (!value || !this.parent.guideId) return true;
+        return value !== this.parent.guideId;
+      },
+    ),
     languageIds: Yup.array()
       .of(Yup.string().required())
       .min(1, t("events.form.validation.languagesRequired")),

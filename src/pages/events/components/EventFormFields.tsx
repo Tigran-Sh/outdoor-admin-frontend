@@ -1,12 +1,12 @@
 import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
-import Checkbox from "@/components/ui/Checkbox/Checkbox";
 import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
 import LocationPicker from "@/components/ui/LocationPicker/LocationPicker";
 import MultiSelect from "@/components/ui/MultiSelect/MultiSelect";
+import SearchableSelect from "@/components/ui/SearchableSelect/SearchableSelect";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 import TimePicker from "@/components/ui/TimePicker/TimePicker";
@@ -47,14 +47,6 @@ function EventFormFields({
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
 
-  function toggleValue(field: "difficultyIds" | "categoryIds", value: string) {
-    const current = formik.values[field];
-    const next = current.includes(value)
-      ? current.filter((item) => item !== value)
-      : [...current, value];
-    formik.setFieldValue(field, next);
-  }
-
   /**
    * Marks the field touched immediately (rather than waiting for blur, which
    * a file input never fires) so an invalid format/size is caught and shown
@@ -94,29 +86,20 @@ function EventFormFields({
             }
           />
 
-          <div className="mb-3">
-            <span className="form-label d-block">
-              {t("events.form.fields.categories.label")}
-            </span>
-
-            <div className="d-flex flex-wrap gap-3">
-              {EVENT_CATEGORIES.map((category) => (
-                <Checkbox
-                  key={category.id}
-                  id={`event-category-${category.id}`}
-                  label={t(`activityTypes.${category.id}`)}
-                  checked={formik.values.categoryIds.includes(category.id)}
-                  onChange={() => toggleValue("categoryIds", category.id)}
-                />
-              ))}
-            </div>
-
-            {formik.touched.categoryIds && formik.errors.categoryIds && (
-              <div className="text-danger fs-13 mt-1">
-                {String(formik.errors.categoryIds)}
-              </div>
-            )}
-          </div>
+          <MultiSelect
+            label={t("events.form.fields.categories.label")}
+            placeholder={t("events.form.fields.categories.placeholder")}
+            options={EVENT_CATEGORIES.map((category) => ({
+              value: category.id,
+              label: t(`activityTypes.${category.id}`),
+            }))}
+            value={formik.values.categoryIds}
+            onChange={(next) => formik.setFieldValue("categoryIds", next)}
+            onBlur={() => formik.setFieldTouched("categoryIds", true)}
+            error={
+              formik.touched.categoryIds ? String(formik.errors.categoryIds ?? "") : undefined
+            }
+          />
 
           <div className="row">
             <div className="col-sm-6">
@@ -140,12 +123,8 @@ function EventFormFields({
               </Select>
             </div>
           </div>
-        </div>
-      )}
 
-      {activeStep === 1 && (
-        <div className="mb-4">
-          <h5 className="fs-14 text-uppercase text-muted mb-3">
+          <h5 className="fs-14 text-uppercase text-muted mb-3 mt-4">
             {t("events.form.steps.media")}
           </h5>
 
@@ -156,12 +135,14 @@ function EventFormFields({
                   <div className="text-muted fs-13 mb-1">
                     {t("clubs.form.fields.currentImage")}
                   </div>
-                  <img
-                    src={currentCoverImageUrl}
-                    alt=""
-                    className="rounded border"
-                    style={{ width: 80, height: 80, objectFit: "cover" }}
-                  />
+                  <div className="d-flex flex-wrap gap-2">
+                    <img
+                      src={currentCoverImageUrl}
+                      alt=""
+                      className="rounded border"
+                      style={{ width: 56, height: 56, objectFit: "cover" }}
+                    />
+                  </div>
                 </div>
               )}
               <ImageUpload
@@ -215,7 +196,7 @@ function EventFormFields({
         </div>
       )}
 
-      {activeStep === 2 && (
+      {activeStep === 1 && (
         <div className="mb-4">
           <h5 className="fs-14 text-uppercase text-muted mb-3">
             {t("events.form.steps.schedule")}
@@ -315,31 +296,26 @@ function EventFormFields({
 
           <div className="row">
             <div className="col-sm-6">
-              <Select
+              <SearchableSelect
                 label={t("events.form.fields.guide.label")}
                 name="guideId"
+                placeholder={t("events.form.fields.guide.placeholder")}
+                options={guideOptions.map((guide) => ({ value: guide.id, label: guide.name }))}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.guideId}
                 error={
                   formik.touched.guideId ? formik.errors.guideId : undefined
                 }
-              >
-                <option value="">
-                  {t("events.form.fields.guide.placeholder")}
-                </option>
-                {guideOptions.map((guide) => (
-                  <option key={guide.id} value={guide.id}>
-                    {guide.name}
-                  </option>
-                ))}
-              </Select>
+              />
             </div>
 
             <div className="col-sm-6">
-              <Select
+              <SearchableSelect
                 label={t("events.form.fields.sweepGuide.label")}
                 name="sweepGuideId"
+                placeholder={t("events.form.fields.sweepGuide.placeholder")}
+                options={guideOptions.map((guide) => ({ value: guide.id, label: guide.name }))}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.sweepGuideId}
@@ -350,50 +326,32 @@ function EventFormFields({
                 }
                 helperText={t("events.form.fields.sweepGuide.helperText")}
                 containerClassName="mb-0"
-              >
-                <option value="">
-                  {t("events.form.fields.sweepGuide.placeholder")}
-                </option>
-                {guideOptions.map((guide) => (
-                  <option key={guide.id} value={guide.id}>
-                    {guide.name}
-                  </option>
-                ))}
-              </Select>
+              />
             </div>
           </div>
         </div>
       )}
 
-      {activeStep === 3 && (
+      {activeStep === 2 && (
         <div className="mb-4">
           <h5 className="fs-14 text-uppercase text-muted mb-3">
             {t("events.form.steps.route")}
           </h5>
 
-          <div className="mb-3">
-            <span className="form-label d-block">
-              {t("events.form.fields.difficulties.label")}
-            </span>
-
-            <div className="d-flex flex-wrap gap-3">
-              {EVENT_DIFFICULTIES.map((difficulty) => (
-                <Checkbox
-                  key={difficulty}
-                  id={`event-difficulty-${difficulty}`}
-                  label={t(`events.difficulties.${difficulty}`)}
-                  checked={formik.values.difficultyIds.includes(difficulty)}
-                  onChange={() => toggleValue("difficultyIds", difficulty)}
-                />
-              ))}
-            </div>
-
-            {formik.touched.difficultyIds && formik.errors.difficultyIds && (
-              <div className="text-danger fs-13 mt-1">
-                {String(formik.errors.difficultyIds)}
-              </div>
-            )}
-          </div>
+          <MultiSelect
+            label={t("events.form.fields.difficulties.label")}
+            placeholder={t("events.form.fields.difficulties.placeholder")}
+            options={EVENT_DIFFICULTIES.map((difficulty) => ({
+              value: difficulty,
+              label: t(`events.difficulties.${difficulty}`),
+            }))}
+            value={formik.values.difficultyIds}
+            onChange={(next) => formik.setFieldValue("difficultyIds", next)}
+            onBlur={() => formik.setFieldTouched("difficultyIds", true)}
+            error={
+              formik.touched.difficultyIds ? String(formik.errors.difficultyIds ?? "") : undefined
+            }
+          />
 
           <div className="row">
             <div className="col-sm-6">
@@ -475,7 +433,7 @@ function EventFormFields({
         </div>
       )}
 
-      {activeStep === 4 && (
+      {activeStep === 3 && (
         <div>
           <h5 className="fs-14 text-uppercase text-muted mb-3">
             {t("events.form.steps.salesTerms")}

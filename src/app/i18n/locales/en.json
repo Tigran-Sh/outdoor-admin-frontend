@@ -291,7 +291,7 @@
       "saveChanges": "Save Changes",
       "saveError": "Couldn't save your changes. Please try again.",
       "steps": {
-        "general": "General",
+        "general": "General & Media",
         "schedule": "Schedule",
         "route": "Route",
         "salesTerms": "Sales & Terms",
@@ -304,7 +304,8 @@
           "placeholder": "Enter event name"
         },
         "categories": {
-          "label": "Categories"
+          "label": "Categories",
+          "placeholder": "Select categories"
         },
         "date": {
           "label": "Date"
@@ -337,7 +338,8 @@
           "placeholder": "Select a region"
         },
         "difficulties": {
-          "label": "Difficulty"
+          "label": "Difficulty",
+          "placeholder": "Select difficulty levels"
         },
         "distanceKm": {
           "label": "Distance (km)"
@@ -417,6 +419,7 @@
         "endDateRequired": "Please select an end date",
         "endDateBeforeStart": "End date can't be before the start date",
         "guideRequired": "Please select a guide",
+        "sameGuideAndSweepGuide": "The assigned guide and sweep guide can't be the same person",
         "languagesRequired": "Please select at least one language",
         "regionRequired": "Please select a region",
         "difficultiesRequired": "Please select at least one difficulty",
