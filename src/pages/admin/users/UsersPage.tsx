@@ -24,9 +24,11 @@ import {
   listUsers,
 } from "@/services/adminUsers.api";
 import { listCapabilities } from "@/services/adminRoles.api";
+import { listAdminClubs } from "@/services/clubs.api";
 import { ROLE_BADGE_VARIANT } from "@/constants/roles";
 import { ROLES, type Role } from "@/types/auth";
 import type { AdminUser, AdminUserOrderingField } from "@/types/adminUser";
+import type { Club } from "@/types/club";
 
 import CapabilitiesModal from "./components/CapabilitiesModal";
 import ChangeRoleModal from "./components/ChangeRoleModal";
@@ -109,6 +111,20 @@ function UsersPage() {
     queryFn: listCapabilities,
   });
 
+  // Clubs have no "list clubs owned by user" filter, so the owner lookup is
+  // built client-side from the full clubs list rather than queried per row.
+  const clubsQuery = useQuery({
+    queryKey: ["admin-clubs", "all-for-owner-lookup"],
+    queryFn: () => listAdminClubs({ page_size: 1000 }),
+  });
+
+  const clubsByOwner = new Map<string, Club[]>();
+  for (const club of clubsQuery.data?.results ?? []) {
+    const owned = clubsByOwner.get(club.owner) ?? [];
+    owned.push(club);
+    clubsByOwner.set(club.owner, owned);
+  }
+
   const toggleActiveMutation = useMutation({
     mutationFn: (action: ConfirmActionState) =>
       action.type === "activate"
@@ -171,6 +187,23 @@ function UsersPage() {
           {t(`admin.roleNames.${row.role}`)}
         </Badge>
       ),
+    },
+    {
+      key: "clubs",
+      header: t("admin.users.table.clubs"),
+      render: (row) => {
+        const clubs = clubsByOwner.get(row.id) ?? [];
+        if (clubs.length === 0) return <span className="text-muted">–</span>;
+        return (
+          <div className="d-flex flex-column gap-1">
+            {clubs.map((club) => (
+              <Link key={club.id} to={`/admin/clubs/${club.id}`}>
+                {club.name}
+              </Link>
+            ))}
+          </div>
+        );
+      },
     },
     {
       key: "is_active",

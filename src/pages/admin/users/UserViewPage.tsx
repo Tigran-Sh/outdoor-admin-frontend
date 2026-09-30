@@ -12,6 +12,7 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 
 import { listCapabilities } from "@/services/adminRoles.api";
 import { activateUser, deactivateUser, getUser } from "@/services/adminUsers.api";
+import { listAdminClubs } from "@/services/clubs.api";
 import { ROLE_BADGE_VARIANT } from "@/constants/roles";
 
 import CapabilitiesModal from "./components/CapabilitiesModal";
@@ -39,6 +40,15 @@ function UserViewPage() {
     queryKey: ["admin-capabilities"],
     queryFn: listCapabilities,
   });
+
+  // Clubs have no "list clubs owned by user" filter, so the owner lookup is
+  // built client-side from the full clubs list rather than a per-user query.
+  const clubsQuery = useQuery({
+    queryKey: ["admin-clubs", "all-for-owner-lookup"],
+    queryFn: () => listAdminClubs({ page_size: 1000 }),
+  });
+
+  const userClubs = (clubsQuery.data?.results ?? []).filter((club) => club.owner === id);
 
   const toggleActiveMutation = useMutation({
     mutationFn: (action: ConfirmActionType) =>
@@ -164,6 +174,26 @@ function UserViewPage() {
           )}
         </CardBody>
       </Card>
+
+      {user && (
+        <Card>
+          <CardBody>
+            <h5 className="card-title mb-3">{t("admin.users.view.clubs")}</h5>
+
+            {userClubs.length > 0 ? (
+              <div className="d-flex flex-column gap-1">
+                {userClubs.map((club) => (
+                  <Link key={club.id} to={`/admin/clubs/${club.id}`}>
+                    {club.name}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted mb-0">{t("admin.users.view.noClubs")}</p>
+            )}
+          </CardBody>
+        </Card>
+      )}
 
       {user && (
         <Card>
