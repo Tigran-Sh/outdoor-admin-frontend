@@ -35,6 +35,7 @@ export interface TeamMemberApi {
   phone: string;
   birth_date: string | null;
   experience_years: number | null;
+  guided_tour_count: number | null;
   bio: string;
   certificates: TeamMemberCertificateApi[];
   is_active: boolean;
@@ -58,6 +59,8 @@ export interface TeamMember {
   phone: string;
   birthDate: string | null;
   experienceYears: number | null;
+  /** Career-wide, self-reported by the club owner -- not verified or derived from events. */
+  guidedTourCount: number | null;
   bio: string;
   certificates: TeamMemberCertificate[];
   isActive: boolean;
@@ -82,6 +85,7 @@ export function mapTeamMemberFromApi(raw: TeamMemberApi): TeamMember {
     phone: raw.phone,
     birthDate: raw.birth_date,
     experienceYears: raw.experience_years,
+    guidedTourCount: raw.guided_tour_count,
     bio: raw.bio,
     certificates: raw.certificates.map((certificate) => ({
       id: certificate.id,
@@ -122,6 +126,7 @@ export interface TeamMemberFormValues {
   phone: string;
   birthDate: string;
   experienceYears: string;
+  guidedTourCount: string;
   bio: string;
   photo: File[];
   certificates: File[];
@@ -139,6 +144,7 @@ export const initialTeamMemberFormValues: TeamMemberFormValues = {
   phone: "",
   birthDate: "",
   experienceYears: "",
+  guidedTourCount: "",
   bio: "",
   photo: [],
   certificates: [],
@@ -157,6 +163,7 @@ export function teamMemberToFormValues(member: TeamMember): TeamMemberFormValues
     phone: member.phone,
     birthDate: member.birthDate ?? "",
     experienceYears: member.experienceYears != null ? String(member.experienceYears) : "",
+    guidedTourCount: member.guidedTourCount != null ? String(member.guidedTourCount) : "",
     bio: member.bio,
     photo: [],
     certificates: [],
@@ -193,6 +200,9 @@ export function buildTeamMemberFormData(
   formData.append("phone", values.phone);
   if (values.birthDate) formData.append("birth_date", values.birthDate);
   if (values.experienceYears !== "") formData.append("experience_years", values.experienceYears);
+  if (values.guidedTourCount !== "") {
+    formData.append("guided_tour_count", values.guidedTourCount);
+  }
   formData.append("bio", values.bio);
   formData.append("is_active", String(values.isActive));
 

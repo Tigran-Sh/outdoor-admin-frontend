@@ -90,7 +90,7 @@ export interface EventApi {
   status: string;
   title: string;
   description: string;
-  category: string;
+  categories: string[];
   cover_image: string | null;
   gallery_images: EventGalleryImageApi[];
   start_at: string | null;
@@ -132,7 +132,7 @@ export interface Event {
   status: EventStatus;
   title: string;
   description: string;
-  category: string;
+  categoryIds: string[];
   coverImage: string | null;
   galleryImages: EventGalleryImage[];
   startAt: string | null;
@@ -175,7 +175,7 @@ export function mapEventFromApi(raw: EventApi): Event {
     status: raw.status as EventStatus,
     title: raw.title,
     description: raw.description,
-    category: activityTypeFromApi(raw.category),
+    categoryIds: raw.categories.map(activityTypeFromApi),
     coverImage: raw.cover_image,
     galleryImages: raw.gallery_images,
     startAt: raw.start_at,
@@ -258,7 +258,7 @@ export function buildEventFormData(values: EventFormValues, club?: string): Form
 
   formData.append("title", values.name);
   if (values.description) formData.append("description", values.description);
-  if (values.category) formData.append("category", activityTypeToApi(values.category));
+  values.categoryIds.forEach((id) => formData.append("categories", activityTypeToApi(id)));
   if (values.region) formData.append("region", regionToApi(values.region));
 
   if (values.date && values.time) {
@@ -335,7 +335,7 @@ export function eventToFormValues(event: Event): EventFormValues {
 
   return {
     name: event.title,
-    category: event.category,
+    categoryIds: event.categoryIds,
     region: event.region,
     description: event.description,
     date,
@@ -369,7 +369,7 @@ export function eventToFormValues(event: Event): EventFormValues {
 
 export const MISSING_TO_PUBLISH_FIELDS = [
   "title",
-  "category",
+  "categories",
   "cover_image",
   "start_at",
   "region",

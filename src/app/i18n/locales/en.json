@@ -164,7 +164,7 @@
     "empty": "No events yet.",
     "table": {
       "name": "Event Name",
-      "category": "Category",
+      "categories": "Categories",
       "region": "Region",
       "date": "Date",
       "guide": "Assigned Guide",
@@ -192,7 +192,7 @@
     },
     "missingFields": {
       "title": "Title",
-      "category": "Category",
+      "categories": "Categories",
       "cover_image": "Cover image",
       "start_at": "Date & time",
       "region": "Region",
@@ -303,9 +303,8 @@
           "label": "Event Name",
           "placeholder": "Enter event name"
         },
-        "category": {
-          "label": "Category",
-          "placeholder": "Select a category"
+        "categories": {
+          "label": "Categories"
         },
         "date": {
           "label": "Date"
@@ -409,7 +408,7 @@
       },
       "validation": {
         "nameRequired": "Please enter an event name",
-        "categoryRequired": "Please select a category",
+        "categoryRequired": "Choose at least one category",
         "dateRequired": "Please select a date",
         "datePast": "Event date can't be in the past",
         "timeRequired": "Please select a time",
@@ -746,6 +745,10 @@
         "activityTypes": { "label": "Specializations" },
         "languages": { "label": "Languages", "placeholder": "Select languages" },
         "experienceYears": { "label": "Experience (years)" },
+        "guidedTourCount": {
+          "label": "Tours Guided",
+          "helperText": "Their whole career, not just at this club. Leave blank if unknown."
+        },
         "bio": { "label": "Short Bio", "placeholder": "Describe their experience..." },
         "certificates": {
           "label": "Certificates / Qualifications",
@@ -764,7 +767,8 @@
         "permissionsRequired": "Please select at least one permission",
         "birthDateFuture": "Date of birth can't be in the future",
         "birthDateTooYoung": "Must be at least {{minAge}} years old",
-        "experienceYearsInvalid": "Enter a valid number of years"
+        "experienceYearsInvalid": "Enter a valid number of years",
+        "guidedTourCountInvalid": "Enter a valid number of tours guided"
       }
     }
   },

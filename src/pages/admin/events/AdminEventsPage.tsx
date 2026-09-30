@@ -148,16 +148,24 @@ function AdminEventsPage() {
       ),
     },
     {
-      key: "category",
-      header: t("events.table.category"),
+      key: "categories",
+      header: t("events.table.categories"),
       render: (row) => {
-        const category = ACTIVITY_TYPES.find((item) => item.id === row.category);
-        if (!category) return "–";
+        if (row.categoryIds.length === 0) return "–";
 
         return (
-          <Badge variant={category.variant} appearance="subtle">
-            {t(`activityTypes.${row.category}`)}
-          </Badge>
+          <div className="d-flex flex-wrap gap-1">
+            {row.categoryIds.map((categoryId) => {
+              const category = ACTIVITY_TYPES.find((item) => item.id === categoryId);
+              if (!category) return null;
+
+              return (
+                <Badge key={categoryId} variant={category.variant} appearance="subtle">
+                  {t(`activityTypes.${categoryId}`)}
+                </Badge>
+              );
+            })}
+          </div>
         );
       },
     },

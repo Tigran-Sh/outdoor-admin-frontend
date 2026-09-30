@@ -37,7 +37,7 @@ export type EventStatus = "scheduled" | "cancelled";
 export interface EventListItem {
   id: string;
   name: string;
-  category: string;
+  categoryIds: string[];
   region: EventRegion;
   date: string;
   time: string;
@@ -89,7 +89,7 @@ export function formatEventDate(date: string, time: string): string {
 export function toEventFormValues(event: EventListItem): EventFormValues {
   return {
     name: event.name,
-    category: event.category,
+    categoryIds: event.categoryIds,
     region: event.region,
     description: event.description,
     date: event.date,
@@ -125,7 +125,7 @@ export function toEventListItem(
 ): Omit<EventListItem, "id" | "status" | "soldCount"> {
   return {
     name: values.name,
-    category: values.category,
+    categoryIds: values.categoryIds,
     region: (EVENT_REGIONS as readonly string[]).includes(values.region)
       ? (values.region as EventRegion)
       : EVENT_REGIONS[0],
@@ -167,7 +167,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "1",
     name: "Sunrise Ridge Hike",
-    category: "hiking",
+    categoryIds: ["hiking"],
     region: "tavush",
     date: "2026-08-12",
     time: "06:00",
@@ -198,7 +198,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "2",
     name: "Lake Sevan Cycling Tour",
-    category: "cycling",
+    categoryIds: ["cycling"],
     region: "gegharkunik",
     date: "2026-08-20",
     time: "09:00",
@@ -229,7 +229,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "3",
     name: "Debed Canyon Rafting",
-    category: "rafting",
+    categoryIds: ["rafting"],
     region: "lori",
     date: "2026-09-02",
     time: "10:30",
@@ -260,7 +260,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "4",
     name: "Aragats Peak Climb",
-    category: "climbing",
+    categoryIds: ["climbing"],
     region: "aragatsotn",
     date: "2026-07-18",
     time: "05:30",
@@ -291,7 +291,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "5",
     name: "Ararat Valley Zipline Adventure",
-    category: "zipline",
+    categoryIds: ["zipline"],
     region: "ararat",
     date: "2026-06-05",
     time: "11:00",
@@ -322,7 +322,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "6",
     name: "Tatev Paragliding Experience",
-    category: "paragliding",
+    categoryIds: ["paragliding"],
     region: "syunik",
     date: "2026-08-29",
     time: "08:00",
@@ -353,7 +353,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "7",
     name: "Yerevan Night Trail Run",
-    category: "trailRunning",
+    categoryIds: ["trailRunning"],
     region: "yerevan",
     date: "2026-05-14",
     time: "20:00",
@@ -385,7 +385,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "8",
     name: "Aragatsotn Winter Ski Camp",
-    category: "skiing",
+    categoryIds: ["skiing"],
     region: "aragatsotn",
     date: "2026-01-16",
     time: "09:00",
@@ -416,7 +416,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "9",
     name: "Dzoraget Wakeboard Session",
-    category: "wakeboarding",
+    categoryIds: ["wakeboarding"],
     region: "lori",
     date: "2026-07-05",
     time: "13:00",
@@ -447,7 +447,7 @@ export const mockEvents: EventListItem[] = [
   {
     id: "10",
     name: "Sevan Sunset Kayaking",
-    category: "kayaking",
+    categoryIds: ["kayaking"],
     region: "gegharkunik",
     date: "2026-06-21",
     time: "18:30",
@@ -516,7 +516,9 @@ export function getEventCountByCategory(events: EventListItem[]): EventTypeCount
   const totals = new Map<string, number>();
 
   events.forEach((event) => {
-    totals.set(event.category, (totals.get(event.category) ?? 0) + 1);
+    event.categoryIds.forEach((category) => {
+      totals.set(category, (totals.get(category) ?? 0) + 1);
+    });
   });
 
   return Array.from(totals.entries())

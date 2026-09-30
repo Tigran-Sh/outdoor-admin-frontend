@@ -175,13 +175,19 @@ function TeamMemberViewPage() {
               </div>
 
               <div className="row g-3 mb-3">
-                <div className="col-sm-6">
+                <div className="col-sm-4">
                   <DetailField
                     label={t("team.form.fields.experienceYears.label")}
                     value={member.experienceYears != null ? String(member.experienceYears) : ""}
                   />
                 </div>
-                <div className="col-sm-6">
+                <div className="col-sm-4">
+                  <DetailField
+                    label={t("team.form.fields.guidedTourCount.label")}
+                    value={member.guidedTourCount != null ? String(member.guidedTourCount) : "—"}
+                  />
+                </div>
+                <div className="col-sm-4">
                   <DetailField
                     label={t("team.form.fields.birthDate.label")}
                     value={member.birthDate}

@@ -45,6 +45,7 @@ export function getTeamMemberFormSteps(
         "activityTypeIds",
         "languageIds",
         "experienceYears",
+        "guidedTourCount",
         "bio",
         "certificates",
         "isActive",
@@ -96,6 +97,11 @@ export function getTeamMemberFormSchema(t: TFunction, mode: TeamMemberFormMode) 
       .transform((value, originalValue) => (originalValue === "" ? undefined : value))
       .typeError(t("team.form.validation.experienceYearsInvalid"))
       .min(0, t("team.form.validation.experienceYearsInvalid")),
+    guidedTourCount: Yup.number()
+      .transform((value, originalValue) => (originalValue === "" ? undefined : value))
+      .typeError(t("team.form.validation.guidedTourCountInvalid"))
+      .integer(t("team.form.validation.guidedTourCountInvalid"))
+      .min(0, t("team.form.validation.guidedTourCountInvalid")),
     bio: Yup.string(),
     photo: Yup.array(),
     certificates: Yup.array(),
@@ -120,6 +126,7 @@ const TEAM_MEMBER_API_FIELD_ENTRIES: [keyof TeamMemberFormValues, string][] = [
   ["phone", "phone"],
   ["birthDate", "birth_date"],
   ["experienceYears", "experience_years"],
+  ["guidedTourCount", "guided_tour_count"],
   ["bio", "bio"],
   ["photo", "photo"],
   ["isActive", "is_active"],

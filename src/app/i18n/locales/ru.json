@@ -164,7 +164,7 @@
     "empty": "Мероприятий пока нет.",
     "table": {
       "name": "Название мероприятия",
-      "category": "Категория",
+      "categories": "Категории",
       "region": "Регион",
       "date": "Дата",
       "guide": "Назначенный гид",
@@ -192,7 +192,7 @@
     },
     "missingFields": {
       "title": "Название",
-      "category": "Категория",
+      "categories": "Категории",
       "cover_image": "Обложка",
       "start_at": "Дата и время",
       "region": "Регион",
@@ -303,9 +303,8 @@
           "label": "Название мероприятия",
           "placeholder": "Введите название мероприятия"
         },
-        "category": {
-          "label": "Категория",
-          "placeholder": "Выберите категорию"
+        "categories": {
+          "label": "Категории"
         },
         "date": {
           "label": "Дата"
@@ -409,7 +408,7 @@
       },
       "validation": {
         "nameRequired": "Пожалуйста, введите название мероприятия",
-        "categoryRequired": "Пожалуйста, выберите категорию",
+        "categoryRequired": "Выберите хотя бы одну категорию",
         "dateRequired": "Пожалуйста, выберите дату",
         "datePast": "Дата мероприятия не может быть в прошлом",
         "timeRequired": "Пожалуйста, выберите время",
@@ -746,6 +745,10 @@
         "activityTypes": { "label": "Специализация" },
         "languages": { "label": "Языки", "placeholder": "Выберите языки" },
         "experienceYears": { "label": "Опыт (лет)" },
+        "guidedTourCount": {
+          "label": "Проведено туров",
+          "helperText": "За всю карьеру, не только в этом клубе. Оставьте пустым, если неизвестно."
+        },
         "bio": { "label": "Краткая биография", "placeholder": "Опишите опыт..." },
         "certificates": {
           "label": "Сертификаты / Квалификации",
@@ -764,7 +767,8 @@
         "permissionsRequired": "Пожалуйста, выберите хотя бы одно право",
         "birthDateFuture": "Дата рождения не может быть в будущем",
         "birthDateTooYoung": "Должно быть не менее {{minAge}} лет",
-        "experienceYearsInvalid": "Введите корректное количество лет"
+        "experienceYearsInvalid": "Введите корректное количество лет",
+        "guidedTourCountInvalid": "Введите корректное количество туров"
       }
     }
   },

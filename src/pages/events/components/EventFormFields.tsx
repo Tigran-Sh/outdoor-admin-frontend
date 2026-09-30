@@ -47,7 +47,7 @@ function EventFormFields({
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
 
-  function toggleValue(field: "difficultyIds", value: string) {
+  function toggleValue(field: "difficultyIds" | "categoryIds", value: string) {
     const current = formik.values[field];
     const next = current.includes(value)
       ? current.filter((item) => item !== value)
@@ -94,30 +94,31 @@ function EventFormFields({
             }
           />
 
-          <div className="row">
-            <div className="col-sm-6">
-              <Select
-                label={t("events.form.fields.category.label")}
-                name="category"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.category}
-                error={
-                  formik.touched.category ? formik.errors.category : undefined
-                }
-                containerClassName="mb-0"
-              >
-                <option value="">
-                  {t("events.form.fields.category.placeholder")}
-                </option>
-                {EVENT_CATEGORIES.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {t(`activityTypes.${category.id}`)}
-                  </option>
-                ))}
-              </Select>
+          <div className="mb-3">
+            <span className="form-label d-block">
+              {t("events.form.fields.categories.label")}
+            </span>
+
+            <div className="d-flex flex-wrap gap-3">
+              {EVENT_CATEGORIES.map((category) => (
+                <Checkbox
+                  key={category.id}
+                  id={`event-category-${category.id}`}
+                  label={t(`activityTypes.${category.id}`)}
+                  checked={formik.values.categoryIds.includes(category.id)}
+                  onChange={() => toggleValue("categoryIds", category.id)}
+                />
+              ))}
             </div>
 
+            {formik.touched.categoryIds && formik.errors.categoryIds && (
+              <div className="text-danger fs-13 mt-1">
+                {String(formik.errors.categoryIds)}
+              </div>
+            )}
+          </div>
+
+          <div className="row">
             <div className="col-sm-6">
               <Select
                 label={t("events.form.fields.region.label")}

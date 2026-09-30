@@ -66,7 +66,9 @@ function AdminEventViewPage() {
     );
   }
 
-  const category = EVENT_CATEGORIES.find((item) => item.id === event.category);
+  const categories = event.categoryIds
+    .map((categoryId) => EVENT_CATEGORIES.find((item) => item.id === categoryId))
+    .filter((category) => category !== undefined);
   const meetingPointLat = Number(event.meetingPointLat);
   const meetingPointLng = Number(event.meetingPointLng);
   const hasMeetingPoint =
@@ -110,11 +112,11 @@ function AdminEventViewPage() {
         <CardBody>
           <div className="d-flex align-items-center flex-wrap gap-2 mb-3">
             <h4 className="mb-0">{event.title || t("events.view.notSpecified")}</h4>
-            {category && (
-              <Badge variant={category.variant} appearance="subtle">
-                {t(`activityTypes.${event.category}`)}
+            {categories.map((category) => (
+              <Badge key={category.id} variant={category.variant} appearance="subtle">
+                {t(`activityTypes.${category.id}`)}
               </Badge>
-            )}
+            ))}
             <Badge variant={EVENT_STATUS_BADGE_VARIANT[event.status]} appearance="subtle">
               {t(`events.status.${event.status}`)}
             </Badge>

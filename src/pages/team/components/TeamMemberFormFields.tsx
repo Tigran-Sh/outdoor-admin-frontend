@@ -254,7 +254,7 @@ function TeamMemberFormFields({
               />
             </div>
 
-            <div className="col-sm-6">
+            <div className="col-sm-3">
               <Input
                 label={t("team.form.fields.experienceYears.label")}
                 name="experienceYears"
@@ -267,6 +267,26 @@ function TeamMemberFormFields({
                 error={
                   formik.touched.experienceYears
                     ? formik.errors.experienceYears
+                    : undefined
+                }
+                containerClassName="mb-0"
+              />
+            </div>
+
+            <div className="col-sm-3">
+              <Input
+                label={t("team.form.fields.guidedTourCount.label")}
+                helperText={t("team.form.fields.guidedTourCount.helperText")}
+                name="guidedTourCount"
+                type="number"
+                min="0"
+                step="1"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.guidedTourCount}
+                error={
+                  formik.touched.guidedTourCount
+                    ? formik.errors.guidedTourCount
                     : undefined
                 }
                 containerClassName="mb-0"

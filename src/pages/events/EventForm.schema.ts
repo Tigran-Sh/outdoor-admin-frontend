@@ -6,7 +6,7 @@ import { getTodayDateString } from "@/utils/date";
 
 export interface EventFormValues {
   name: string;
-  category: string;
+  categoryIds: string[];
   region: string;
   description: string;
   date: string;
@@ -36,7 +36,7 @@ export interface EventFormValues {
 
 export const initialEventFormValues: EventFormValues = {
   name: "",
-  category: "",
+  categoryIds: [],
   region: "",
   description: "",
   date: "",
@@ -69,7 +69,7 @@ export function getEventFormSteps(t: TFunction): FormWizardStep<EventFormValues>
     {
       id: "general",
       label: t("events.form.steps.general"),
-      fields: ["name", "description", "category", "region"],
+      fields: ["name", "description", "categoryIds", "region"],
     },
     {
       id: "media",
@@ -139,7 +139,9 @@ function imageArraySchema(t: TFunction) {
 export function getEventFormSchema(t: TFunction) {
   return Yup.object({
     name: Yup.string().required(t("events.form.validation.nameRequired")),
-    category: Yup.string().required(t("events.form.validation.categoryRequired")),
+    categoryIds: Yup.array()
+      .of(Yup.string().required())
+      .min(1, t("events.form.validation.categoryRequired")),
     region: Yup.string().required(t("events.form.validation.regionRequired")),
     description: Yup.string(),
     date: Yup.string()
