@@ -1,16 +1,21 @@
+import { useMemo } from "react";
 import type { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 
+import Badge from "@/components/ui/Badge/Badge";
 import DatePicker from "@/components/ui/DatePicker/DatePicker";
 import ImageUpload from "@/components/ui/ImageUpload/ImageUpload";
 import Input from "@/components/ui/Input/Input";
 import LocationPicker from "@/components/ui/LocationPicker/LocationPicker";
 import MultiSelect from "@/components/ui/MultiSelect/MultiSelect";
 import SearchableSelect from "@/components/ui/SearchableSelect/SearchableSelect";
+import type { SearchableSelectOption } from "@/components/ui/SearchableSelect/SearchableSelect.types";
 import Select from "@/components/ui/Select/Select";
 import Textarea from "@/components/ui/Textarea/Textarea";
 import TimePicker from "@/components/ui/TimePicker/TimePicker";
 
+import { getGuideAvailability } from "@/services/events.api";
 import {
   EVENT_CATEGORIES,
   EVENT_DIFFICULTIES,
@@ -20,7 +25,7 @@ import {
   EVENT_REGIONS,
   type EventGuideOption,
 } from "@/types/event";
-import { getTodayDateString } from "@/utils/date";
+import { dateRangesOverlap, getTodayDateString } from "@/utils/date";
 import type { EventFormValues } from "../EventForm.schema";
 
 interface EventGalleryImagePreview {
@@ -32,6 +37,8 @@ interface EventFormFieldsProps {
   formik: FormikProps<EventFormValues>;
   activeStep: number;
   guideOptions?: EventGuideOption[];
+  /** The event being edited, so its own guide assignment doesn't count as a conflict against itself. Omit when creating. */
+  currentEventId?: string | null;
   /** Current cover image URL, shown until a new file replaces it (edit mode). */
   currentCoverImageUrl?: string | null;
   /** Already-uploaded gallery images (edit mode); new ones are appended, not replaced. */
@@ -42,10 +49,63 @@ function EventFormFields({
   formik,
   activeStep,
   guideOptions = [],
+  currentEventId,
   currentCoverImageUrl,
   currentGalleryImages = [],
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
+
+  // A single-day event's range is just its own date; a multi-day one runs through `endDate`.
+  const eventStartDate = formik.values.date;
+  const eventEndDate =
+    formik.values.durationType === "multi" && formik.values.endDate
+      ? formik.values.endDate
+      : formik.values.date;
+
+  const availabilityQuery = useQuery({
+    queryKey: ["guide-availability", eventStartDate, eventEndDate],
+    queryFn: () => getGuideAvailability({ from: eventStartDate, to: eventEndDate }),
+    enabled: Boolean(eventStartDate),
+  });
+
+  /**
+   * Guides who already have a non-cancelled event overlapping this event's date(s) -- shown as a
+   * "Busy" badge rather than disabled, since double-booking a guide (different time slots the
+   * same day, or a deliberate override) is a valid call the club owner should still be able to
+   * make; this is a heads-up, not a hard rule.
+   */
+  const busyGuideIds = useMemo(() => {
+    const busy = new Set<string>();
+    for (const guide of availabilityQuery.data ?? []) {
+      const isBusy = guide.assignments.some(
+        (assignment) =>
+          assignment.id !== currentEventId &&
+          assignment.status !== "cancelled" &&
+          dateRangesOverlap(
+            eventStartDate,
+            eventEndDate,
+            assignment.startAt,
+            assignment.endAt ?? assignment.startAt,
+          ),
+      );
+      if (isBusy) busy.add(guide.id);
+    }
+    return busy;
+  }, [availabilityQuery.data, currentEventId, eventStartDate, eventEndDate]);
+
+  const guideSelectOptions: SearchableSelectOption[] = guideOptions.map((guide) => ({
+    value: guide.id,
+    label: busyGuideIds.has(guide.id) ? (
+      <span className="d-flex align-items-center justify-content-between gap-2">
+        <span>{guide.name}</span>
+        <Badge variant="warning" appearance="subtle" pill>
+          {t("events.form.fields.guide.busyBadge")}
+        </Badge>
+      </span>
+    ) : (
+      guide.name
+    ),
+  }));
 
   /**
    * Marks the field touched immediately (rather than waiting for blur, which
@@ -300,7 +360,7 @@ function EventFormFields({
                 label={t("events.form.fields.guide.label")}
                 name="guideId"
                 placeholder={t("events.form.fields.guide.placeholder")}
-                options={guideOptions.map((guide) => ({ value: guide.id, label: guide.name }))}
+                options={guideSelectOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.guideId}
@@ -315,7 +375,7 @@ function EventFormFields({
                 label={t("events.form.fields.sweepGuide.label")}
                 name="sweepGuideId"
                 placeholder={t("events.form.fields.sweepGuide.placeholder")}
-                options={guideOptions.map((guide) => ({ value: guide.id, label: guide.name }))}
+                options={guideSelectOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.sweepGuideId}

@@ -14,3 +14,16 @@ export function getDateStringYearsAgo(years: number): string {
   date.setFullYear(date.getFullYear() - years);
   return formatDateInputValue(date);
 }
+
+/**
+ * Whether two inclusive date ranges (`YYYY-MM-DD`, or full ISO datetimes -- only the date part is
+ * compared) share at least one day. A single-day range is passed as the same value for both ends.
+ */
+export function dateRangesOverlap(
+  aStart: string,
+  aEnd: string,
+  bStart: string,
+  bEnd: string,
+): boolean {
+  return aStart.slice(0, 10) <= bEnd.slice(0, 10) && bStart.slice(0, 10) <= aEnd.slice(0, 10);
+}

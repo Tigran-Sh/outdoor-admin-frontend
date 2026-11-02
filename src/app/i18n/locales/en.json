@@ -292,7 +292,7 @@
       "saveError": "Couldn't save your changes. Please try again.",
       "steps": {
         "general": "General & Media",
-        "schedule": "Schedule",
+        "schedule": "Schedule & Guide",
         "route": "Route",
         "salesTerms": "Sales & Terms",
         "media": "Media",
@@ -326,7 +326,8 @@
         },
         "guide": {
           "label": "Assigned Guide",
-          "placeholder": "Select a guide"
+          "placeholder": "Select a guide",
+          "busyBadge": "Busy"
         },
         "sweepGuide": {
           "label": "Sweep Guide",

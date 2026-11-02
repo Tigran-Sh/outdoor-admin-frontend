@@ -123,6 +123,7 @@ function CreateEventPage() {
               formik={formik}
               activeStep={activeStep}
               guideOptions={guideOptions}
+              currentEventId={eventId}
             />
           </form>
 

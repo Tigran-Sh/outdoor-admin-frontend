@@ -164,6 +164,7 @@ function EditEventPage() {
               formik={formik}
               activeStep={activeStep}
               guideOptions={guideOptions}
+              currentEventId={event.id}
               currentCoverImageUrl={event.coverImage}
               currentGalleryImages={event.galleryImages}
             />
